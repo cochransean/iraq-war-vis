@@ -36,7 +36,8 @@ IraqMap.prototype.initVis = function() {
     // setup project and path generator
     var projection = d3.geo.mercator()
         .translate([vis.width / 2, vis.height / 2])
-        .scale(500);
+        .center([43.68, 33.22])
+        .scale(4400);
 
     var path = d3.geo.path()
         .projection(projection);
@@ -48,5 +49,6 @@ IraqMap.prototype.initVis = function() {
         .append("path")
         .attr("d", path)
         .attr("class", "map")
-        .attr("fill", "black");
+        .attr("fill", "white")
+        .attr("stroke", "black");
 };
