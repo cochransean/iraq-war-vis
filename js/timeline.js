@@ -12,7 +12,8 @@ Timeline = function(_parentElement, _data){
   	// No data wrangling, no update sequence
   	this.displayData = this.data;
 
-  	this.initVis();
+	// TODO update init vis and all other methods
+  	// this.initVis();
 };
 
 

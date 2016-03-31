@@ -11,10 +11,11 @@ StackedAreaChart = function(_parentElement, _data){
   	this.data = _data;
   	this.displayData = []; // see data wrangling
 
-  	// DEBUG RAW DATA
-  	console.log(this.data);
+  	// TODO DEBUG RAW DATA once data is uploaded
+  	// console.log(this.data);
 
-  	this.initVis();
+	// TODO update init vis and all other methods
+  	// this.initVis();
 };
 
 
