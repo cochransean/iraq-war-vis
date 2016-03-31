@@ -9,7 +9,7 @@ var parseDate = d3.time.format("%Y").parse;
 var colorScale = d3.scale.category20();
 
 // Variables for the visualization instances
-var iraqMap, areachart, timeline;
+var iraqMap, baghdadMap, areachart, timeline;
 
 
 // Start application by loading the data
@@ -40,6 +40,7 @@ function loadData() {
 function createVis() {
 
 	iraqMap = new IraqMap("iraq-map", iraqMapData);
+    baghdadMap = new BaghdadMap("baghdad-map", iraqMapData);
 
 }
 
