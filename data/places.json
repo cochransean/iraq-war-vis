@@ -1,0 +1,1327 @@
+{
+  "type": "Topology",
+  "objects": {
+    "places": {
+      "type": "GeometryCollection",
+      "bbox": [
+        41.8594414,
+        29.9731116,
+        48.4716854,
+        37.2288536
+      ],
+      "geometries": [
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 21034458,
+            "name": "Baghdad",
+            "type": "city",
+            "population": 0
+          },
+          "coordinates": [
+            3783,
+            4626
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 26066533,
+            "name": "Ø§ÙØ¯ÙØ±Ø§Ø­",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            3831,
+            4513
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 26265743,
+            "name": "Ø§ÙÙØ±Ø§Ø¯ÙØ©",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            3875,
+            4524
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 26266031,
+            "name": "Ø¬Ø¨ÙØ±",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            3882,
+            4546
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 26608946,
+            "name": "ÙØ·Ø§Ø± Ø¨ØºØ¯Ø§Ø¯ Ø§ÙØ¯ÙÙÙ",
+            "type": "airport",
+            "population": 0
+          },
+          "coordinates": [
+            3559,
+            4551
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 95068269,
+            "name": "Ø§ÙÙØµÙØ± Ø§ÙØ±Ø¦Ø§Ø³ÙØ©",
+            "type": "village",
+            "population": 0
+          },
+          "coordinates": [
+            1929,
+            8840
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 99469955,
+            "name": "Ø§ÙÙÙØ´",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            1873,
+            9315
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 99474380,
+            "name": "Duhok",
+            "type": "city",
+            "population": 0
+          },
+          "coordinates": [
+            1727,
+            9494
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 99475476,
+            "name": "Erbil",
+            "type": "city",
+            "population": 0
+          },
+          "coordinates": [
+            3252,
+            8569
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 100029817,
+            "name": "Ø§ÙØ±Ø´ÙØ¯ÙØ©",
+            "type": "village",
+            "population": 0
+          },
+          "coordinates": [
+            1860,
+            8864
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 100040775,
+            "name": "Ø§ÙÙÙØ§Ø¡Ø§Øª Ø§ÙØ«Ø§ÙÙØ©",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1954,
+            8841
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 100041135,
+            "name": "Ø§ÙØ¨ÙØ¯ÙØ§Øª",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1964,
+            8834
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 100483077,
+            "name": "Ø­Ù Ø§ÙÙØ­Ø¯Ø©",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            2019,
+            8760
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 100484720,
+            "name": "Ø­Ù Ø§ÙØ³ÙØ±",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1971,
+            8835
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 100485025,
+            "name": "Ø§ÙØ²ÙÙØ±",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            2000,
+            8825
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 100485443,
+            "name": "alqadiseyah",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            2015,
+            8821
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 100487119,
+            "name": "Ø¬Ø§ÙØ¹Ø© Ø§ÙÙÙØµÙ",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            1942,
+            8827
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 100502170,
+            "name": "Ø¨Ø­Ø²Ø§ÙÙ",
+            "type": "village",
+            "population": 0
+          },
+          "coordinates": [
+            2238,
+            8940
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 100511878,
+            "name": "ØªÙÙÙÙ (Tel Keppe)",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            1906,
+            8982
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 100517580,
+            "name": "Ø§ÙÙØ¯ÙÙØ© Ø§ÙØ³ÙØ§Ø­ÙØ© ÙÙ Ø³Ø¯ Ø§ÙÙ",
+            "type": "village",
+            "population": 0
+          },
+          "coordinates": [
+            1491,
+            9155
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 104482095,
+            "name": "Qaraqosh",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            2297,
+            8680
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 104484140,
+            "name": "karamlees",
+            "type": "village",
+            "population": 0
+          },
+          "coordinates": [
+            2352,
+            8725
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 104491691,
+            "name": "bartilla",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            2295,
+            8791
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 104532595,
+            "name": "Salahuddin",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            3542,
+            8834
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 104644910,
+            "name": "aski kalak",
+            "type": "village",
+            "population": 0
+          },
+          "coordinates": [
+            2731,
+            8685
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 117588607,
+            "name": "Basrah",
+            "type": "city",
+            "population": 0
+          },
+          "coordinates": [
+            9035,
+            730
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 181297525,
+            "name": "Rayat",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            4582,
+            9184
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 192581952,
+            "name": "Fallujah",
+            "type": "city",
+            "population": 0
+          },
+          "coordinates": [
+            2926,
+            4653
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 213386601,
+            "name": "Faysh Khabur",
+            "type": "village",
+            "population": 0
+          },
+          "coordinates": [
+            801,
+            9792
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 213402531,
+            "name": "Ø²Ø§Ø®Ù (Zakho)",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            1255,
+            9883
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 213526185,
+            "name": "Amedi",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            2463,
+            9810
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 213550637,
+            "name": "ØªÙØ¹ÙØ±",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            892,
+            8821
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 213579181,
+            "name": "Sinjar",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            0,
+            8752
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 237489444,
+            "name": "Ø§ÙØ²Ø¨ÙØ±",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            8834,
+            576
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 245952169,
+            "name": "Karbala",
+            "type": "city",
+            "population": 0
+          },
+          "coordinates": [
+            3289,
+            3637
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 248191492,
+            "name": "Ramadi",
+            "type": "city",
+            "population": 0
+          },
+          "coordinates": [
+            2190,
+            4751
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 248408523,
+            "name": "Samarra",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            3045,
+            5821
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 248411548,
+            "name": "Balad",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            3459,
+            5565
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 248421016,
+            "name": "Ad Dawr",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            2928,
+            6181
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 248421092,
+            "name": "Diwaniyah",
+            "type": "city",
+            "population": 0
+          },
+          "coordinates": [
+            4634,
+            2773
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 248421600,
+            "name": "Tikrit",
+            "type": "city",
+            "population": 0
+          },
+          "coordinates": [
+            2756,
+            6362
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 248436981,
+            "name": "Kirkuk",
+            "type": "city",
+            "population": 0
+          },
+          "coordinates": [
+            3835,
+            7574
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 248441053,
+            "name": "Al Sulaymaniyah",
+            "type": "city",
+            "population": 0
+          },
+          "coordinates": [
+            5416,
+            7692
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 248441616,
+            "name": "Chamchamal",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            4497,
+            7664
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 248454679,
+            "name": "Bayji",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            2467,
+            6831
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 248457084,
+            "name": "Al-Sharqat",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            2064,
+            7792
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 248459050,
+            "name": "Hamdaniyah",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            2170,
+            8025
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 248689519,
+            "name": "Samawah",
+            "type": "city",
+            "population": 250000
+          },
+          "coordinates": [
+            5177,
+            1839
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 248690226,
+            "name": "Nasiriyah",
+            "type": "city",
+            "population": 560200
+          },
+          "coordinates": [
+            6651,
+            1476
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 248691069,
+            "name": "Al Hillah",
+            "type": "city",
+            "population": 0
+          },
+          "coordinates": [
+            3891,
+            3456
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 248692456,
+            "name": "Al Faw",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            9999,
+            0
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 248700950,
+            "name": "Al âAmÄrah",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            8021,
+            2588
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 248701647,
+            "name": "Baqubah",
+            "type": "city",
+            "population": 0
+          },
+          "coordinates": [
+            4219,
+            5196
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 249247796,
+            "name": "Qandil",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            3507,
+            9166
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 249399353,
+            "name": "Iraq",
+            "type": "country",
+            "population": 0
+          },
+          "coordinates": [
+            3502,
+            4303
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 250722867,
+            "name": "Kani Masi",
+            "type": "village",
+            "population": 0
+          },
+          "coordinates": [
+            2392,
+            9999
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 256791396,
+            "name": "Ø§ÙÙÙØ§Ø¡Ø§Øª Ø§ÙØ§ÙÙÙ",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1955,
+            8832
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 256791489,
+            "name": "Ø­Ù Ø§ÙØ¹Ø±Ø¨Ù",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1909,
+            8860
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 256791526,
+            "name": "Ø­Ù Ø§ÙØ­Ø¯Ø¨Ø§Ø¡",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1951,
+            8852
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 256792134,
+            "name": "Ø­Ù Ø§ÙØ¶Ø¨Ø§Ø·",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1961,
+            8771
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 256961601,
+            "name": "Ø¨Ø¯Ø§ÙØ© Ø§ÙØ³ÙÙØ³",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1955,
+            8791
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 259270259,
+            "name": "Ø§ÙÙÙØµÙÙØ©",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1945,
+            8781
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 259272851,
+            "name": "Ø§ÙØ¯ÙØ¯Ø§Ù",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1950,
+            8763
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 259273020,
+            "name": "Ø­Ù Ø§ÙØ¨Ø¹Ø«",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1974,
+            8769
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 259273312,
+            "name": "Ø­Ù Ø§ÙÙØ§ÙÙØ©",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1964,
+            8778
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 259415029,
+            "name": "Ø­Ù Ø§ÙÙÙØµÙØ±",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1898,
+            8750
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 259415075,
+            "name": "ÙØ§Ø¯Ù Ø­Ø¬Ø±",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1915,
+            8749
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 259415194,
+            "name": "ÙÙØµÙ Ø§ÙØ¬Ø¯ÙØ¯Ø©",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1882,
+            8766
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 259417230,
+            "name": "Ø§ÙÙÙØ·ÙØ© Ø§ÙØµÙØ§Ø¹ÙØ©",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            2014,
+            8783
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 259436980,
+            "name": "Ø´Ø±ÙØ© Ø§ÙØµÙØ§Ø¹Ø§Øª Ø§ÙØ¯ÙØ§Ø¦ÙØ©",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1832,
+            8968
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 259437044,
+            "name": "Ø§ÙÙÙØ·ÙØ© Ø§ÙØ­Ø±Ø©",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1806,
+            8990
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 259510249,
+            "name": "Ø§ÙØ¯Ø±ÙØ²ÙÙØ©",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1967,
+            8794
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 259510472,
+            "name": "Ø­Ù Ø§ÙØ¬Ø²Ø§Ø¦Ø±",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1980,
+            8796
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 259514333,
+            "name": "Ø­Ù Ø§ÙÙÙØ±",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            2009,
+            8803
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 259523480,
+            "name": "Ø­Ù ÙØ±ÙØ§Ù",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1943,
+            8817
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 259524321,
+            "name": "Ø­Ù Ø§ÙÙÙÙØ¯Ø³ÙÙ",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1931,
+            8811
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 259525959,
+            "name": "Ø­Ù Ø§ÙØ²Ø±Ø§Ø¹Ù",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1941,
+            8805
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 259527463,
+            "name": "Ø­Ù Ø§ÙÙØ±ÙÙÙ",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1858,
+            8773
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 259824906,
+            "name": "Ø­Ù Ø§ÙØ§ÙØ¯ÙØ³",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1924,
+            8829
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 259825375,
+            "name": "Ø­Ù Ø§ÙØ´Ø±Ø·Ø©",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1927,
+            8825
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 259826570,
+            "name": "Ø§ÙÙØ¬ÙÙØ¹Ø© Ø§ÙØ«ÙØ§ÙÙØ©",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            1935,
+            8824
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 261140156,
+            "name": "Ø¨Ø¹Ø´ÙÙØ©",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            2254,
+            8926
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 274487057,
+            "name": "MandalÄ« / ÙÙØ¯ÙÙ",
+            "type": "village",
+            "population": 0
+          },
+          "coordinates": [
+            5584,
+            5199
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 288742878,
+            "name": "Ø§ÙÙÙØ¯Ø§Ø¯ÙØ©",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            4644,
+            5516
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 288750155,
+            "name": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            5337,
+            6028
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 288753825,
+            "name": "Ø§ÙØ®Ø§ÙØµ",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            4029,
+            5307
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 288763386,
+            "name": "JalÅ«lÄ' / Ø¬ÙÙÙØ§Ø¡",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            4979,
+            5927
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 288765264,
+            "name": "as-Sa'dÄ«yah / Ø§ÙØ³Ø¹Ø¯ÙØ©",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            4928,
+            5806
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 288766864,
+            "name": "BanÄ« Åa'd / Ø¨ÙÙ ØµØ¹Ø¯",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            4061,
+            4957
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 297299062,
+            "name": "ØµÙÙØ§Ù",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            8862,
+            193
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 297446410,
+            "name": "Ø£Ù ÙØµØ±â",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            9186,
+            102
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 297453585,
+            "name": "Ar Rumaythah",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            5068,
+            2144
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 297456099,
+            "name": "Qawam al Hamzah",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            4718,
+            2417
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 297456471,
+            "name": "Ash Shamiyah",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            4133,
+            2737
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 297459094,
+            "name": "Al Mahmudiyah",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            3793,
+            4247
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 297459773,
+            "name": "Hindiya",
+            "type": "village",
+            "population": 0
+          },
+          "coordinates": [
+            3575,
+            3540
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 297470197,
+            "name": "Al Qurnah",
+            "type": "village",
+            "population": 0
+          },
+          "coordinates": [
+            8430,
+            1431
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 348089814,
+            "name": "Kufa",
+            "type": "town",
+            "population": 0
+          },
+          "coordinates": [
+            3840,
+            2835
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 348117530,
+            "name": "Najaf",
+            "type": "city",
+            "population": 0
+          },
+          "coordinates": [
+            3736,
+            2795
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "osm_id": 391386856,
+            "name": "92",
+            "type": "suburb",
+            "population": 0
+          },
+          "coordinates": [
+            3273,
+            8510
+          ]
+        }
+      ]
+    }
+  },
+  "arcs": [],
+  "transform": {
+    "scale": [
+      0.000661290529052905,
+      0.0007256467646764679
+    ],
+    "translate": [
+      41.8594414,
+      29.9731116
+    ]
+  }
+}
