@@ -5,10 +5,11 @@
  * @param _data -- the data used for the map
  */
 
-IraqMap = function(_parentElement, _data){
+IraqMap = function(_parentElement, _districtData, _placeData){
     this.parentElement = _parentElement;
 
-    this.data = _data;
+    this.districtData = _districtData;
+    this.placeData = _placeData;
 
     // No data wrangling, no update sequence
     this.displayData = [];
@@ -20,6 +21,12 @@ IraqMap.prototype.initVis = function() {
 
     // set this so it remains consistent
     var vis = this;
+
+    // filter out minor cities and suburbs
+    // TODO do this in on the data itself so we aren't doing client side each time
+    this.placeData = this.placeData.filter(function(value) {
+        if (value.properties.type === "city") { return true }
+    });
 
     vis.margin = {top: 20, right: 20, bottom: 20, left: 20};
 
@@ -43,12 +50,29 @@ IraqMap.prototype.initVis = function() {
         .projection(projection);
 
     // Render the Iraq map (no need to update borders so include here and not update vis)
-    vis.svg.selectAll("path")
-        .data(vis.data)
+    vis.svg.selectAll(".district-borders")
+        .data(vis.districtData)
         .enter()
         .append("path")
         .attr("d", path)
-        .attr("class", "map")
-        .attr("fill", "white")
-        .attr("stroke", "black");
+        .attr("class", "map district-borders");
+
+    vis.svg.selectAll(".city")
+        .data(vis.placeData)
+        .enter()
+        .append("circle")
+        .attr("cx", function (d) { return projection(d.geometry.coordinates)[0]; })
+        .attr("cy", function (d) { return projection(d.geometry.coordinates)[1]; })
+        .attr("class", "map city point")
+        .attr("r", "3px");
+
+    vis.svg.selectAll(".city-label")
+        .data(vis.placeData)
+        .enter()
+        .append("text")
+        .text(function(d) { return d.properties.name; })
+        .attr("x", function (d) { return projection(d.geometry.coordinates)[0]; })
+        .attr("y", function (d) { return projection(d.geometry.coordinates)[1]; })
+        .attr("class", "city-label");
+
 };
