@@ -3,8 +3,9 @@
 var iraqMapDistricts = [];
 var iraqMapWater = [];
 var iraqMapRoads = [];
-var iraqMapPoints = [];
 var iraqMapPlaces = [];
+var iraqMapAirport = [];
+var iraqMapExteriorBorders;
 
 // Date parser to convert strings to date objects
 var parseDate = d3.time.format("%Y").parse;
@@ -22,34 +23,30 @@ loadData();
 function loadData() {
 
     // Use the Queue.js library to read two files
-    // TODO we might want to nest additional queues for the two maps underneath the district borders file (so each map
-    // TODO can load exactly the files it needs instead of waiting on all files
+    // TODO we might want to rethink how all this is loaded once we've got more included; some vis's might be able
+    // TODO to load and go while others (further down page can load after first vis's are already display loading
     queue()
         .defer(d3.json, "data/iraq-topo.json")
         .defer(d3.json, "data/waterways.json")
         .defer(d3.json, "data/roads.json")
-        .defer(d3.json, "data/points.json")
         .defer(d3.json, "data/places.json")
-        .await(function(error, districtData, waterData, roadData, pointData, placeData){
+        .defer(d3.json, "data/baghdad-airport.json")
+        .await(function(error, districtData, waterData, roadData, placeData, airportData){
 
             // if error, print and return
             if (error) {
                 console.log(error);
-                return
             }
 
             iraqMapDistricts = topojson.feature(districtData, districtData.objects.Iraq_districts).features;
+            iraqMapExteriorBorders = topojson.mesh(districtData, districtData.objects.Iraq_districts, function(a, b) {
+                return a === b;
+            });
             iraqMapWater = topojson.feature(waterData, waterData.objects.waterways).features;
             iraqMapRoads = topojson.feature(roadData, roadData.objects.roads).features;
-            iraqMapPoints = topojson.feature(pointData, pointData.objects.points).features;
             iraqMapPlaces = topojson.feature(placeData, placeData.objects.places).features;
+            iraqMapAirport = topojson.feature(airportData, airportData.objects.SDE_BAGH_AIRPRT).features;
 
-            // TODO delete this debug statement after it works
-            console.log(iraqMapDistricts);
-            console.log(iraqMapWater);
-            console.log(iraqMapRoads);
-            console.log(iraqMapPoints);
-            console.log(iraqMapPlaces);
             createVis();
         });
 
@@ -57,8 +54,8 @@ function loadData() {
 
 function createVis() {
 
-	iraqMap = new IraqMap("iraq-map", iraqMapDistricts, iraqMapPlaces);
-    baghdadMap = new BaghdadMap("baghdad-map", iraqMapDistricts, iraqMapWater, iraqMapRoads, iraqMapPoints);
+	iraqMap = new IraqMap("iraq-map", iraqMapDistricts, iraqMapExteriorBorders, iraqMapPlaces);
+    baghdadMap = new BaghdadMap("baghdad-map", iraqMapDistricts, iraqMapWater, iraqMapRoads, iraqMapAirport);
 
 }
 
