@@ -55,6 +55,13 @@ svg .district-borders {
   fill: none;
 }
 
+svg .exterior-borders {
+  stroke: black;
+  stroke-width: 2px;
+  stroke-linejoin: round;
+  fill: none;
+}
+
 svg .waterway {
   stroke: blue;
   stroke-width: 3px;
@@ -70,6 +77,13 @@ svg .road {
   stroke-linejoin: round;
 }
 
+svg .airport {
+  stroke: grey;
+  stroke-width: 1px;
+  fill: none;
+  stroke-linejoin: round;
+}
+
 svg .point {
   stroke: black;
   stroke-width: 1px;
@@ -78,5 +92,7 @@ svg .point {
 }
 
 svg .city-label {
-  text-anchor: end;
+  text-anchor: middle;
+  font-size: 12px;
+  font-weight: bold;
 }

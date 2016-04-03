@@ -5,11 +5,13 @@
  * @param _data -- the data used for the map
  */
 
-IraqMap = function(_parentElement, _districtData, _placeData){
+IraqMap = function(_parentElement, _districtData, _exteriorBorder, _placeData){
     this.parentElement = _parentElement;
 
     this.districtData = _districtData;
     this.placeData = _placeData;
+    this.exteriorBorder = _exteriorBorder;
+    console.log(this.exteriorBorder);
 
     // No data wrangling, no update sequence
     this.displayData = [];
@@ -21,12 +23,6 @@ IraqMap.prototype.initVis = function() {
 
     // set this so it remains consistent
     var vis = this;
-
-    // filter out minor cities and suburbs
-    // TODO do this in on the data itself so we aren't doing client side each time
-    this.placeData = this.placeData.filter(function(value) {
-        if (value.properties.type === "city") { return true }
-    });
 
     vis.margin = {top: 20, right: 20, bottom: 20, left: 20};
 
@@ -50,6 +46,11 @@ IraqMap.prototype.initVis = function() {
         .projection(projection);
 
     // Render the Iraq map (no need to update borders so include here and not update vis)
+    vis.svg.append("path")
+        .datum(vis.exteriorBorder)
+        .attr("d", path)
+        .attr("class", "map exterior-borders");
+
     vis.svg.selectAll(".district-borders")
         .data(vis.districtData)
         .enter()
@@ -72,7 +73,10 @@ IraqMap.prototype.initVis = function() {
         .append("text")
         .text(function(d) { return d.properties.name; })
         .attr("x", function (d) { return projection(d.geometry.coordinates)[0]; })
-        .attr("y", function (d) { return projection(d.geometry.coordinates)[1]; })
+        .attr("y", function (d) {
+            const verticalOffset = 7;
+            return projection(d.geometry.coordinates)[1] - verticalOffset;
+        })
         .attr("class", "city-label");
 
 };
