@@ -5,12 +5,13 @@
  * @param _data -- the data used for the map
  */
 
-BaghdadMap = function(_parentElement, _districtData, _waterData, _roadData, _airportData){
+BaghdadMap = function(_parentElement, _districtData, _waterData, _airportData){
     this.parentElement = _parentElement;
+
+    // this is a change for a test
 
     this.districtData = _districtData;
     this.waterData = _waterData;
-    this.roadData = _roadData;
     this.airportData = _airportData;
 
     // No data wrangling, no update sequence
@@ -58,13 +59,6 @@ BaghdadMap.prototype.initVis = function() {
         .append("path")
         .attr("d", path)
         .attr("class", "map waterway");
-
-    vis.svg.selectAll(".roads")
-        .data(vis.roadData)
-        .enter()
-        .append("path")
-        .attr("d", path)
-        .attr("class", "map road");
 
     vis.svg.selectAll(".airport")
         .data(vis.airportData)

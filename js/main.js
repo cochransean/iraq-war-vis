@@ -28,10 +28,9 @@ function loadData() {
     queue()
         .defer(d3.json, "data/iraq-topo.json")
         .defer(d3.json, "data/waterways.json")
-        .defer(d3.json, "data/roads.json")
         .defer(d3.json, "data/places.json")
         .defer(d3.json, "data/baghdad-airport.json")
-        .await(function(error, districtData, waterData, roadData, placeData, airportData){
+        .await(function(error, districtData, waterData, placeData, airportData){
 
             // if error, print and return
             if (error) {
@@ -43,7 +42,6 @@ function loadData() {
                 return a === b;
             });
             iraqMapWater = topojson.feature(waterData, waterData.objects.waterways).features;
-            iraqMapRoads = topojson.feature(roadData, roadData.objects.roads).features;
             iraqMapPlaces = topojson.feature(placeData, placeData.objects.places).features;
             iraqMapAirport = topojson.feature(airportData, airportData.objects.SDE_BAGH_AIRPRT).features;
 
@@ -55,7 +53,7 @@ function loadData() {
 function createVis() {
 
 	iraqMap = new IraqMap("iraq-map", iraqMapDistricts, iraqMapExteriorBorders, iraqMapPlaces);
-    baghdadMap = new BaghdadMap("baghdad-map", iraqMapDistricts, iraqMapWater, iraqMapRoads, iraqMapAirport);
+    baghdadMap = new BaghdadMap("baghdad-map", iraqMapDistricts, iraqMapWater, iraqMapAirport);
 
 }
 
