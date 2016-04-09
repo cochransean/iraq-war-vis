@@ -10,33 +10,29 @@ var force = d3.layout.force()
     .size([width,height])
     .linkDistance(50);
 
-d3.csv("data/esoc-iraq-v3_ethnicity.csv",function(error, links){
-    //console.log(links);
+d3.csv("data/esoc-iraq-v3_sigact-district-year.csv",function(error, links){
 
     if (error) throw error;
 
-    var nodesByName = {};
-
     links.forEach(function(link){
-        link.district = nodeByName(link.district);
-        link.sunni_pop_CIA_1978 = +link.sunni_pop_CIA_1978;
+        link.suicide = +link.suicide;
+        link.year = +link.year;
     });
-    
-    var nodes = d3.values(nodesByName);
+
+    links.filter(function(link){
+        return link.year == 2004;
+    });
+    console.log(links);
 
     var node = svg.selectAll(".node")
         .data(links)
         .enter().append("circle")
         .attr("class", "node")
-        .attr("r", 4.5)
-        .call(force.drag)
-        .attr("fill", function(d){
-            if (d.sunni_pop_CIA_1978 > 1000)
-                return ("blue");
-            else
-                return ("red");
-        });
-
+        .attr("r", 5)
+        .attr("r", function(d){
+            return d.suicide
+        })
+        .call(force.drag);
 
     force
         .nodes(links)
@@ -44,15 +40,8 @@ d3.csv("data/esoc-iraq-v3_ethnicity.csv",function(error, links){
         .start();
 
     function tick() {
-
         node.attr("cx", function(d){return d.x})
             .attr("cy", function(d){return d.y});
-
-    }
-
-    function nodeByName(name){
-        return nodesByName[name] || (nodesByName[name] = {name: name});
     }
 
 });
-
