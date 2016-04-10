@@ -19,6 +19,7 @@ d3.csv("data/esoc-iraq-v3_sigact-district-year.csv",function(error, links){
     links.filter(function(link){
         link.suicide = +link.suicide;
         link.year = +link.year;
+        link.ied_total = +link.ied_total;
     });
 
     console.log(links);
@@ -27,6 +28,7 @@ d3.csv("data/esoc-iraq-v3_sigact-district-year.csv",function(error, links){
 
     updateVisualization();
     $('#button').click();
+    $('#button2').click();
 
 });
 
@@ -34,24 +36,30 @@ function updateVisualization(){
 
     var ranking = d3.select("#button").property("value");
 
+    var ranking2 = d3.select("#button2").property("value");
+
     var node = svg.selectAll(".node")
-        .data(data)
-        .enter().append("circle")
+        .data(data);
+
+    node
+        .enter().append("circle").attr("class", "node");
+    node
         .filter(function(d){
             return d.year == ranking;
         })
-        .attr("class", "node")
-        .attr("r", 5)
         .attr("r",function(d){
-            return d.suicide;
-        })
+        return d[ranking2]/10;
+        });
+
+    node
         .call(force.drag);
+
+    node.exit().remove();
 
     force
         .nodes(data)
         .on("tick", tick)
         .start();
-
 
     function tick() {
         node.attr("cx", function(d){return d.x})
