@@ -11,7 +11,6 @@ IraqMap = function(_parentElement, _districtData, _exteriorBorder, _placeData){
     this.districtData = _districtData;
     this.placeData = _placeData;
     this.exteriorBorder = _exteriorBorder;
-    console.log(this.exteriorBorder);
 
     // No data wrangling, no update sequence
     this.displayData = [];
