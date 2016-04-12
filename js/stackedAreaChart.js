@@ -12,7 +12,7 @@ StackedAreaChart = function(_parentElement, _districtViolenceData, _totalViolenc
   	this.totalViolenceData = _totalViolenceData;
 	this.displayData = []; // see data wrangling
 
-	// TODO update init vis and all other methods
+
   	this.initVis();
 };
 
@@ -42,12 +42,15 @@ StackedAreaChart.prototype.initVis = function(){
 	// TO-DO: Overlay with path clipping
 
 
-	// Scales and axes
-  	vis.x = d3.time.scale()
+	// Scales and axes TODO: change this to time scale (d3.time.scale())
+  	vis.x = d3.scale.linear()
   		.range([0, vis.width]);
 
 	vis.y = d3.scale.linear()
 		.range([vis.height, 0]);
+
+    // TODO: update with color brewer scale
+    vis.colorScale = d3.scale.category20();
 
 	vis.xAxis = d3.svg.axis()
 		.scale(vis.x)
@@ -64,13 +67,14 @@ StackedAreaChart.prototype.initVis = function(){
 	vis.svg.append("g")
 		.attr("class", "y-axis axis");
 
+	// Area generator
+    vis.area = d3.svg.area()
+        .x(function(d) { return vis.x(d.week) })
+        .y0(function(d) { return vis.y(d.y0) })
+        .y1(function(d) { return vis.y(d.y + d.y0) });
 
-  	// TO-DO: Stacked area layout
-	// vis.area = d3.svg.area()
-	//	...
 
-
-	// TO-DO: Tooltip placeholder
+	// TODO: Tooltip placeholder
 
 
 	// filter and format data for stacked area chart
@@ -82,7 +86,6 @@ StackedAreaChart.prototype.initVis = function(){
 /*
  * Data wrangling
  */
-
 StackedAreaChart.prototype.wrangleData = function(){
 	var vis = this;
 
@@ -122,25 +125,28 @@ StackedAreaChart.prototype.wrangleData = function(){
  * The drawing function - should use the D3 update sequence (enter, update, exit)
  * Function parameters only needed if different kinds of updates are needed
  */
-
 StackedAreaChart.prototype.updateVis = function(){
 	var vis = this;
 
     // debug data
+    console.log(vis.totalViolenceData);
     console.log(vis.displayData);
 
     // update the axes
     // Get the maximum of the multi-dimensional array or in other words, get the highest peak of the uppermost layer
 	vis.y.domain([0, d3.max(vis.displayData, function(d) {
 			return d3.max(d.values, function(e) {
-				return e.y0 + e.y;
+                return e.y0 + e.y;
 			});
 		})
 	]);
 
-    // TODO convert weeks to dates and update x range
+    // TODO convert weeks to dates and update x domain
     vis.x.domain(weekRange);
 
+    // Call axis functions with the new domain
+    vis.svg.select(".x-axis").call(vis.xAxis);
+    vis.svg.select(".y-axis").call(vis.yAxis);
 
 	// Draw the layers
 	var categories = vis.svg.selectAll(".area")
@@ -151,17 +157,15 @@ StackedAreaChart.prototype.updateVis = function(){
 
   	categories
 		.style("fill", function(d) {
-  			return colorScale(d.name);
+			return vis.colorScale(d.name);
   		})
-      .attr("d", function(d) {
-				return vis.area(d.values);
-      });
+  		.attr("d", function(d) {
+			return vis.area(d.values);
+      	});
 
-  	// TO-DO: Update tooltip text
 	categories.exit().remove();
 
+    // TODO: update tooltip text
 
-	// Call axis functions with the new domain 
-	vis.svg.select(".x-axis").call(vis.xAxis);
-  	vis.svg.select(".y-axis").call(vis.yAxis);
+
 };

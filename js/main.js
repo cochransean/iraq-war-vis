@@ -9,11 +9,10 @@ var districtViolenceData = [];
 var totalViolenceData = [];
 
 // globals for linking of map and stacked area chart
-var weekRange = [2292, 2555]; // TODO make this dynamically update with brush
+const minWeek = 2292;
+const maxWeek = 2555;
+var weekRange = [minWeek, maxWeek]; // TODO make this dynamically update with brush
 
-
-// Set ordinal color scale
-var colorScale = d3.scale.category20();
 
 // Variables for the visualization instances
 var iraqMap, baghdadMap, areaChart;
@@ -47,8 +46,12 @@ function loadData() {
             iraqMapWater = topojson.feature(waterData, waterData.objects.waterways).features;
             iraqMapPlaces = topojson.feature(placeData, placeData.objects.places).features;
             iraqMapAirport = topojson.feature(airportData, airportData.objects.SDE_BAGH_AIRPRT).features;
-            districtViolenceData = districtViolence;
-            totalViolenceData = countryViolence;
+
+            // convert violence data as required (to numeric data types)
+            var numericFields = ["SIGACT", "SIG_1", "df", "idf", "suicide",
+                "ied_attack", "ied_clear", "ied_total", "week"];
+            districtViolenceData = convertToNumeric(districtViolence, numericFields);
+            totalViolenceData = convertToNumeric(countryViolence, numericFields);
 
             createVis();
         });
@@ -69,11 +72,13 @@ function brushed() {
 	// TO-DO: React to 'brushed' event
 }
 
+
+
 /*
  * This filters by week using the global variable "weekRange". The min is represented by the 0 position in the week
  * range array; the max by 1 position.
  *
- * Use: provide this as an argument for .filter(). Example: array.filter(filterByWeek);
+ * Use: Provide this as an argument for .filter(). Example: array.filter(filterByWeek);
  */
 function filterByWeek(arrayDataPoint) {
     if (arrayDataPoint.week >= weekRange[0] && arrayDataPoint.week <= weekRange[1]) {
@@ -81,10 +86,40 @@ function filterByWeek(arrayDataPoint) {
     }
 }
 
-/*
- * Convert week to date object
- */
-function convertWeekToDate(week) {
 
-    // TODO need a function converting weeks from the data into data objects for use with our graphs
+/*
+ * Convert week from data set to date object
+ *
+ * Arguments:
+ *      endWeek: the week you want to convert to a date object
+ *      startDate: the date object representing the first day of the data set (reference ESOC code book)
+ *      startWeek: the int representing the numeric value of the starting week in the ESOC dataset (earliest in the set)
+ *
+ * Returns: A javascript date object corresponding to the week from the ESOC dataset
+ */
+function convertWeekToDate(endWeek, startDate, startWeek) {
+
+    const MS_IN_DAY = 86400000;
+    var daysElapsed = endWeek - startWeek;
+    new Date(startDate.getTime() + daysElapsed * MS_IN_DAY);
+}
+
+
+/*
+ * Convert numeric strings from csv into actual numeric data types
+ *
+ * Arguments:
+ *      array: the array of objects that you want to convert
+ *      fields: the fields from each object that need to be converted
+ *
+ * Returns: The data-set converted
+ */
+function convertToNumeric(array, fields) {
+
+    return array.map(function(value) {
+        fields.forEach(function(field) {
+            value[field] = +value[field];
+        });
+        return value
+    });
 }
