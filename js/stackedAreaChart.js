@@ -39,11 +39,8 @@ StackedAreaChart.prototype.initVis = function(){
 		.append("g")
 	    .attr("transform", "translate(" + vis.margin.left + "," + vis.margin.top + ")");
 
-	// TO-DO: Overlay with path clipping
-
-
-	// Scales and axes TODO: change this to time scale (d3.time.scale())
-  	vis.x = d3.scale.linear()
+	// Scales and axes
+  	vis.x = d3.time.scale()
   		.range([0, vis.width]);
 
 	vis.y = d3.scale.linear()
@@ -69,13 +66,16 @@ StackedAreaChart.prototype.initVis = function(){
 
 	// Area generator
     vis.area = d3.svg.area()
-        .x(function(d) { return vis.x(d.week) })
+        .x(function(d) { return vis.x(d.date) })
         .y0(function(d) { return vis.y(d.y0) })
         .y1(function(d) { return vis.y(d.y + d.y0) });
 
+    // set time range globally (to extent of data on initial load, user can filter later)
+    dateRange = d3.extent(vis.totalViolenceData, function(d) {
+       return d.date;
+    });
 
 	// TODO: Tooltip placeholder
-
 
 	// filter and format data for stacked area chart
   	vis.wrangleData();
@@ -96,14 +96,15 @@ StackedAreaChart.prototype.wrangleData = function(){
     vis.displayData = vis[selectedOption];
 
     // filter by date TODO update this with brush functionality; need to make this global also since map relies on it
-    vis.displayData = vis.displayData.filter(filterByWeek);
+    vis.displayData = vis.displayData.filter(filterByDate);
+    console.log(vis.displayData);
 
     var dataCategories = ["df", "idf", "ied_total", "suicide"];
     vis.displayData = dataCategories.map(function(category) {
         return {
             name: category,
             values: vis.displayData.map(function(d) {
-                return {week: d.week, y: d[category]};
+                return {date: d.date, y: d[category]};
             })
         };
     });
@@ -140,9 +141,7 @@ StackedAreaChart.prototype.updateVis = function(){
 			});
 		})
 	]);
-
-    // TODO convert weeks to dates and update x domain
-    vis.x.domain(weekRange);
+    vis.x.domain(dateRange);
 
     // Call axis functions with the new domain
     vis.svg.select(".x-axis").call(vis.xAxis);
