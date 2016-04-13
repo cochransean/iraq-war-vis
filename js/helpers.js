@@ -3,13 +3,17 @@
  */
 
 
-
+/*
+ * React to brush events on the time select
+ */
 function brushed() {
 
-    // TODO: React to 'brushed' event by globally changing dates and using event handler to announce so map can update
+    // globally update dates
+    dateRange = timeSelect.brush.extent();
+
+    // announce change with event handler
+    $( document ).trigger( "datesChanged" );
 }
-
-
 
 /*
  * This filters by week using the global variable "dateRange". The min is represented by the 0 position in the week

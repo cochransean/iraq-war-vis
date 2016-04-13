@@ -3,17 +3,29 @@
 /*
  * StackedAreaChart - Object constructor function
  * @param _parentElement 	-- the HTML element in which to draw the visualization
- * @param _data						-- the  
+ * @param _districtViolenceData    -- violence data by district
+ * @param _totalViolenceData    -- violence for entire country not divided by district
+ * @param _dimensions       -- dimensions object
+ * @param _colorScale       -- color scale desired from colorbrewer.js
  */
 
-StackedAreaChart = function(_parentElement, _districtViolenceData, _totalViolenceData){
+StackedAreaChart = function(_parentElement, _dimensions, _districtViolenceData, _totalViolenceData, _colorScale){
 	this.parentElement = _parentElement;
   	this.districtViolenceData = _districtViolenceData;
   	this.totalViolenceData = _totalViolenceData;
 	this.displayData = []; // see data wrangling
 
+    // dimensions
+    this.width = _dimensions.width;
+    this.height = _dimensions.height;
+    this.margin = _dimensions.margin;
+    this.selectedColors = _colorScale;
 
   	this.initVis();
+
+    // TODO: fix this; bind event handler for changed dates
+    $( document ).on("datesChanged", console.log("received event handler"));
+
 };
 
 
@@ -26,10 +38,8 @@ StackedAreaChart.prototype.initVis = function(){
 
     var vis = this;
 
-	vis.margin = { top: 40, right: 0, bottom: 60, left: 60 };
-
-	vis.width = 800 - vis.margin.left - vis.margin.right,
-  	vis.height = 400 - vis.margin.top - vis.margin.bottom;
+	vis.width = vis.width - vis.margin.left - vis.margin.right;
+  	vis.height = vis.height - vis.margin.top - vis.margin.bottom;
 
 
   	// SVG drawing area
@@ -46,8 +56,8 @@ StackedAreaChart.prototype.initVis = function(){
 	vis.y = d3.scale.linear()
 		.range([vis.height, 0]);
 
-    // TODO: update with color brewer scale
-    vis.colorScale = d3.scale.category20();
+    // color brewer scale, update range and domain depending on data
+    vis.colorScale = d3.scale.ordinal();
 
 	vis.xAxis = d3.svg.axis()
 		.scale(vis.x)
@@ -57,11 +67,11 @@ StackedAreaChart.prototype.initVis = function(){
 	    .scale(vis.y)
 	    .orient("left");
 
-	vis.svg.append("g")
+	vis.xAxisGroup = vis.svg.append("g")
 	    .attr("class", "x-axis axis")
 	    .attr("transform", "translate(0," + vis.height + ")");
 
-	vis.svg.append("g")
+	vis.yAxisGroup = vis.svg.append("g")
 		.attr("class", "y-axis axis");
 
 	// Area generator
@@ -97,7 +107,6 @@ StackedAreaChart.prototype.wrangleData = function(){
 
     // filter by date TODO update this with brush functionality; need to make this global also since map relies on it
     vis.displayData = vis.displayData.filter(filterByDate);
-    console.log(vis.displayData);
 
     var dataCategories = ["df", "idf", "ied_total", "suicide"];
     vis.displayData = dataCategories.map(function(category) {
@@ -129,10 +138,6 @@ StackedAreaChart.prototype.wrangleData = function(){
 StackedAreaChart.prototype.updateVis = function(){
 	var vis = this;
 
-    // debug data
-    console.log(vis.totalViolenceData);
-    console.log(vis.displayData);
-
     // update the axes
     // Get the maximum of the multi-dimensional array or in other words, get the highest peak of the uppermost layer
 	vis.y.domain([0, d3.max(vis.displayData, function(d) {
@@ -143,9 +148,17 @@ StackedAreaChart.prototype.updateVis = function(){
 	]);
     vis.x.domain(dateRange);
 
+    // update color scale
+    var categoryNames = vis.displayData.map(function(d) {
+        return d.name;
+    });
+    vis.colorScale
+        .domain(categoryNames)
+        .range(colorbrewer[vis.selectedColors][categoryNames.length]);
+
     // Call axis functions with the new domain
-    vis.svg.select(".x-axis").call(vis.xAxis);
-    vis.svg.select(".y-axis").call(vis.yAxis);
+    vis.xAxisGroup.call(vis.xAxis);
+    vis.yAxisGroup.call(vis.yAxis);
 
 	// Draw the layers
 	var categories = vis.svg.selectAll(".area")

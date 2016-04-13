@@ -13,7 +13,7 @@ var dateRange;
 
 
 // Variables for the visualization instances
-var iraqMap, baghdadMap, areaChart;
+var iraqMap, baghdadMap, areaChart, timeSelect;
 
 
 // Start application by loading the data
@@ -58,6 +58,21 @@ function createVis() {
 
 	iraqMap = new IraqMap("iraq-map", iraqMapDistricts, iraqMapExteriorBorders, iraqMapPlaces);
     baghdadMap = new BaghdadMap("baghdad-map", iraqMapDistricts, iraqMapWater, iraqMapAirport);
-    areaChart = new StackedAreaChart("area-chart", districtViolenceData, totalViolenceData);
+
+    // Area chart with different dimensions from corresponding timeline select
+    var areaChartDimensions = {
+        "width": 800,
+        "height": 400,
+        "margin": { top: 40, right: 40, bottom: 40, left: 40 }
+    };
+    areaChart = new StackedAreaChart("area-chart", areaChartDimensions, districtViolenceData, totalViolenceData, "Set1");
+
+    // Timeline select: smaller version of area chart with brush functionality added
+    var timeSelectDimensions = {
+        "width": areaChartDimensions.width,
+        "height": 100,
+        "margin": { top: 40, right: 40, bottom: 40, left: 40 }
+    };
+    timeSelect = new TimeSelect("area-chart", timeSelectDimensions, districtViolenceData, totalViolenceData, "Greys")
 
 }
