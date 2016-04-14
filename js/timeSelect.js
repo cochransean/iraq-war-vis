@@ -16,12 +16,13 @@ function TimeSelect(_parentElement, _dimensions, _districtViolenceData, _totalVi
     // remove y-axis
     vis.yAxisGroup.remove();
 
-    // TODO: remove update functionality so vis doesn't update with brushes
+    // remove update functionality so vis doesn't update with brushes
+    $("#" + vis.parentElement).off("datesChanged");
 
     // Initialize brush component
     vis.brush = d3.svg.brush()
         .x(vis.x)
-        .on("brush", brushed);
+        .on("brushend", brushend);
 
     // Append brush component
     vis.svg.append("g")

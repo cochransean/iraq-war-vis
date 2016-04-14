@@ -6,14 +6,18 @@
 /*
  * React to brush events on the time select
  */
-function brushed() {
+function brushend() {
+
+    console.log(timeSelect.brush.extent());
 
     // globally update dates
     dateRange = timeSelect.brush.extent();
 
     // announce change with event handler
-    $( document ).trigger( "datesChanged" );
+    $(document).trigger( "datesChanged" );
+
 }
+
 
 /*
  * This filters by week using the global variable "dateRange". The min is represented by the 0 position in the week

@@ -23,9 +23,6 @@ StackedAreaChart = function(_parentElement, _dimensions, _districtViolenceData, 
 
   	this.initVis();
 
-    // TODO: fix this; bind event handler for changed dates
-    $( document ).on("datesChanged", console.log("received event handler"));
-
 };
 
 
@@ -85,10 +82,11 @@ StackedAreaChart.prototype.initVis = function(){
        return d.date;
     });
 
-	// TODO: Tooltip placeholder
+    // TODO: Tooltip placeholder
 
 	// filter and format data for stacked area chart
   	vis.wrangleData();
+
 };
 
 
@@ -105,7 +103,7 @@ StackedAreaChart.prototype.wrangleData = function(){
     // wrangle aggregate data TODO fix for district level data also
     vis.displayData = vis[selectedOption];
 
-    // filter by date TODO update this with brush functionality; need to make this global also since map relies on it
+    // filter by date
     vis.displayData = vis.displayData.filter(filterByDate);
 
     var dataCategories = ["df", "idf", "ied_total", "suicide"];
@@ -118,6 +116,7 @@ StackedAreaChart.prototype.wrangleData = function(){
         };
     });
 
+
     // init stack layout
     var stack = d3.layout.stack()
         .values(function(d) { return d.values; });
@@ -127,6 +126,7 @@ StackedAreaChart.prototype.wrangleData = function(){
 
 	// Update the visualization
   	vis.updateVis();
+
 };
 
 

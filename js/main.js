@@ -67,6 +67,9 @@ function createVis() {
     };
     areaChart = new StackedAreaChart("area-chart", areaChartDimensions, districtViolenceData, totalViolenceData, "Set1");
 
+    // add event listener for area chart
+    $(document).on("datesChanged", function() { areaChart.wrangleData() });
+
     // Timeline select: smaller version of area chart with brush functionality added
     var timeSelectDimensions = {
         "width": areaChartDimensions.width,
