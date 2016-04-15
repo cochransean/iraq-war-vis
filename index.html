@@ -27,7 +27,19 @@
 				<h2>A map with statistics on the Iraq War visualized</h2>
 
 				<!-- Visualization placeholders -->
-				<div class="vis" id="iraq-map"></div>
+
+				<div class="col-md-12">
+					<div class="user-control">
+						<select id="district-level-data" class="form-control" onchange="UpdateIraqMap()">
+							<option value="Population-Shia">Shia population in percentage per district</option>
+							<option value="Population-Sunni">Sunni population in percentage per district</option>
+							<option value="Population-Kurdish">Kurdish population in percentage per district</option>
+						</select>
+					</div>
+					<br/>
+					<div class="vis" id="iraq-map"></div>
+				</div>
+
 				<div class="vis" id="baghdad-map"></div>
                 <div id="area-chart-div">
                     <div class="row">
