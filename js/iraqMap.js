@@ -55,7 +55,11 @@ IraqMap.prototype.initVis = function() {
         .enter()
         .append("path")
         .attr("d", path)
-        .attr("class", "map district-borders");
+        .attr("class", "map district-borders")
+        .style({
+            "stroke": "black",
+            "stroke-width": "0.5"
+        });
 
     vis.svg.selectAll(".city")
         .data(vis.placeData)
@@ -78,4 +82,48 @@ IraqMap.prototype.initVis = function() {
         })
         .attr("class", "city-label");
 
+    // Update the visualization
+    vis.updateVis();
+
 };
+
+IraqMap.prototype.updateVis = function(){
+
+    var vis = this;
+
+    /** Create a quantize scale that sorts the data values into color buckets: */
+
+    var colorScale = d3.scale.quantize()
+        .range(colorbrewer.Greens[6]);
+
+    /** Load CSV (data for the areas): */
+
+    d3.csv("Data/Ethnicity-Data.csv", function(data) {
+
+        /** Define the domain for the quantize scale: */
+
+        colorScale.domain([
+            d3.min(data, function(d) { return d.shia_pop_CIA_2003; }),
+            d3.max(data, function(d) { return d.shia_pop_CIA_2003; })
+        ]);
+
+        for (var i = 0; i < data.length; i++) {
+            for (var j = 0; j < vis.districtData.length; j++) {
+                if (data[i].district == vis.districtData[j].properties.ADM3NAME) {
+                    vis.districtData[j].properties.ShiaPop = data[i].shia_pop_CIA_2003;
+                    // "break" terminates the loop once the matching states have been found
+                    break;
+                }
+            }
+        }
+
+        vis.svg.selectAll(".district-borders")
+            .style("fill", function(d) {
+                var value = d.properties.ShiaPop;
+                if (value) {
+                    return colorScale(value);
+                } else {
+                    return "#ccc";
+                }
+            });
+    })};
