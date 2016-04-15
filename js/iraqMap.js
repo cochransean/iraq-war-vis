@@ -91,36 +91,59 @@ IraqMap.prototype.updateVis = function() {
 
     var vis = this;
 
-    /** Create "Shia population" as (arbitrary) custom view (for now)
+    /** Create "Shia population" as (arbitrary) custom view (for now) */
 
     /** Create a quantize scale that sorts the data values into color buckets: */
+
+    var colorScale = d3.scale.quantize()
+        .domain([
+            d3.min(vis.districtData, function (d) { return d.properties.ShareShia; }),
+            d3.max(vis.districtData, function (d) { return d.properties.ShareShia; }) ])
+        .range(colorbrewer.Greens[6]);
+
+    // TODO: The domain could also simply go from 0 to 1. May make more sense for consistency.
+    /** an alternative color range that allows for more control:
+        var color = [];
+        var color_length = 255;
+        for (var i = 0; i < color_length; i++) {
+            var color_new = "rgb(" + Math.floor( i / ( color_length - 1 ) * 200 + 55) + ", 0, 0)";
+            color.push(color_new);
+        }
+        var colorScale = d3.scale.quantize()
+            .range(color);
+    */
+
+    vis.svg.selectAll(".district-borders")
+        .style("fill", function (d) {
+            var value = d.properties.ShareShia;
+            if (value) { return colorScale(value); }
+            else { return "#ccc"; }
+        })
+        .append("title")
+        .text(function (d) {
+            return "Shia population in " + d.properties.ADM3NAME + ": " + Math.floor(d.properties.ShareShia * 100) + "%.";
+        });
+};
+
+function UpdateIraqMap() {
+
+    var vis = iraqMap;
+
     var selectBox = document.getElementById("district-level-data");
     var selectedValue = selectBox.options[selectBox.selectedIndex].value;
 
     if (selectedValue == "Population-Shia") {
-        
+
         var colorScale = d3.scale.quantize()
             .domain([
                 d3.min(vis.districtData, function (d) { return d.properties.ShareShia; }),
                 d3.max(vis.districtData, function (d) { return d.properties.ShareShia; }) ])
             .range(colorbrewer.Greens[6]);
 
-        /** TODO: The domain could also simply go from 0 to 1. May make more sense for consistency. */
-        /** an alternative color range that allows for more control:
-         var color = [];
-         var color_length = 255;
-         for (var i = 0; i < color_length; i++) {
-            var color_new = "rgb(" + Math.floor( i / ( color_length - 1 ) * 200 + 55) + ", 0, 0)";
-            color.push(color_new);
-        }
-         var colorScale = d3.scale.quantize()
-         .range(color);
-         */
-
         vis.svg.selectAll(".district-borders")
             .style("fill", function (d) {
                 var value = d.properties.ShareShia;
-                if (value) { return colorScale(value); } 
+                if (value) { return colorScale(value); }
                 else { return "#ccc"; }
             })
             .append("title")
@@ -168,10 +191,4 @@ IraqMap.prototype.updateVis = function() {
                 return "Kurdish population in " + d.properties.ADM3NAME + ": " + Math.floor(d.properties.ShareKurdish * 100) + "%.";
             });
     }
-};
-
-function UpdateIraqMap() {
-
-    IraqMap.prototype.updateVis();
-
 }
