@@ -12,14 +12,15 @@ var force = d3.layout.force()
 
 var data;
 
-d3.csv("data/esoc-iraq-v3_sigact-district-year.csv",function(error, links){
+d3.csv("data/esoc-iraq-v3_ethnicity.csv",function(error, links){
 
     if (error) throw error;
 
     links.filter(function(link){
-        link.suicide = +link.suicide;
-        link.year = +link.year;
-        link.ied_total = +link.ied_total;
+        link.sunni_pop_CIA_2003 = +link.sunni_pop_CIA_2003;
+        link.kurd_pop_CIA_2003 = +link.kurd_pop_CIA_2003;
+        link.shia_pop_CIA_2003 = +link.shia_pop_CIA_2003;
+        link.total_pop_CIA_2003 = +link.total_pop_CIA_2003;
     });
 
     console.log(links);
@@ -28,31 +29,50 @@ d3.csv("data/esoc-iraq-v3_sigact-district-year.csv",function(error, links){
 
     updateVisualization();
     $('#button').click();
-    $('#button2').click();
 
 });
 
 function updateVisualization(){
 
-    var ranking = d3.select("#button").property("value");
-
-    var ranking2 = d3.select("#button2").property("value");
+    var district = d3.select("#button").property("value");
 
     var node = svg.selectAll(".node")
         .data(data);
 
     node
-        .enter().append("circle").attr("class", "node");
+        .enter().append("circle").attr("class", "node")
+        .call(force.drag);
+
     node
         .filter(function(d){
-            return d.year == ranking;
+            return d.district == district;
         })
         .attr("r",function(d){
-        return d[ranking2]/10;
+            return d.sunni_pop_CIA_2003/1000;
         });
 
     node
+        .enter().append("circle").attr("class", "node")
         .call(force.drag);
+
+    node
+        .filter(function(d){
+            return d.district == district;
+        })
+        .attr("r",function(d){
+            return d.kurd_pop_CIA_2003/1000;
+        });
+
+    node
+        .enter().append("circle").attr("class", "node")
+        .call(force.drag);
+    node
+        .filter(function(d){
+            return d.district == district;
+        })
+        .attr("r",function(d){
+            return d.shia_pop_CIA_2003/1000;
+        });
 
     node.exit().remove();
 
