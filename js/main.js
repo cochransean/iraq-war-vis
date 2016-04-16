@@ -62,13 +62,6 @@ function loadData() {
 
 function createVis() {
 
-    iraqMap = new IraqMap("iraq-map", iraqMapDistricts, iraqMapExteriorBorders, iraqMapPlaces, districtViolenceData,
-        ethnicDistrictData);
-
-    // listen for changes to choropleth option and update accordingly
-    $("#district-level-data").change(function() { iraqMap.updateChoropleth() });
-
-
     // Area chart with different dimensions from corresponding timeline select
     var areaChartDimensions = {
         "width": 800,
@@ -76,8 +69,6 @@ function createVis() {
         "margin": { top: 40, right: 40, bottom: 40, left: 40 }
     };
     areaChart = new StackedAreaChart("area-chart", areaChartDimensions, districtViolenceData, totalViolenceData, "Set1");
-
-    // add event listener for area chart
     $(document).on("datesChanged", function() { areaChart.wrangleData() });
 
     // Timeline select: smaller version of area chart with brush functionality added
@@ -87,5 +78,11 @@ function createVis() {
         "margin": { top: 40, right: 40, bottom: 40, left: 40 }
     };
     timeSelect = new TimeSelect("area-chart", timeSelectDimensions, districtViolenceData, totalViolenceData, "Greys")
+
+    // Create map after timeline because timeline generates dates needed for map data selection
+    iraqMap = new IraqMap("iraq-map", iraqMapDistricts, iraqMapExteriorBorders, iraqMapPlaces, districtViolenceData,
+        ethnicDistrictData);
+    $("#district-level-data").change(function() { iraqMap.updateChoropleth() });
+    $(document).on("datesChanged", function() { iraqMap.wrangleData() });
 
 }

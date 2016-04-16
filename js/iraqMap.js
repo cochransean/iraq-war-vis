@@ -110,6 +110,12 @@ IraqMap.prototype.wrangleData = function() {
     var selectBox = document.getElementById("circle-data");
     var selectedValue = selectBox.options[selectBox.selectedIndex].value;
 
+    // start with the entire data set then filter by date
+    // TODO we need to go back to all these functions that are hard coded for violence data and make them
+    // TODO broadly applicable for whatever category is selected once it's all working
+    vis.displayDataArray = vis.districtViolenceData;
+    vis.displayDataArray = vis.displayDataArray.filter(filterByDate);
+
     // populate object with districts prior to augmented assignment below to prevent key error
     var districts = d3.keys(vis.ethnicData);
     districts.forEach(function(district) {
@@ -117,7 +123,7 @@ IraqMap.prototype.wrangleData = function() {
     });
 
     // cycle through time periods adding up cumulative for each district
-    vis.districtViolenceData.forEach(function(timePeriod) {
+    vis.displayDataArray.forEach(function(timePeriod) {
         vis.displayData[timePeriod.district] += timePeriod[selectedValue];
     });
 
@@ -127,7 +133,6 @@ IraqMap.prototype.wrangleData = function() {
 IraqMap.prototype.updateCircles = function() {
     var vis = this;
 
-    console.log(vis.displayData);
     var districts = d3.keys(vis.displayData);
     vis.displayDataArray = districts.map(function(district) {
        return {
@@ -135,7 +140,6 @@ IraqMap.prototype.updateCircles = function() {
            "value": vis.displayData[district]
        }
     });
-    console.log(vis.displayDataArray);
 
     // update circle scale
     vis.circleScale
@@ -143,14 +147,26 @@ IraqMap.prototype.updateCircles = function() {
             return d.value;
         }));
 
-    vis.svg.selectAll("circle")
-        .data(vis.displayDataArray)
-        .enter()
+    var circles = vis.svg.selectAll("circle")
+        .data(vis.displayDataArray, function(d) { return d.district });
+
+    circles.enter()
         .append("circle")
         .attr("cx", function (d) { return vis.districtCentroids[d.district][0]; } )
         .attr("cy", function (d) { return vis.districtCentroids[d.district][1]; } )
-        .attr("r", function(d) { return vis.circleScale(d.value) })
         .style({ "fill": "black", "opacity": "0.6" });
+
+    circles
+        .attr("r", function(d) {
+            var scaledValue = vis.circleScale(d.value);
+
+            // don't circles so small they aren't legible and look like noise
+            scaledValue = scaledValue < 2 ? 0: scaledValue;
+            return scaledValue;
+        });
+
+    circles.exit()
+        .remove();
 
 };
 
