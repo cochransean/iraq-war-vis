@@ -46,6 +46,10 @@ h2 {
   shape-rendering: crispEdges;
 }
 
+#controls h5 {
+  font-weight: bold;
+}
+
 /* MAP STYLES */
 svg .district-borders {
   stroke: black;

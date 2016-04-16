@@ -65,8 +65,8 @@ function createVis() {
     // Area chart with different dimensions from corresponding timeline select
     var areaChartDimensions = {
         "width": null,
-        "height": 450,
-        "margin": { top: 40, right: 40, bottom: 40, left: 40 }
+        "height": 390,
+        "margin": { top: 40, right: 40, bottom: 20, left: 40 }
     };
     areaChart = new StackedAreaChart("area-chart", areaChartDimensions, districtViolenceData, totalViolenceData, "Set1");
     $(document).on("datesChanged", function() { areaChart.wrangleData() });
@@ -75,7 +75,7 @@ function createVis() {
     var timeSelectDimensions = {
         "width": areaChart.width,
         "height": 100,
-        "margin": { top: 40, right: 40, bottom: 40, left: 40 }
+        "margin": { top: 20, right: 40, bottom: 20, left: 40 }
     };
     timeSelect = new TimeSelect("area-chart", timeSelectDimensions, districtViolenceData, totalViolenceData, "Greys");
 
