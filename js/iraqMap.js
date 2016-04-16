@@ -145,8 +145,9 @@ function UpdateIraqMap() {
                 var value = d.properties.ShareShia;
                 if (value) { return colorScale(value); }
                 else { return "#ccc"; }
-            })
-            .append("title")
+            });
+
+        vis.svg.selectAll("title")
             .text(function (d) {
                 return "Shia population in " + d.properties.ADM3NAME + ": " + Math.floor(d.properties.ShareShia * 100) + "%.";
             });
@@ -165,8 +166,9 @@ function UpdateIraqMap() {
                 var value = d.properties.ShareSunni;
                 if (value) { return colorScale(value); }
                 else { return "#ccc"; }
-            })
-            .append("title")
+            });
+
+        vis.svg.selectAll("title")
             .text(function (d) {
                 return "Sunni population in " + d.properties.ADM3NAME + ": " + Math.floor(d.properties.ShareSunni * 100) + "%.";
             });
@@ -185,8 +187,9 @@ function UpdateIraqMap() {
                 var value = d.properties.ShareKurdish;
                 if (value) { return colorScale(value); }
                 else { return "#ccc"; }
-            })
-            .append("title")
+            });
+
+        vis.svg.selectAll("title")
             .text(function (d) {
                 return "Kurdish population in " + d.properties.ADM3NAME + ": " + Math.floor(d.properties.ShareKurdish * 100) + "%.";
             });
