@@ -5,8 +5,7 @@
  * @param _data -- the data used for the map
  */
 
-IraqMap = function(_parentElement, _districtData, _exteriorBorder, _placeData, _districtViolenceData,
-                   _totalViolenceData, _ethnicData){
+IraqMap = function(_parentElement, _districtData, _exteriorBorder, _placeData, _districtViolenceData, _ethnicData){
     this.parentElement = _parentElement;
 
     this.districtData = _districtData;
@@ -14,11 +13,8 @@ IraqMap = function(_parentElement, _districtData, _exteriorBorder, _placeData, _
     this.exteriorBorder = _exteriorBorder;
     this.districtViolenceData = _districtViolenceData;
     this.districtCentroids = {};
-    this.totalViolenceData = _totalViolenceData;
     this.ethnicData = _ethnicData;
-
-    // No data wrangling, no update sequence
-    this.displayData = [];
+    this.displayData = []; // see data wrangling
 
     this.initVis();
 };
@@ -98,15 +94,30 @@ IraqMap.prototype.initVis = function() {
 
     // Update the visualization
     vis.updateChoropleth();
-    vis.createCircles();
+    vis.wrangleData();
 
 };
 
-IraqMap.prototype.createCircles = function() {
+IraqMap.prototype.wrangleData = function() {
+    var vis = this;
+
+    console.log(districtViolenceData);
+    var selectBox = document.getElementById("circle-data");
+    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+    console.log(selectedValue);
+
+    // TODO filter by current date range and arrange into totals for that range by district
+
+
+    vis.displayData = vis.districtViolenceData;
+    vis.updateCircles();
+};
+
+IraqMap.prototype.updateCircles = function() {
     var vis = this;
 
     vis.svg.selectAll("circle")
-        .data(vis.districtViolenceData)
+        .data(vis.displayData)
         .enter()
         .append("circle")
         .attr("cx", function (d) { return vis.districtCentroids[d.district][0]; } )

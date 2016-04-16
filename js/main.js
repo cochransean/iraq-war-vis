@@ -63,7 +63,7 @@ function loadData() {
 function createVis() {
 
     iraqMap = new IraqMap("iraq-map", iraqMapDistricts, iraqMapExteriorBorders, iraqMapPlaces, districtViolenceData,
-        totalViolenceData, ethnicDistrictData);
+        ethnicDistrictData);
 
     // listen for changes to choropleth option and update accordingly
     $("#district-level-data").change(function() { iraqMap.updateChoropleth() });
