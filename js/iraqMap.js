@@ -5,12 +5,13 @@
  * @param _data -- the data used for the map
  */
 
-IraqMap = function(_parentElement, _districtData, _exteriorBorder, _placeData){
+IraqMap = function(_parentElement, _districtData, _exteriorBorder, _placeData, _districtViolenceData){
     this.parentElement = _parentElement;
 
     this.districtData = _districtData;
     this.placeData = _placeData;
     this.exteriorBorder = _exteriorBorder;
+    this.districtViolenceData = _districtViolenceData;
 
     // No data wrangling, no update sequence
     this.displayData = [];
@@ -61,6 +62,24 @@ IraqMap.prototype.initVis = function() {
             "stroke-width": "0.5"
         });
 
+    /** Here, I added the centroid of the SVG district paths to the Violence Data. It works,
+     * but the code is totally killing loading times.
+     * The idea behind this was to use the centroid for each district to move to circles to the right place.
+     */
+    vis.svg.selectAll(".district-borders")
+        .each(function (d, i) {
+            for (var j = 0; j < vis.districtViolenceData.length; j++) {
+                if (d.properties.ADM3NAME == vis.districtViolenceData[j].district) {
+                    vis.districtViolenceData[j].x = path.centroid(d)[0];
+                    vis.districtViolenceData[j].y = path.centroid(d)[1];
+                }
+            }
+        });
+    console.log(districtViolenceData);
+
+
+
+    console.log(vis.placeData);
     vis.svg.selectAll(".city")
         .data(vis.placeData)
         .enter()
@@ -83,11 +102,12 @@ IraqMap.prototype.initVis = function() {
         .attr("class", "city-label");
 
     // Update the visualization
-    vis.updateVis();
+    vis.createChoropleth();
+    vis.createCircles();
 
 };
 
-IraqMap.prototype.updateVis = function() {
+IraqMap.prototype.createChoropleth = function() {
 
     var vis = this;
 
@@ -125,7 +145,21 @@ IraqMap.prototype.updateVis = function() {
         });
 };
 
-function UpdateIraqMap() {
+IraqMap.prototype.createCircles = function() {
+    var vis = this;
+
+    vis.svg.selectAll("circle")
+        .data(vis.districtViolenceData)
+        .enter()
+        .append("circle")
+        .attr("cx", function (d) { return d.x; } )
+        .attr("cy", function (d) { return d.y; } )
+        .attr("r", 3)
+        .style({ "fill": "black", "opacity": "0.6" });
+
+};
+
+function UpdateChoropleth() {
 
     var vis = iraqMap;
 
