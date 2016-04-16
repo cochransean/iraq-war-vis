@@ -24,10 +24,11 @@ IraqMap.prototype.initVis = function() {
     // set this so it remains consistent
     var vis = this;
 
-    vis.margin = {top: 20, right: 20, bottom: 20, left: 20};
-
-    vis.width = 800 - vis.margin.left - vis.margin.right;
-    vis.height = 800 - vis.margin.top - vis.margin.bottom;
+    // size map based on width of its div (to take up all available space and allow for easier styling)
+    vis.margin = {top: 0, right: 0, bottom: 20, left: 20};
+    vis.width = $("#" + vis.parentElement).width();
+    vis.height = vis.width - vis.margin.top - vis.margin.bottom;
+    vis.width = vis.width - vis.margin.left - vis.margin.right;
 
     // SVG drawing area
     vis.svg = d3.select("#" + vis.parentElement).append("svg")
@@ -40,7 +41,7 @@ IraqMap.prototype.initVis = function() {
     var projection = d3.geo.mercator()
         .translate([vis.width / 2, vis.height / 2])
         .center([43.68, 33.22])
-        .scale(4400);
+        .scale(3700);
 
     var path = d3.geo.path()
         .projection(projection);

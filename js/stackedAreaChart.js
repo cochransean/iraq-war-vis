@@ -15,8 +15,8 @@ StackedAreaChart = function(_parentElement, _dimensions, _districtViolenceData, 
   	this.totalViolenceData = _totalViolenceData;
 	this.displayData = []; // see data wrangling
 
-    // dimensions
-    this.width = _dimensions.width;
+    // set dimensions; size based on width of div to allow for easier styling with bootstrap
+    this.width = $("#" + this.parentElement).width();
     this.height = _dimensions.height;
     this.margin = _dimensions.margin;
     this.selectedColors = _colorScale;
@@ -35,6 +35,7 @@ StackedAreaChart.prototype.initVis = function(){
 
     var vis = this;
 
+	// size with margins accounted for
 	vis.width = vis.width - vis.margin.left - vis.margin.right;
   	vis.height = vis.height - vis.margin.top - vis.margin.bottom;
 

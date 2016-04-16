@@ -64,8 +64,8 @@ function createVis() {
 
     // Area chart with different dimensions from corresponding timeline select
     var areaChartDimensions = {
-        "width": 800,
-        "height": 400,
+        "width": null,
+        "height": 500,
         "margin": { top: 40, right: 40, bottom: 40, left: 40 }
     };
     areaChart = new StackedAreaChart("area-chart", areaChartDimensions, districtViolenceData, totalViolenceData, "Set1");
@@ -75,9 +75,9 @@ function createVis() {
     var timeSelectDimensions = {
         "width": areaChartDimensions.width,
         "height": 100,
-        "margin": { top: 40, right: 40, bottom: 40, left: 40 }
+        "margin": { top: 40, right: 40, bottom: 40, left: 0 }
     };
-    timeSelect = new TimeSelect("area-chart", timeSelectDimensions, districtViolenceData, totalViolenceData, "Greys")
+    timeSelect = new TimeSelect("area-chart", timeSelectDimensions, districtViolenceData, totalViolenceData, "Greys");
 
     // Create map after timeline because timeline generates dates needed for map data selection
     iraqMap = new IraqMap("iraq-map", iraqMapDistricts, iraqMapExteriorBorders, iraqMapPlaces, districtViolenceData,
