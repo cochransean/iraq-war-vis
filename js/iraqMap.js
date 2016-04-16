@@ -95,7 +95,7 @@ IraqMap.prototype.initVis = function() {
         .attr("class", "city-label");
 
     // Update the visualization
-    vis.createChoropleth();
+    vis.updateChoropleth();
     vis.createCircles();
 
 };
@@ -161,73 +161,35 @@ IraqMap.prototype.createCircles = function() {
 
 };
 
-function UpdateChoropleth() {
+IraqMap.prototype.updateChoropleth = function() {
 
-    var vis = iraqMap;
+    var vis = this;
 
     var selectBox = document.getElementById("district-level-data");
-    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+    var ethnicGroupName = selectBox.options[selectBox.selectedIndex].value;
+    var selectedValue = "Share" + ethnicGroupName;
 
-    if (selectedValue == "Population-Shia") {
+    // get array of values to calculate extent for color scale
+    var districts = d3.keys(vis.ethnicData);
+    var valuesForExtent = districts.map(function(district) {
+        return vis.ethnicData[district][selectedValue];
+    });
 
-        var colorScale = d3.scale.quantize()
-            .domain([
-                d3.min(vis.districtData, function (d) { return d.properties.ShareShia; }),
-                d3.max(vis.districtData, function (d) { return d.properties.ShareShia; }) ])
-            .range(colorbrewer.Greens[6]);
+    var colorScale = d3.scale.quantize()
+        .domain(d3.extent(valuesForExtent))
+        .range(colorbrewer.Greens[6]);
 
-        vis.svg.selectAll(".district-borders")
-            .style("fill", function (d) {
-                var value = d.properties.ShareShia;
-                if (value) { return colorScale(value); }
-                else { return "#ccc"; }
-            });
+    vis.svg.selectAll(".district-borders")
+        .style("fill", function (d) {
+            var value = vis.ethnicData[d.properties.ADM3NAME][selectedValue];
+            if (value) { return colorScale(value); }
+            else { return "#ccc"; }
+        });
 
-        vis.svg.selectAll("title")
-            .text(function (d) {
-                return "Shia population in " + d.properties.ADM3NAME + ": " + Math.floor(d.properties.ShareShia * 100) + "%.";
-            });
-    }
+    vis.svg.selectAll("title")
+        .text(function (d) {
+            return ethnicGroupName + " population in " + d.properties.ADM3NAME + ": " +
+                Math.floor(d.properties.ShareShia * 100) + "%.";
+        });
 
-    if (selectedValue == "Population-Sunni") {
-
-        var colorScale = d3.scale.quantize()
-            .domain([
-                d3.min(vis.districtData, function (d) { return d.properties.ShareSunni; }),
-                d3.max(vis.districtData, function (d) { return d.properties.ShareSunni; }) ])
-            .range(colorbrewer.Greens[6]);
-
-        vis.svg.selectAll(".district-borders")
-            .style("fill", function (d) {
-                var value = d.properties.ShareSunni;
-                if (value) { return colorScale(value); }
-                else { return "#ccc"; }
-            });
-
-        vis.svg.selectAll("title")
-            .text(function (d) {
-                return "Sunni population in " + d.properties.ADM3NAME + ": " + Math.floor(d.properties.ShareSunni * 100) + "%.";
-            });
-    }
-
-    if (selectedValue == "Population-Kurdish") {
-
-        var colorScale = d3.scale.quantize()
-            .domain([
-                d3.min(vis.districtData, function (d) { return d.properties.ShareKurdish; }),
-                d3.max(vis.districtData, function (d) { return d.properties.ShareKurdish; }) ])
-            .range(colorbrewer.Greens[6]);
-
-        vis.svg.selectAll(".district-borders")
-            .style("fill", function (d) {
-                var value = d.properties.ShareKurdish;
-                if (value) { return colorScale(value); }
-                else { return "#ccc"; }
-            });
-
-        vis.svg.selectAll("title")
-            .text(function (d) {
-                return "Kurdish population in " + d.properties.ADM3NAME + ": " + Math.floor(d.properties.ShareKurdish * 100) + "%.";
-            });
-    }
-}
+};

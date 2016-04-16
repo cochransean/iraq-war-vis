@@ -66,9 +66,12 @@ function loadData() {
 
 function createVis() {
 
-	iraqMap = new IraqMap("iraq-map", iraqMapDistricts, iraqMapExteriorBorders, iraqMapPlaces, districtViolenceData,
+    iraqMap = new IraqMap("iraq-map", iraqMapDistricts, iraqMapExteriorBorders, iraqMapPlaces, districtViolenceData,
         ethnicDistrictData);
-    baghdadMap = new BaghdadMap("baghdad-map", iraqMapDistricts, iraqMapWater, iraqMapAirport);
+
+    // listen for changes to choropleth option and update accordingly
+    $("#district-level-data").change(function() { iraqMap.updateChoropleth() });
+
 
     // Area chart with different dimensions from corresponding timeline select
     var areaChartDimensions = {
