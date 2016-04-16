@@ -65,7 +65,7 @@ function createVis() {
     // Area chart with different dimensions from corresponding timeline select
     var areaChartDimensions = {
         "width": null,
-        "height": 500,
+        "height": 450,
         "margin": { top: 40, right: 40, bottom: 40, left: 40 }
     };
     areaChart = new StackedAreaChart("area-chart", areaChartDimensions, districtViolenceData, totalViolenceData, "Set1");
@@ -73,9 +73,9 @@ function createVis() {
 
     // Timeline select: smaller version of area chart with brush functionality added
     var timeSelectDimensions = {
-        "width": areaChartDimensions.width,
+        "width": areaChart.width,
         "height": 100,
-        "margin": { top: 40, right: 40, bottom: 40, left: 0 }
+        "margin": { top: 40, right: 40, bottom: 40, left: 40 }
     };
     timeSelect = new TimeSelect("area-chart", timeSelectDimensions, districtViolenceData, totalViolenceData, "Greys");
 

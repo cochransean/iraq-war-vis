@@ -31,37 +31,39 @@
 
         <!-- Visualizations -->
         <div class="row">
-            <div class="col-md-7">
-                <div class="map-control">
-                    <form>
-                        <div class="form-group">
-                            <label for="district-level-data">Select Data</label>
-                            <select id="district-level-data" class="form-control">
-                                <option value="Shia">Shia population in percentage per district</option>
-                                <option value="Sunni">Sunni population in percentage per district</option>
-                                <option value="Kurdish">Kurdish population in percentage per district</option>
-                            </select>
-                            <select id="circle-data" class="form-control">
-                                <option value="ied_total">IEDs</option>
-                            </select>
-                        </div>
-                    </form>
-                </div>
+            <div class="col-md-6">
                 <div id="iraq-map"></div>
             </div>
-            <div class="col-md-5">
-                <div id="area-chart-div" class="col-md-10">
-                    <div id="area-chart-control">
-                        <form>
-                            <div class="form-group">
-                                <label for="area-chart-data-select">Select Data</label>
-                                <select id="area-chart-data-select" class="form-control">
-                                    <option>Violence by Type</option>
-                                </select>
-                            </div>
-                        </form>
-                    </div>
+            <div class="col-md-6">
+                <div id="area-chart-div">
                     <div id="area-chart"></div>
+                    <div id="controls" class="row">
+                        <div id="map-control" class="col-xs-6">
+                            <form>
+                                <div class="form-group">
+                                    <label for="district-level-data">Select Map Data</label>
+                                    <select id="district-level-data" class="form-control">
+                                        <option value="Shia">Shia population in percentage per district</option>
+                                        <option value="Sunni">Sunni population in percentage per district</option>
+                                        <option value="Kurdish">Kurdish population in percentage per district</option>
+                                    </select>
+                                    <select id="circle-data" class="form-control">
+                                        <option value="ied_total">IEDs</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="area-chart-control" class="col-xs-6">
+                            <form>
+                                <div class="form-group">
+                                    <label for="area-chart-data-select">Select Area Chart Data</label>
+                                    <select id="area-chart-data-select" class="form-control">
+                                        <option>Violence by Type</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

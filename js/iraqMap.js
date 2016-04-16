@@ -25,7 +25,7 @@ IraqMap.prototype.initVis = function() {
     var vis = this;
 
     // size map based on width of its div (to take up all available space and allow for easier styling)
-    vis.margin = {top: 0, right: 0, bottom: 20, left: 20};
+    vis.margin = {top: 20, right: 20, bottom: 20, left: 20};
     vis.width = $("#" + vis.parentElement).width();
     vis.height = vis.width - vis.margin.top - vis.margin.bottom;
     vis.width = vis.width - vis.margin.left - vis.margin.right;
@@ -40,7 +40,7 @@ IraqMap.prototype.initVis = function() {
     // setup project and path generator
     var projection = d3.geo.mercator()
         .translate([vis.width / 2, vis.height / 2])
-        .center([43.68, 33.22])
+        .center([43.75, 33.2])
         .scale(3700);
 
     var path = d3.geo.path()
