@@ -7,14 +7,14 @@
 
 IraqMap = function(_parentElement, _districtData, _exteriorBorder, _placeData, _districtViolenceData, _ethnicData){
     this.parentElement = _parentElement;
-
     this.districtData = _districtData;
     this.placeData = _placeData;
     this.exteriorBorder = _exteriorBorder;
     this.districtViolenceData = _districtViolenceData;
     this.districtCentroids = {};
     this.ethnicData = _ethnicData;
-    this.displayData = []; // see data wrangling
+    this.displayData = {}; // see data wrangling
+    this.displayDataArray = [];
 
     this.initVis();
 };
@@ -45,6 +45,14 @@ IraqMap.prototype.initVis = function() {
     var path = d3.geo.path()
         .projection(projection);
 
+    // setup color scale here; update range and domain upon updates to allow for color scale changes
+    // get array of values to calculate extent for color scale
+    vis.colorScale = d3.scale.quantize();
+
+    // setup linear scale for proportionate symbol circle radii; update domain later because it will change on selection
+    vis.circleScale = d3.scale.linear()
+        .range([0, 30]);
+
     // Render the Iraq map (no need to update borders so include here and not update vis)
     vis.svg.append("path")
         .datum(vis.exteriorBorder)
@@ -62,10 +70,7 @@ IraqMap.prototype.initVis = function() {
             "stroke-width": "0.5"
         });
 
-    /** Here, I added the centroid of the SVG district paths to the Violence Data. It works,
-     * but the code is totally killing loading times.
-     * The idea behind this was to use the centroid for each district to move to circles to the right place.
-     */
+    // get district centroids and place into object for constant time access
     vis.svg.selectAll(".district-borders")
         .each(function (d) {
             vis.districtCentroids[d.properties.ADM3NAME] = path.centroid(d);
@@ -101,28 +106,50 @@ IraqMap.prototype.initVis = function() {
 IraqMap.prototype.wrangleData = function() {
     var vis = this;
 
-    console.log(districtViolenceData);
+    // get currently selected data
     var selectBox = document.getElementById("circle-data");
     var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-    console.log(selectedValue);
 
-    // TODO filter by current date range and arrange into totals for that range by district
+    // populate object with districts prior to augmented assignment below to prevent key error
+    var districts = d3.keys(vis.ethnicData);
+    districts.forEach(function(district) {
+        vis.displayData[district] = 0;
+    });
 
+    // cycle through time periods adding up cumulative for each district
+    vis.districtViolenceData.forEach(function(timePeriod) {
+        vis.displayData[timePeriod.district] += timePeriod[selectedValue];
+    });
 
-    vis.displayData = vis.districtViolenceData;
     vis.updateCircles();
 };
 
 IraqMap.prototype.updateCircles = function() {
     var vis = this;
 
+    console.log(vis.displayData);
+    var districts = d3.keys(vis.displayData);
+    vis.displayDataArray = districts.map(function(district) {
+       return {
+           "district": district,
+           "value": vis.displayData[district]
+       }
+    });
+    console.log(vis.displayDataArray);
+
+    // update circle scale
+    vis.circleScale
+        .domain(d3.extent(vis.displayDataArray, function(d) {
+            return d.value;
+        }));
+
     vis.svg.selectAll("circle")
-        .data(vis.displayData)
+        .data(vis.displayDataArray)
         .enter()
         .append("circle")
         .attr("cx", function (d) { return vis.districtCentroids[d.district][0]; } )
         .attr("cy", function (d) { return vis.districtCentroids[d.district][1]; } )
-        .attr("r", 3)
+        .attr("r", function(d) { return vis.circleScale(d.value) })
         .style({ "fill": "black", "opacity": "0.6" });
 
 };
@@ -135,20 +162,19 @@ IraqMap.prototype.updateChoropleth = function() {
     var ethnicGroupName = selectBox.options[selectBox.selectedIndex].value;
     var selectedValue = "Share" + ethnicGroupName;
 
-    // get array of values to calculate extent for color scale
+    // update color scale
     var districts = d3.keys(vis.ethnicData);
     var valuesForExtent = districts.map(function(district) {
         return vis.ethnicData[district][selectedValue];
     });
-
-    var colorScale = d3.scale.quantize()
+    vis.colorScale
         .domain(d3.extent(valuesForExtent))
         .range(colorbrewer.Greens[6]);
 
     vis.svg.selectAll(".district-borders")
         .style("fill", function (d) {
             var value = vis.ethnicData[d.properties.ADM3NAME][selectedValue];
-            if (value) { return colorScale(value); }
+            if (value) { return vis.colorScale(value); }
             else { return "#ccc"; }
         });
 
