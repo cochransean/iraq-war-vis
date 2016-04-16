@@ -31,7 +31,7 @@ function loadData() {
         .defer(d3.json, "data/baghdad-airport.json")
         .defer(d3.csv, "data/violence/Violence_district_level_week.csv")
         .defer(d3.csv, "data/violence/Violence_country_level_week.csv")
-        .defer(d3.csv, "Data/Ethnicity-Data.csv")
+        .defer(d3.csv, "data/Ethnicity-Data.csv")
         .await(function(error, districtData, waterData, placeData, airportData, districtViolence, countryViolence,
                 ethnicData){
 
