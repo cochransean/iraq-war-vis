@@ -27,13 +27,11 @@ function loadData() {
     // TODO to load and go while others (further down page can load after first vis's are already display loading
     queue()
         .defer(d3.json, "data/iraq-topo.json")
-        .defer(d3.json, "data/waterways.json")
         .defer(d3.json, "data/places.json")
-        .defer(d3.json, "data/baghdad-airport.json")
         .defer(d3.csv, "data/violence/Violence_district_level_week.csv")
         .defer(d3.csv, "data/violence/Violence_country_level_week.csv")
         .defer(d3.csv, "data/Ethnicity-Data.csv")
-        .await(function(error, districtData, waterData, placeData, airportData, districtViolence, countryViolence,
+        .await(function(error, districtData, placeData, districtViolence, countryViolence,
                 ethnicData){
 
             // if error, print and return
@@ -51,9 +49,7 @@ function loadData() {
             iraqMapExteriorBorders = topojson.mesh(districtData, districtData.objects.Iraq_districts, function(a, b) {
                 return a === b;
             });
-            iraqMapWater = topojson.feature(waterData, waterData.objects.waterways).features;
             iraqMapPlaces = topojson.feature(placeData, placeData.objects.places).features;
-            iraqMapAirport = topojson.feature(airportData, airportData.objects.SDE_BAGH_AIRPRT).features;
 
             // convert violence data as required (to numeric data types)
             districtViolenceData = prepEsocWeeklyViolenceData(districtViolence);
@@ -67,7 +63,7 @@ function loadData() {
 function createVis() {
 
     iraqMap = new IraqMap("iraq-map", iraqMapDistricts, iraqMapExteriorBorders, iraqMapPlaces, districtViolenceData,
-        ethnicDistrictData);
+        totalViolenceData, ethnicDistrictData);
 
     // listen for changes to choropleth option and update accordingly
     $("#district-level-data").change(function() { iraqMap.updateChoropleth() });

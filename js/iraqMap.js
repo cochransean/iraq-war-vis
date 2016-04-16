@@ -5,7 +5,8 @@
  * @param _data -- the data used for the map
  */
 
-IraqMap = function(_parentElement, _districtData, _exteriorBorder, _placeData, _districtViolenceData, _ethnicData){
+IraqMap = function(_parentElement, _districtData, _exteriorBorder, _placeData, _districtViolenceData,
+                   _totalViolenceData, _ethnicData){
     this.parentElement = _parentElement;
 
     this.districtData = _districtData;
@@ -13,6 +14,7 @@ IraqMap = function(_parentElement, _districtData, _exteriorBorder, _placeData, _
     this.exteriorBorder = _exteriorBorder;
     this.districtViolenceData = _districtViolenceData;
     this.districtCentroids = {};
+    this.totalViolenceData = _totalViolenceData;
     this.ethnicData = _ethnicData;
 
     // No data wrangling, no update sequence
@@ -98,53 +100,6 @@ IraqMap.prototype.initVis = function() {
     vis.updateChoropleth();
     vis.createCircles();
 
-};
-
-IraqMap.prototype.createChoropleth = function() {
-
-    var vis = this;
-
-    /** Create "Shia population" as (arbitrary) custom view (for now) */
-
-    /** Create a quantize scale that sorts the data values into color buckets: */
-
-    console.log(d3.extent(vis.ethnicData, function(d) { console.log(d.ShareShia); return d.ShareShia }));
-
-    // get array of values to calculate extent for color scale
-    var districts = d3.keys(vis.ethnicData);
-    var valuesForExtent = districts.map(function(district) {
-        return vis.ethnicData[district].ShareShia;
-    });
-    console.log(valuesForExtent);
-
-    var colorScale = d3.scale.quantize()
-        .domain(d3.extent(valuesForExtent))
-        .range(colorbrewer.Greens[6]);
-
-    // TODO: The domain could also simply go from 0 to 1. May make more sense for consistency.
-    /** an alternative color range that allows for more control:
-        var color = [];
-        var color_length = 255;
-        for (var i = 0; i < color_length; i++) {
-            var color_new = "rgb(" + Math.floor( i / ( color_length - 1 ) * 200 + 55) + ", 0, 0)";
-            color.push(color_new);
-        }
-        var colorScale = d3.scale.quantize()
-            .range(color);
-    */
-
-    vis.svg.selectAll(".district-borders")
-        .style("fill", function (d) {
-            var value = vis.ethnicData[d.properties.ADM3NAME].ShareShia;
-            console.log(value);
-            console.log(colorScale(value));
-            if (value) { return colorScale(value); }
-            else { return "#ccc"; }
-        })
-        .append("title")
-        .text(function (d) {
-            return "Shia population in " + d.properties.ADM3NAME + ": " + Math.floor(d.properties.ShareShia * 100) + "%.";
-        });
 };
 
 IraqMap.prototype.createCircles = function() {
