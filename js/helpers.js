@@ -76,3 +76,32 @@ function prepEsocWeeklyViolenceData(array) {
         return value
     });
 }
+
+/*
+ * Preps ethnic data by arranging in object with key as district name
+ *
+ * Arguments:
+ *      array of ethnic data
+ *
+ * Returns:
+ *      an object arranged with key as district and numeric strings converted to numeric data types
+ */
+function prepEthnicData(array) {
+
+    var ethnicDataObject = {};
+
+    // fields to convert to numbers
+    var numericFields = ["sunni_pop_CIA_1978", "kurd_pop_CIA_1978", "shia_pop_CIA_1978", "total_pop_CIA_1978",
+        "sunni_pop_CIA_2003", "kurd_pop_CIA_2003", "shia_pop_CIA_2003" , "total_pop_CIA_2003", "sunni_pop_CIA_1992",
+        "kurd_pop_CIA_1992", "shia_pop_CIA_1992", "total_pop_CIA_1992", "landscan_pop", "shiapop", "sunnipop", "kurdpop",
+        "xtianpop", "turcpop", "mixedpop"];
+
+    array.forEach(function(value) {
+        ethnicDataObject[value.district] = {};
+        ethnicDataObject[value.district].ShareShia = value.shia_pop_CIA_2003 / value.total_pop_CIA_2003;
+        ethnicDataObject[value.district].ShareSunni = value.sunni_pop_CIA_2003 / value.total_pop_CIA_2003;
+        ethnicDataObject[value.district].ShareKurdish = value.kurd_pop_CIA_2003 / value.total_pop_CIA_2003;
+    });
+
+    return ethnicDataObject;
+}

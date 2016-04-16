@@ -5,7 +5,7 @@
  * @param _data -- the data used for the map
  */
 
-IraqMap = function(_parentElement, _districtData, _exteriorBorder, _placeData, _districtViolenceData){
+IraqMap = function(_parentElement, _districtData, _exteriorBorder, _placeData, _districtViolenceData, _ethnicData){
     this.parentElement = _parentElement;
 
     this.districtData = _districtData;
@@ -13,6 +13,7 @@ IraqMap = function(_parentElement, _districtData, _exteriorBorder, _placeData, _
     this.exteriorBorder = _exteriorBorder;
     this.districtViolenceData = _districtViolenceData;
     this.districtCentroids = {};
+    this.ethnicData = _ethnicData;
 
     // No data wrangling, no update sequence
     this.displayData = [];
@@ -70,7 +71,6 @@ IraqMap.prototype.initVis = function() {
     vis.svg.selectAll(".district-borders")
         .each(function (d) {
             vis.districtCentroids[d.properties.ADM3NAME] = path.centroid(d);
-            console.log(vis.districtCentroids[d.properties.ADM3NAME]);
         });
 
     vis.svg.selectAll(".city")
@@ -108,10 +108,17 @@ IraqMap.prototype.createChoropleth = function() {
 
     /** Create a quantize scale that sorts the data values into color buckets: */
 
+    console.log(d3.extent(vis.ethnicData, function(d) { console.log(d.ShareShia); return d.ShareShia }));
+
+    // get array of values to calculate extent for color scale
+    var districts = d3.keys(vis.ethnicData);
+    var valuesForExtent = districts.map(function(district) {
+        return vis.ethnicData[district].ShareShia;
+    });
+    console.log(valuesForExtent);
+
     var colorScale = d3.scale.quantize()
-        .domain([
-            d3.min(vis.districtData, function (d) { return d.properties.ShareShia; }),
-            d3.max(vis.districtData, function (d) { return d.properties.ShareShia; }) ])
+        .domain(d3.extent(valuesForExtent))
         .range(colorbrewer.Greens[6]);
 
     // TODO: The domain could also simply go from 0 to 1. May make more sense for consistency.
@@ -128,7 +135,9 @@ IraqMap.prototype.createChoropleth = function() {
 
     vis.svg.selectAll(".district-borders")
         .style("fill", function (d) {
-            var value = d.properties.ShareShia;
+            var value = vis.ethnicData[d.properties.ADM3NAME].ShareShia;
+            console.log(value);
+            console.log(colorScale(value));
             if (value) { return colorScale(value); }
             else { return "#ccc"; }
         })

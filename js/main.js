@@ -7,6 +7,7 @@ var iraqMapAirport = [];
 var iraqMapExteriorBorders;
 var districtViolenceData = [];
 var totalViolenceData = [];
+var ethnicDistrictData;
 
 // globals for linking of map and stacked area chart
 var dateRange;
@@ -42,19 +43,10 @@ function loadData() {
 
             iraqMapDistricts = topojson.feature(districtData, districtData.objects.Iraq_districts).features;
 
-            // TODO: Load all the data that the Choropleth should be able to display and attach the data to the districts
-            // TODO: So far, I only load in the ethnicity data, but more can be added
-            for (var i = 0; i < ethnicData.length; i++) {
-                for (var j = 0; j < iraqMapDistricts.length; j++) {
-                    if (ethnicData[i].district == iraqMapDistricts[j].properties.ADM3NAME) {
-                        iraqMapDistricts[j].properties.ShareShia = ethnicData[i].shia_pop_CIA_2003 / ethnicData[i].total_pop_CIA_2003;
-                        iraqMapDistricts[j].properties.ShareSunni = ethnicData[i].sunni_pop_CIA_2003 / ethnicData[i].total_pop_CIA_2003;
-                        iraqMapDistricts[j].properties.ShareKurdish = ethnicData[i].kurd_pop_CIA_2003 / ethnicData[i].total_pop_CIA_2003;
-                        // "break" terminates the loop once the matching states have been found
-                        break;
-                    }
-                }
-            }
+            // load ethnic data in object with key as district for use by multiple visualizations
+            ethnicDistrictData = prepEthnicData(ethnicData);
+
+            console.log(ethnicDistrictData);
 
             iraqMapExteriorBorders = topojson.mesh(districtData, districtData.objects.Iraq_districts, function(a, b) {
                 return a === b;
@@ -74,7 +66,8 @@ function loadData() {
 
 function createVis() {
 
-	iraqMap = new IraqMap("iraq-map", iraqMapDistricts, iraqMapExteriorBorders, iraqMapPlaces, districtViolenceData);
+	iraqMap = new IraqMap("iraq-map", iraqMapDistricts, iraqMapExteriorBorders, iraqMapPlaces, districtViolenceData,
+        ethnicDistrictData);
     baghdadMap = new BaghdadMap("baghdad-map", iraqMapDistricts, iraqMapWater, iraqMapAirport);
 
     // Area chart with different dimensions from corresponding timeline select
