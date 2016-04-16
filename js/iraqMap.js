@@ -12,6 +12,7 @@ IraqMap = function(_parentElement, _districtData, _exteriorBorder, _placeData, _
     this.placeData = _placeData;
     this.exteriorBorder = _exteriorBorder;
     this.districtViolenceData = _districtViolenceData;
+    this.districtCentroids = {};
 
     // No data wrangling, no update sequence
     this.displayData = [];
@@ -67,19 +68,11 @@ IraqMap.prototype.initVis = function() {
      * The idea behind this was to use the centroid for each district to move to circles to the right place.
      */
     vis.svg.selectAll(".district-borders")
-        .each(function (d, i) {
-            for (var j = 0; j < vis.districtViolenceData.length; j++) {
-                if (d.properties.ADM3NAME == vis.districtViolenceData[j].district) {
-                    vis.districtViolenceData[j].x = path.centroid(d)[0];
-                    vis.districtViolenceData[j].y = path.centroid(d)[1];
-                }
-            }
+        .each(function (d) {
+            vis.districtCentroids[d.properties.ADM3NAME] = path.centroid(d);
+            console.log(vis.districtCentroids[d.properties.ADM3NAME]);
         });
-    console.log(districtViolenceData);
 
-
-
-    console.log(vis.placeData);
     vis.svg.selectAll(".city")
         .data(vis.placeData)
         .enter()
@@ -152,8 +145,8 @@ IraqMap.prototype.createCircles = function() {
         .data(vis.districtViolenceData)
         .enter()
         .append("circle")
-        .attr("cx", function (d) { return d.x; } )
-        .attr("cy", function (d) { return d.y; } )
+        .attr("cx", function (d) { return vis.districtCentroids[d.district][0]; } )
+        .attr("cy", function (d) { return vis.districtCentroids[d.district][1]; } )
         .attr("r", 3)
         .style({ "fill": "black", "opacity": "0.6" });
 
