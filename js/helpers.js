@@ -98,3 +98,28 @@ function prepEthnicData(array) {
 
     return ethnicDataObject;
 }
+
+/*
+ * Preps troop number data
+ *
+ * Arguments: array of troop number data
+ * Returns: formatted array
+ */
+function prepTroopNumbersData(array) {
+
+    // create d3 date format
+    var dateFormat = d3.time.format("%B %Y");
+
+    var preppedData = array.map(function(value) {
+
+        // turn string date into date object TODO later update this to reflect troop numbers are at end of month
+        var formattedDate = dateFormat.parse(value["Month (end of)"]);
+        return {
+            "date": formattedDate,
+            "usTroops": +value["US troops"],
+            "intTroops": +value["Total international troops"]
+        }
+
+    });
+    return preppedData
+}

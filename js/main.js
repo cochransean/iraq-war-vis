@@ -1,13 +1,12 @@
 
 // variables for data
 var iraqMapDistricts = [];
-var iraqMapWater = [];
 var iraqMapPlaces = [];
-var iraqMapAirport = [];
 var iraqMapExteriorBorders;
 var districtViolenceData = [];
 var totalViolenceData = [];
 var ethnicDistrictData;
+var troopNumbersData;
 
 // globals for linking of map and stacked area chart
 var dateRange;
@@ -31,8 +30,9 @@ function loadData() {
         .defer(d3.csv, "data/violence/Violence_district_level_month.csv")
         .defer(d3.csv, "data/violence/Violence_country_level_month.csv")
         .defer(d3.csv, "data/Ethnicity-Data.csv")
+        .defer(d3.csv, "data/us-troop-numbers-month.csv")
         .await(function(error, districtData, placeData, districtViolence, countryViolence,
-                ethnicData){
+                ethnicData, troopNumbers){
 
             // if error, print and return
             if (error) {
@@ -55,6 +55,10 @@ function loadData() {
             districtViolenceData = prepEsocWeeklyViolenceData(districtViolence);
             totalViolenceData = prepEsocWeeklyViolenceData(countryViolence);
 
+            // prep troop data
+            troopNumbersData = prepTroopNumbersData(troopNumbers);
+
+
             createVis();
         });
 
@@ -66,18 +70,22 @@ function createVis() {
     var areaChartDimensions = {
         "width": null,
         "heightRatio": 4/5,
-        "margin": { top: 20, right: 40, bottom: 20, left: 45 }
+        "margin": { top: 20, right: 40, bottom: 45, left: 60 }
     };
-    areaChart = new StackedAreaChart("area-chart", areaChartDimensions, districtViolenceData, totalViolenceData, "Set1");
+    areaChart = new StackedAreaChart("area-chart", areaChartDimensions, districtViolenceData, totalViolenceData,
+        troopNumbersData, "Set1");
     $(document).on("datesChanged", function() { areaChart.wrangleData() });
+    $("#area-chart-data-select").change(function() { areaChart.wrangleData() });
 
     // Timeline select: smaller version of area chart with brush functionality added
     var timeSelectDimensions = {
         "width": null,
         "heightRatio": 1/5,
-        "margin": { top: 20, right: 40, bottom: 20, left: 45 }
+        "margin": { top: 20, right: 40, bottom: 45, left: 60 }
     };
-    timeSelect = new TimeSelect("area-chart", timeSelectDimensions, districtViolenceData, totalViolenceData, "Greys");
+    timeSelect = new TimeSelect("area-chart", timeSelectDimensions, districtViolenceData, totalViolenceData,
+        troopNumbersData, "Greys");
+    $("#area-chart-data-select").change(function() { timeSelect.wrangleData() });
 
     // Create map after timeline because timeline generates dates needed for map data selection
     iraqMap = new IraqMap("iraq-map", iraqMapDistricts, iraqMapExteriorBorders, iraqMapPlaces, districtViolenceData,

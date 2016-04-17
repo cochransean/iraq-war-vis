@@ -187,8 +187,6 @@ IraqMap.prototype.updateChoropleth = function() {
     var selectBox = document.getElementById("district-level-data");
     vis.selectedBackgroundValue = selectBox.options[selectBox.selectedIndex].value;
 
-    console.log(vis.ethnicData);
-
     // update color scale
     var districts = d3.keys(vis.ethnicData);
     var valuesForExtent = districts.map(function(district) {

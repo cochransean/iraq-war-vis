@@ -9,10 +9,13 @@
  * @param _colorScale       -- color scale desired from colorbrewer.js
  */
 
-StackedAreaChart = function(_parentElement, _dimensions, _districtViolenceData, _totalViolenceData, _colorScale){
+StackedAreaChart = function(_parentElement, _dimensions, _districtViolenceData, _totalViolenceData,
+							_troopNumbersData, _colorScale){
+
 	this.parentElement = _parentElement;
   	this.districtViolenceData = _districtViolenceData;
   	this.totalViolenceData = _totalViolenceData;
+	this.troopsBySource = _troopNumbersData;
 	this.displayData = []; // see data wrangling
 
     // set dimensions; size based on width of div to allow for easier styling with bootstrap
@@ -36,7 +39,6 @@ StackedAreaChart.prototype.initVis = function(){
     var vis = this;
 
 	var controlsHeight = $("#controls").height();
-	console.log(vis.width - vis.margin.top - vis.margin.bottom);
 	vis.height = (vis.width - controlsHeight) * vis.heightRatio - vis.margin.top - vis.margin.bottom;
 	vis.width = vis.width - vis.margin.left - vis.margin.right;
 
@@ -69,6 +71,11 @@ StackedAreaChart.prototype.initVis = function(){
 	    .attr("class", "x-axis axis")
 	    .attr("transform", "translate(0," + vis.height + ")");
 
+	vis.xLabel = vis.xAxisGroup.append("text")
+		.attr("x", vis.width / 2)
+		.attr("y", 40)
+		.attr("text-anchor", "middle");
+
 	vis.yAxisGroup = vis.svg.append("g")
 		.attr("class", "y-axis axis");
 
@@ -96,16 +103,24 @@ StackedAreaChart.prototype.initVis = function(){
 StackedAreaChart.prototype.wrangleData = function(){
 	var vis = this;
 
-    // TODO get user data selection and update appropriately (later allow for district level data and selection)
-    var selectedOption = "totalViolenceData";
+    // update data selection based on user input
+	vis.selectedOption = $("#" + vis.parentElement + "-data-select").val();
 
-    // wrangle aggregate data TODO fix for district level data also
-    vis.displayData = vis[selectedOption];
+    // wrangle aggregate data
+    vis.displayData = vis[vis.selectedOption];
+	console.log(vis.displayData);
 
-    // filter by date
-    vis.displayData = vis.displayData.filter(filterByDate);
+	vis.displayData = vis.displayData.filter(filterByDate);
 
-    var dataCategories = ["df", "idf", "ied_total", "suicide"];
+	// object to map user selection to fields you want to display; update here as data types are added
+	var selectionToCategories = {
+		"totalViolenceData": ["df", "idf", "ied_total", "suicide"],
+		"troopsBySource": ["usTroops", "intTroops"]
+	};
+
+	// get fields appropriate for the user selection
+	var dataCategories = selectionToCategories[vis.selectedOption];
+	console.log(dataCategories);
     vis.displayData = dataCategories.map(function(category) {
         return {
             name: category,
@@ -114,6 +129,7 @@ StackedAreaChart.prototype.wrangleData = function(){
             })
         };
     });
+	console.log(vis.displayData);
 
 
     // init stack layout
@@ -158,6 +174,9 @@ StackedAreaChart.prototype.updateVis = function(){
     // Call axis functions with the new domain
     vis.xAxisGroup.call(vis.xAxis);
     vis.yAxisGroup.call(vis.yAxis);
+
+	// update axis text
+	vis.xLabel.text($("#" + vis.parentElement + "-data-select").text());
 
 	// Draw the layers
 	var categories = vis.svg.selectAll(".area")
