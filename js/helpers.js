@@ -8,8 +8,6 @@
  */
 function brushend() {
 
-    console.log(timeSelect.brush.extent());
-
     // globally update dates
     dateRange = timeSelect.brush.extent();
 

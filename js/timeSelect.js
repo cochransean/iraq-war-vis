@@ -6,7 +6,7 @@
  */
 
 TimeSelect.prototype = StackedAreaChart.prototype;
-TimeSelect.constructor = TimeSelect;
+TimeSelect.prototype.constructor = TimeSelect;
 
 function TimeSelect(_parentElement, _dimensions, _districtViolenceData, _totalViolenceData,
                     _troopNumbersData, _colorScale) {
@@ -17,9 +17,6 @@ function TimeSelect(_parentElement, _dimensions, _districtViolenceData, _totalVi
 
     // remove y-axis
     vis.yAxisGroup.remove();
-
-    // remove update functionality so vis doesn't update with brushes
-    $("#" + vis.parentElement).off("datesChanged");
 
     // Initialize brush component
     vis.brush = d3.svg.brush()

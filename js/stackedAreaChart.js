@@ -103,14 +103,22 @@ StackedAreaChart.prototype.initVis = function(){
 StackedAreaChart.prototype.wrangleData = function(){
 	var vis = this;
 
-    // update data selection based on user input
+    // track old option to see if a new data type has been selected, requiring reseting of dates
+	var oldOption = vis.selectedOption;
+
+	// update data selection based on user input
 	vis.selectedOption = $("#" + vis.parentElement + "-data-select").val();
+	vis.displayData = vis[vis.selectedOption];
 
-    // wrangle aggregate data
-    vis.displayData = vis[vis.selectedOption];
-	console.log(vis.displayData);
+	// if new data selection, update date range
+	if (oldOption !== vis.selectedOption) {
+		dateRange = d3.extent(vis.displayData, function(d) { return d.date })
+	}
 
-	vis.displayData = vis.displayData.filter(filterByDate);
+	// if same as old data selection, filter by date
+	else {
+		vis.displayData = vis.displayData.filter(filterByDate);
+	}
 
 	// object to map user selection to fields you want to display; update here as data types are added
 	var selectionToCategories = {
@@ -120,7 +128,6 @@ StackedAreaChart.prototype.wrangleData = function(){
 
 	// get fields appropriate for the user selection
 	var dataCategories = selectionToCategories[vis.selectedOption];
-	console.log(dataCategories);
     vis.displayData = dataCategories.map(function(category) {
         return {
             name: category,
@@ -129,7 +136,6 @@ StackedAreaChart.prototype.wrangleData = function(){
             })
         };
     });
-	console.log(vis.displayData);
 
 
     // init stack layout
@@ -167,9 +173,10 @@ StackedAreaChart.prototype.updateVis = function(){
     var categoryNames = vis.displayData.map(function(d) {
         return d.name;
     });
+	var numberColors = categoryNames.length <= 2? 3: categoryNames.length;
     vis.colorScale
         .domain(categoryNames)
-        .range(colorbrewer[vis.selectedColors][categoryNames.length]);
+        .range(colorbrewer[vis.selectedColors][numberColors]);
 
     // Call axis functions with the new domain
     vis.xAxisGroup.call(vis.xAxis);
@@ -181,8 +188,8 @@ StackedAreaChart.prototype.updateVis = function(){
 	// Draw the layers
 	var categories = vis.svg.selectAll(".area")
         .data(vis.displayData);
-  
-  	categories.enter().append("path")
+
+	categories.enter().append("path")
 		.attr("class", "area");
 
   	categories
