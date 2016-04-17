@@ -47,10 +47,6 @@ IraqMap.prototype.initVis = function() {
     var path = d3.geo.path()
         .projection(projection);
 
-    // setup color scale here; update range and domain upon updates to allow for color scale changes
-    // get array of values to calculate extent for color scale
-    vis.colorScale = d3.scale.quantize();
-
     // setup linear scale for proportionate symbol circle radii; update domain later because it will change on selection
     vis.circleScale = d3.scale.linear()
         .range([0, 30]);
@@ -189,26 +185,32 @@ IraqMap.prototype.updateChoropleth = function() {
 
     console.log(vis.ethnicData);
 
+    // create color scale (needs to be done here now as the scale's type depends on data)
+
+
     // update color scale
     var districts = d3.keys(vis.ethnicData);
     var valuesForExtent = districts.map(function(district) {
         return vis.ethnicData[district][vis.selectedBackgroundValue];
     });
-    vis.colorScale
-        .domain(d3.extent(valuesForExtent))
-        .range(colorbrewer.Greens[6]);
+    console.log(valuesForExtent);
+
+    if (vis.selectedBackgroundValue == "Composition") {
+        vis.colorScale = d3.scale.ordinal()
+            .domain(["Shia", "Sunni", "Kurdish", "Shia and Sunni", "Sunni and Kurdsih", "Shia, Sunni and Kurdish"])
+            .range(colorbrewer.Greens[5]);
+    }
+    else {
+        vis.colorScale = d3.scale.quantize()
+            .domain(d3.extent(valuesForExtent))
+            .range(colorbrewer.Greens[6]);
+    }
 
     vis.svg.selectAll(".district-borders")
         .style("fill", function (d) {
             var value = vis.ethnicData[d.properties.ADM3NAME][vis.selectedBackgroundValue];
             if (value) { return vis.colorScale(value); }
             else { return "#ccc"; }
-        });
-
-    vis.svg.selectAll("title")
-        .text(function (d) {
-            return vis.selectedBackgroundValue + " population in " + d.properties.ADM3NAME + ": " +
-                Math.floor(d.properties.ShareShia * 100) + "%.";
         });
 
 };
@@ -223,6 +225,12 @@ IraqMap.prototype.updateBackgroundTooltip = function(d) {
         var ethnicGroupName = vis.selectedBackgroundValue;
         var message = ethnicGroupName + " population in District " + d.properties.ADM3NAME + ": " +
         Math.floor(vis.ethnicData[d.properties.ADM3NAME][ethnicGroupName] * 100) + "%"
+        return message
+    }
+    if (vis.selectedBackgroundValue == "Composition") {
+        var ethnicGroupName = vis.selectedBackgroundValue;
+        var message = "Population in District " + d.properties.ADM3NAME + ": " +
+            vis.ethnicData[d.properties.ADM3NAME][ethnicGroupName];
         return message
     }
 

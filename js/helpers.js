@@ -88,12 +88,26 @@ function prepEsocWeeklyViolenceData(array) {
 function prepEthnicData(array) {
 
     var ethnicDataObject = {};
-
+    
     array.forEach(function(value) {
         ethnicDataObject[value.district] = {};
-        ethnicDataObject[value.district].Shia = value.shia_pop_CIA_2003 / value.total_pop_CIA_2003;
-        ethnicDataObject[value.district].Sunni = value.sunni_pop_CIA_2003 / value.total_pop_CIA_2003;
-        ethnicDataObject[value.district].Kurdish = value.kurd_pop_CIA_2003 / value.total_pop_CIA_2003;
+
+        var Shia = value.shia_pop_CIA_2003 / value.total_pop_CIA_2003;
+        var Sunni = value.sunni_pop_CIA_2003 / value.total_pop_CIA_2003;
+        var Kurdish = value.kurd_pop_CIA_2003 / value.total_pop_CIA_2003;
+
+        ethnicDataObject[value.district].Shia = Shia;
+        ethnicDataObject[value.district].Sunni = Sunni;
+        ethnicDataObject[value.district].Kurdish = Kurdish;
+
+        if (Shia == 1) { ethnicDataObject[value.district].Composition = "Shia"; }
+        if (Sunni == 1) { ethnicDataObject[value.district].Composition = "Sunni"; }
+        if (Kurdish == 1) { ethnicDataObject[value.district].Composition = "Kurdish"; }
+        if (Shia != 0 && Sunni != 0 && Kurdish == 0) { ethnicDataObject[value.district].Composition = "Shia and Sunni"}
+        if (Shia != 0 && Sunni == 0 && Kurdish != 0) { ethnicDataObject[value.district].Composition = "Shia and Kurdsih"}
+        if (Shia == 0 && Sunni != 0 && Kurdish != 0) { ethnicDataObject[value.district].Composition = "Sunni and Kurdish"}
+        if (Shia != 0 && Sunni != 0 && Kurdish != 0) { ethnicDataObject[value.district].Composition = "Shia, Sunni and Kurdish"}
+
     });
 
     return ethnicDataObject;
