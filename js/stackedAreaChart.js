@@ -198,7 +198,8 @@ StackedAreaChart.prototype.updateVis = function () {
         .data(vis.displayData);
 
     categories.enter().append("path")
-        .attr("class", "area");
+        .attr("class", "area")
+        .on("mouseover", function (d) { $("#area-chart-tooltip").html(d.name) });
 
     categories
         .style("fill", function (d) {

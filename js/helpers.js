@@ -108,6 +108,7 @@ function prepEthnicData(array) {
 
     });
 
+    console.log(ethnicDataObject);
     return ethnicDataObject;
 }
 
