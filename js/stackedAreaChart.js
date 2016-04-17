@@ -17,7 +17,7 @@ StackedAreaChart = function(_parentElement, _dimensions, _districtViolenceData, 
 
     // set dimensions; size based on width of div to allow for easier styling with bootstrap
     this.width = $("#" + this.parentElement).width();
-    this.height = _dimensions.height;
+    this.heightRatio = _dimensions.heightRatio;
     this.margin = _dimensions.margin;
     this.selectedColors = _colorScale;
 
@@ -35,10 +35,10 @@ StackedAreaChart.prototype.initVis = function(){
 
     var vis = this;
 
-	// size with margins accounted for
+	var controlsHeight = $("#controls").height();
+	console.log(vis.width - vis.margin.top - vis.margin.bottom);
+	vis.height = (vis.width - controlsHeight) * vis.heightRatio - vis.margin.top - vis.margin.bottom;
 	vis.width = vis.width - vis.margin.left - vis.margin.right;
-  	vis.height = vis.height - vis.margin.top - vis.margin.bottom;
-
 
   	// SVG drawing area
 	vis.svg = d3.select("#" + vis.parentElement).append("svg")

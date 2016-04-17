@@ -14,7 +14,7 @@ var dateRange;
 
 
 // Variables for the visualization instances
-var iraqMap, baghdadMap, areaChart, timeSelect;
+var iraqMap, areaChart, timeSelect;
 
 
 // Start application by loading the data
@@ -65,17 +65,17 @@ function createVis() {
     // Area chart with different dimensions from corresponding timeline select
     var areaChartDimensions = {
         "width": null,
-        "height": 390,
-        "margin": { top: 40, right: 40, bottom: 20, left: 40 }
+        "heightRatio": 4/5,
+        "margin": { top: 20, right: 40, bottom: 20, left: 45 }
     };
     areaChart = new StackedAreaChart("area-chart", areaChartDimensions, districtViolenceData, totalViolenceData, "Set1");
     $(document).on("datesChanged", function() { areaChart.wrangleData() });
 
     // Timeline select: smaller version of area chart with brush functionality added
     var timeSelectDimensions = {
-        "width": areaChart.width,
-        "height": 100,
-        "margin": { top: 20, right: 40, bottom: 20, left: 40 }
+        "width": null,
+        "heightRatio": 1/5,
+        "margin": { top: 20, right: 40, bottom: 20, left: 45 }
     };
     timeSelect = new TimeSelect("area-chart", timeSelectDimensions, districtViolenceData, totalViolenceData, "Greys");
 
