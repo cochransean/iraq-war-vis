@@ -83,6 +83,7 @@ function createVis() {
     iraqMap = new IraqMap("iraq-map", iraqMapDistricts, iraqMapExteriorBorders, iraqMapPlaces, districtViolenceData,
         ethnicDistrictData);
     $("#district-level-data").change(function() { iraqMap.updateChoropleth() });
+    $("#circle-data").change(function() { iraqMap.wrangleData() });
     $(document).on("datesChanged", function() { iraqMap.wrangleData() });
 
 }
