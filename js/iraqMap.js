@@ -198,7 +198,7 @@ IraqMap.prototype.updateChoropleth = function() {
     if (vis.selectedBackgroundValue == "Composition") {
         vis.colorScale = d3.scale.ordinal()
             .domain(["Shia", "Sunni", "Kurdish", "Shia and Sunni", "Sunni and Kurdsih", "Shia, Sunni and Kurdish"])
-            .range(colorbrewer.Greens[5]);
+            .range(colorbrewer.Greens[6]);
     }
     else {
         vis.colorScale = d3.scale.quantize()
@@ -224,7 +224,7 @@ IraqMap.prototype.updateBackgroundTooltip = function(d) {
 
         var ethnicGroupName = vis.selectedBackgroundValue;
         var message = ethnicGroupName + " population in District " + d.properties.ADM3NAME + ": " +
-        Math.floor(vis.ethnicData[d.properties.ADM3NAME][ethnicGroupName] * 100) + "%"
+        Math.floor(vis.ethnicData[d.properties.ADM3NAME][ethnicGroupName] * 100) + "%";
         return message
     }
     if (vis.selectedBackgroundValue == "Composition") {
