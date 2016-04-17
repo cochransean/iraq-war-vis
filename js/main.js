@@ -93,5 +93,6 @@ function createVis() {
     $("#district-level-data").change(function() { iraqMap.updateChoropleth() });
     $("#circle-data").change(function() { iraqMap.wrangleData() });
     $(document).on("datesChanged", function() { iraqMap.wrangleData() });
+    $(document).on("dateRangeChanged", function() { iraqMap.wrangleData() });
 
 }

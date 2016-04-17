@@ -36,7 +36,11 @@
             </div>
             <div class="col-md-6">
                 <div id="area-chart-div">
-                    <div id="area-chart"></div>
+                    <div id="area-chart">
+                        <div id="area-chart-tooltip">
+                            <p>Tooltip Placeholder</p>
+                        </div>
+                    </div>
                     <div id="controls" class="row">
                         <div id="map-control" class="col-xs-6">
                             <h5>Map</h5>
@@ -74,8 +78,8 @@
                                         <label for="area-chart-data-select" class="col-xs-2 control-label">Data</label>
                                         <div class="col-xs-10">
                                             <select id="area-chart-data-select" class="form-control">
-                                                <option value="totalViolenceData">Monthly Violent Incidents by Type</option>
-                                                <option value="troopsBySource">Number of Troops</option>
+                                                <option class="area-chart-option" value="totalViolenceData">Monthly Violent Incidents by Type</option>
+                                                <option class="area-chart-option" value="troopsBySource">Number of Troops</option>
                                             </select>
                                         </div>
                                     </div>
