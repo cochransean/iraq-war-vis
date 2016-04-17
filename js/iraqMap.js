@@ -55,6 +55,12 @@ IraqMap.prototype.initVis = function() {
     vis.circleScale = d3.scale.linear()
         .range([0, 30]);
 
+    // set tooltips
+    vis.tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .html(function(d) { return vis.updateBackgroundTooltip(d) });
+    vis.svg.call(vis.tip);
+
     // Render the Iraq map (no need to update borders so include here and not update vis)
     vis.svg.append("path")
         .datum(vis.exteriorBorder)
@@ -67,6 +73,8 @@ IraqMap.prototype.initVis = function() {
         .append("path")
         .attr("d", path)
         .attr("class", "map district-borders")
+        .on('mouseover', vis.tip.show)
+        .on('mouseout', vis.tip.hide)
         .style({
             "stroke": "black",
             "stroke-width": "0.5"
@@ -110,7 +118,7 @@ IraqMap.prototype.wrangleData = function() {
 
     // get currently selected data
     var selectBox = document.getElementById("circle-data");
-    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+    vis.selectedCircleValue = selectBox.options[selectBox.selectedIndex].value;
 
     // start with the entire data set then filter by date
     // TODO we need to go back to all these functions that are hard coded for violence data and make them
@@ -126,7 +134,7 @@ IraqMap.prototype.wrangleData = function() {
 
     // cycle through time periods adding up cumulative for each district
     vis.displayDataArray.forEach(function(timePeriod) {
-        vis.displayData[timePeriod.district] += timePeriod[selectedValue];
+        vis.displayData[timePeriod.district] += timePeriod[vis.selectedCircleValue];
     });
 
     vis.updateCircles();
@@ -177,13 +185,14 @@ IraqMap.prototype.updateChoropleth = function() {
     var vis = this;
 
     var selectBox = document.getElementById("district-level-data");
-    var ethnicGroupName = selectBox.options[selectBox.selectedIndex].value;
-    var selectedValue = "Share" + ethnicGroupName;
+    vis.selectedBackgroundValue = selectBox.options[selectBox.selectedIndex].value;
+
+    console.log(vis.ethnicData);
 
     // update color scale
     var districts = d3.keys(vis.ethnicData);
     var valuesForExtent = districts.map(function(district) {
-        return vis.ethnicData[district][selectedValue];
+        return vis.ethnicData[district][vis.selectedBackgroundValue];
     });
     vis.colorScale
         .domain(d3.extent(valuesForExtent))
@@ -191,38 +200,36 @@ IraqMap.prototype.updateChoropleth = function() {
 
     vis.svg.selectAll(".district-borders")
         .style("fill", function (d) {
-            var value = vis.ethnicData[d.properties.ADM3NAME][selectedValue];
+            var value = vis.ethnicData[d.properties.ADM3NAME][vis.selectedBackgroundValue];
             if (value) { return vis.colorScale(value); }
             else { return "#ccc"; }
         });
 
     vis.svg.selectAll("title")
         .text(function (d) {
-            return ethnicGroupName + " population in " + d.properties.ADM3NAME + ": " +
+            return vis.selectedBackgroundValue + " population in " + d.properties.ADM3NAME + ": " +
                 Math.floor(d.properties.ShareShia * 100) + "%.";
         });
 
-    // adding tooltips:
-    var tooltip = d3.select("#" + vis.parentElement)
-        .append("div")
-        .attr({ "id": "tooltipChoropleth", "class": "hidden" });
-    tooltip.append("p")
-        .attr({ "id": "text"})
-        .text("team awesome");
+};
 
-    vis.svg.selectAll(".district-borders")
-        .on("mouseover", function(d) {
-            var x = vis.districtCentroids[d.properties.ADM3NAME][0] + 60;
-            var y = vis.districtCentroids[d.properties.ADM3NAME][1] + 20;
-            d3.select("#tooltipChoropleth")
-                .style("left", x + "px")
-                .style("top", y + "px")
-                .select("#text")
-                .text(ethnicGroupName + " population in District " + d.properties.ADM3NAME + ": " +
-                    Math.floor(vis.ethnicData[d.properties.ADM3NAME][selectedValue] * 100) + "%");
-            d3.select("#tooltipChoropleth").classed("hidden", false);
-        })
-        .on("mouseout", function() {
-            d3.select("#tooltipChoropleth").classed("hidden", true);
-        });
+IraqMap.prototype.updateBackgroundTooltip = function(d) {
+
+    var vis = this;
+
+    if (vis.selectedBackgroundValue == "Shia" || vis.selectedBackgroundValue == "Sunni" ||
+        vis.selectedBackgroundValue == "Kurdish") {
+
+        var ethnicGroupName = vis.selectedBackgroundValue;
+        var message = ethnicGroupName + " population in District " + d.properties.ADM3NAME + ": " +
+        Math.floor(vis.ethnicData[d.properties.ADM3NAME][ethnicGroupName] * 100) + "%"
+        return message
+    }
+
+    // TODO: add other cases for different background selections here
+    // else if...
+    // else...
+
+
+
 };

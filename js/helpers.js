@@ -91,9 +91,9 @@ function prepEthnicData(array) {
 
     array.forEach(function(value) {
         ethnicDataObject[value.district] = {};
-        ethnicDataObject[value.district].ShareShia = value.shia_pop_CIA_2003 / value.total_pop_CIA_2003;
-        ethnicDataObject[value.district].ShareSunni = value.sunni_pop_CIA_2003 / value.total_pop_CIA_2003;
-        ethnicDataObject[value.district].ShareKurdish = value.kurd_pop_CIA_2003 / value.total_pop_CIA_2003;
+        ethnicDataObject[value.district].Shia = value.shia_pop_CIA_2003 / value.total_pop_CIA_2003;
+        ethnicDataObject[value.district].Sunni = value.sunni_pop_CIA_2003 / value.total_pop_CIA_2003;
+        ethnicDataObject[value.district].Kurdish = value.kurd_pop_CIA_2003 / value.total_pop_CIA_2003;
     });
 
     return ethnicDataObject;
