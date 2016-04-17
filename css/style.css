@@ -101,10 +101,8 @@ svg .city-label {
   font-weight: bold;
 }
 
-/* Tooltip for Choropleth */
-
+/* Tooltips */
 #tooltipChoropleth {
-  position: absolute;
   width: 140px;
   height: auto;
   padding: 8px;

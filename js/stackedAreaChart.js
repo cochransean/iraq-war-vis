@@ -83,8 +83,6 @@ StackedAreaChart.prototype.initVis = function(){
        return d.date;
     });
 
-    // TODO: Tooltip placeholder
-
 	// filter and format data for stacked area chart
   	vis.wrangleData();
 

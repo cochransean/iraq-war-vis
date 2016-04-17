@@ -36,17 +36,16 @@ function filterByDate(arrayDataPoint) {
  * Convert week from data set to date object
  *
  * Arguments:
- *      endWeek: the week you want to convert to a date object
+ *      endMonth: the month you want to convert to a date object
  *      startDate: the date object representing the first day of the data set (reference ESOC code book)
- *      startWeek: the int representing the numeric value of the starting week in the ESOC dataset (earliest in the set)
+ *      startMonth: the int representing the numeric value of the starting week in the ESOC dataset (earliest in the set)
  *
  * Returns: A javascript date object corresponding to the week from the ESOC dataset
  */
-function convertWeekToDate(endWeek, startWeek, startDate) {
-
-    const MS_IN_DAY = 86400000;
-    var daysElapsed = (endWeek - startWeek) * 7;
-    return new Date(startDate.getTime() + daysElapsed * MS_IN_DAY);
+function convertWeekToDate(endMonth, startMonth, startDate) {
+    var monthsElapsed = endMonth - startMonth;
+    var convertedDate = new Date(new Date(startDate).setMonth(startDate.getMonth()+monthsElapsed));
+    return convertedDate
 }
 
 
@@ -59,11 +58,11 @@ function convertWeekToDate(endWeek, startWeek, startDate) {
  * Returns: The data-set converted
  */
 function prepEsocWeeklyViolenceData(array) {
-    var numericFields = ["SIGACT", "SIG_1", "df", "idf", "suicide", "ied_attack", "ied_clear", "ied_total", "week"];
+    var numericFields = ["SIGACT", "SIG_1", "df", "idf", "suicide", "ied_attack", "ied_clear", "ied_total", "month"];
 
     // dates per code book and data
     var startDate = new Date(2004, 1, 1);
-    var startWeek = 2292;
+    var startMonth = 529;
 
     return array.map(function(value) {
         numericFields.forEach(function(field) {
@@ -71,7 +70,7 @@ function prepEsocWeeklyViolenceData(array) {
         });
 
         // convert date
-        value.date = convertWeekToDate(value.week, startWeek, startDate);
+        value.date = convertWeekToDate(value.month, startMonth, startDate);
 
         return value
     });
@@ -89,12 +88,6 @@ function prepEsocWeeklyViolenceData(array) {
 function prepEthnicData(array) {
 
     var ethnicDataObject = {};
-
-    // fields to convert to numbers
-    var numericFields = ["sunni_pop_CIA_1978", "kurd_pop_CIA_1978", "shia_pop_CIA_1978", "total_pop_CIA_1978",
-        "sunni_pop_CIA_2003", "kurd_pop_CIA_2003", "shia_pop_CIA_2003" , "total_pop_CIA_2003", "sunni_pop_CIA_1992",
-        "kurd_pop_CIA_1992", "shia_pop_CIA_1992", "total_pop_CIA_1992", "landscan_pop", "shiapop", "sunnipop", "kurdpop",
-        "xtianpop", "turcpop", "mixedpop"];
 
     array.forEach(function(value) {
         ethnicDataObject[value.district] = {};

@@ -28,8 +28,8 @@ function loadData() {
     queue()
         .defer(d3.json, "data/iraq-topo.json")
         .defer(d3.json, "data/places.json")
-        .defer(d3.csv, "data/violence/Violence_district_level_week.csv")
-        .defer(d3.csv, "data/violence/Violence_country_level_week.csv")
+        .defer(d3.csv, "data/violence/Violence_district_level_month.csv")
+        .defer(d3.csv, "data/violence/Violence_country_level_month.csv")
         .defer(d3.csv, "data/Ethnicity-Data.csv")
         .await(function(error, districtData, placeData, districtViolence, countryViolence,
                 ethnicData){
