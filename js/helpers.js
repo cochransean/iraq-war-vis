@@ -104,7 +104,7 @@ function prepEthnicData(array) {
         if (Sunni == 1) { ethnicDataObject[value.district].Composition = "Sunni"; }
         if (Kurdish == 1) { ethnicDataObject[value.district].Composition = "Kurdish"; }
         if (Shia != 0 && Sunni != 0 && Kurdish == 0) { ethnicDataObject[value.district].Composition = "Shia and Sunni"}
-        if (Shia != 0 && Sunni == 0 && Kurdish != 0) { ethnicDataObject[value.district].Composition = "Shia and Kurdsih"}
+        if (Shia != 0 && Sunni == 0 && Kurdish != 0) { ethnicDataObject[value.district].Composition = "Shia and Kurdish"}
         if (Shia == 0 && Sunni != 0 && Kurdish != 0) { ethnicDataObject[value.district].Composition = "Sunni and Kurdish"}
         if (Shia != 0 && Sunni != 0 && Kurdish != 0) { ethnicDataObject[value.district].Composition = "Shia, Sunni and Kurdish"}
 

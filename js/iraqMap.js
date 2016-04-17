@@ -197,7 +197,7 @@ IraqMap.prototype.updateChoropleth = function() {
 
     if (vis.selectedBackgroundValue == "Composition") {
         vis.colorScale = d3.scale.ordinal()
-            .domain(["Shia", "Sunni", "Kurdish", "Shia and Sunni", "Sunni and Kurdsih", "Shia, Sunni and Kurdish"])
+            .domain(["Shia", "Sunni", "Kurdish", "Shia and Sunni", "Sunni and Kurdish", "Shia, Sunni and Kurdish"])
             .range(colorbrewer.Greens[6]);
     }
     else {
