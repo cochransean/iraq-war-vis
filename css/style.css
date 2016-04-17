@@ -100,3 +100,29 @@ svg .city-label {
   font-size: 12px;
   font-weight: bold;
 }
+
+/* Tooltip for Choropleth */
+
+#tooltipChoropleth {
+  position: absolute;
+  width: 140px;
+  height: auto;
+  padding: 8px;
+  background-color: white;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  -moz-box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.5);
+  box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+#tooltipChoropleth.hidden {
+  display: none;
+}
+
+#tooltipChoropleth p {
+  margin: 0;
+  font-family: sans-serif;
+  font-size: 12px;
+  line-height: 14px;
+}

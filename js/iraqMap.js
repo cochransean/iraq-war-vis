@@ -41,7 +41,7 @@ IraqMap.prototype.initVis = function() {
     var projection = d3.geo.mercator()
         .translate([vis.width / 2, vis.height / 2])
         .center([43.75, 33.2])
-        .scale(3700);
+        .scale(4000);
 
     var path = d3.geo.path()
         .projection(projection);
@@ -201,4 +201,27 @@ IraqMap.prototype.updateChoropleth = function() {
                 Math.floor(d.properties.ShareShia * 100) + "%.";
         });
 
+    // adding tooltips:
+    var tooltip = d3.select("#" + vis.parentElement)
+        .append("div")
+        .attr({ "id": "tooltipChoropleth", "class": "hidden" });
+    tooltip.append("p")
+        .attr({ "id": "text"})
+        .text("team awesome");
+
+    vis.svg.selectAll(".district-borders")
+        .on("mouseover", function(d) {
+            var x = vis.districtCentroids[d.properties.ADM3NAME][0] + 60;
+            var y = vis.districtCentroids[d.properties.ADM3NAME][1] + 20;
+            d3.select("#tooltipChoropleth")
+                .style("left", x + "px")
+                .style("top", y + "px")
+                .select("#text")
+                .text(ethnicGroupName + " population in District " + d.properties.ADM3NAME + ": " +
+                    Math.floor(vis.ethnicData[d.properties.ADM3NAME][selectedValue] * 100) + "%");
+            d3.select("#tooltipChoropleth").classed("hidden", false);
+        })
+        .on("mouseout", function() {
+            d3.select("#tooltipChoropleth").classed("hidden", true);
+        });
 };
