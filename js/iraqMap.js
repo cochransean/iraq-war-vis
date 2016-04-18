@@ -221,6 +221,8 @@ IraqMap.prototype.updateChoropleth = function() {
 
 IraqMap.prototype.updateBackgroundTooltip = function(d) {
 
+    // TODO: can clean up this whole section so that you loop over an array of the ethnicity names rather than copying
+    // and pasting code for each
     var vis = this;
 
     if (vis.selectedBackgroundValue == "Shia" || vis.selectedBackgroundValue == "Sunni" ||
@@ -231,16 +233,27 @@ IraqMap.prototype.updateBackgroundTooltip = function(d) {
         Math.floor(vis.ethnicData[d.properties.ADM3NAME][ethnicGroupName] * 100) + "%";
         return message
     }
-    if (vis.selectedBackgroundValue == "Composition") {
-        var ethnicGroupName = vis.selectedBackgroundValue;
-        var message = "Population in District " + d.properties.ADM3NAME + ": " +
+    else if (vis.selectedBackgroundValue == "Composition") {
+        ethnicGroupName = vis.selectedBackgroundValue;
+        message = "Population in District " + d.properties.ADM3NAME + ": " +
             vis.ethnicData[d.properties.ADM3NAME][ethnicGroupName];
         return message
     }
-
+    // TODO need to clean up the code here so that rounding doesn't lead to percentages that don't added up to 100%
+    else if(vis.selectedBackgroundValue == "ethnicHomogeneity") {
+        message = "Ethnic Composition of District " + d.properties.ADM3NAME + ": " +
+            "Shia: " + Math.floor(vis.ethnicData[d.properties.ADM3NAME]["Shia"] * 100) + "%</br>" +
+            "Sunni: " + Math.floor(vis.ethnicData[d.properties.ADM3NAME]["Sunni"] * 100) + "%</br>" +
+            "Kurish: " + Math.floor(vis.ethnicData[d.properties.ADM3NAME]["Kurdish"] * 100) + "%</br>"
+        return message
+    }
+    else {
+        return "No data for current selection"
+    }
     // TODO: add other cases for different background selections here
     // else if...
     // else...
+
 
 
 
