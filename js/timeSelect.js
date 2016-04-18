@@ -13,22 +13,32 @@ function TimeSelect(_parentElement, _dimensions, _districtViolenceData, _totalVi
     StackedAreaChart.call(this, _parentElement, _dimensions, _districtViolenceData, _totalViolenceData,
                           _troopNumbersData, _colorScale);
 
-    var vis = this;
+    this.initVis = function() {
+        StackedAreaChart.prototype.initVis.call(this);
+        var vis = this;
 
-    // remove y-axis
-    vis.yAxisGroup.remove();
+        console.log("time select updating");
 
-    // Initialize brush component
-    vis.brush = d3.svg.brush()
-        .x(vis.x)
-        .on("brushend", brushend);
+        // remove y-axis
+        vis.yAxisGroup.remove();
 
-    // Append brush component
-    vis.svg.append("g")
-        .attr("class", "x brush")
-        .call(vis.brush)
-        .selectAll("rect")
-        .attr("y", -6)
-        .attr("height", vis.height + 7);
+        // Initialize brush component
+        vis.brush = d3.svg.brush()
+            .x(vis.x)
+            .on("brushend", brushend);
 
+        // Append brush component
+        vis.svg.append("g")
+            .attr("class", "x brush")
+            .call(vis.brush)
+            .selectAll("rect")
+            .attr("y", -6)
+            .attr("height", vis.height + 7);
+    };
+
+    this.updateUI = function() {
+
+        // override this method (no UI updating on time select)
+        return false
+    };
 }

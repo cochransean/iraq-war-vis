@@ -74,6 +74,7 @@ function createVis() {
     };
     areaChart = new StackedAreaChart("area-chart", areaChartDimensions, districtViolenceData, totalViolenceData,
         troopNumbersData, "Set1");
+    areaChart.initVis();
     $(document).on("datesChanged", function() { areaChart.wrangleData() });
     $("#area-chart-data-select").change(function() { areaChart.wrangleData() });
 
@@ -85,6 +86,7 @@ function createVis() {
     };
     timeSelect = new TimeSelect("area-chart", timeSelectDimensions, districtViolenceData, totalViolenceData,
         troopNumbersData, "Greys");
+    timeSelect.initVis();
     $("#area-chart-data-select").change(function() { timeSelect.wrangleData() });
 
     // Create map after timeline because timeline generates dates needed for map data selection

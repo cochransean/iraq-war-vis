@@ -22,8 +22,6 @@ StackedAreaChart = function (_parentElement, _dimensions, _districtViolenceData,
     this.margin = _dimensions.margin;
     this.selectedColors = _colorScale;
 
-    this.initVis();
-
 };
 
 
@@ -190,18 +188,14 @@ StackedAreaChart.prototype.updateVis = function () {
     vis.xAxisGroup.call(vis.xAxis);
     vis.yAxisGroup.call(vis.yAxis);
 
-    // update axis text based on text from index
-    vis.xLabel.text($('[class=' + vis.parentElement + '-option][value=' + vis.selectedOption + ']').text());
-
     // Draw the layers
-    var categories = vis.svg.selectAll(".area")
+    vis.categories = vis.svg.selectAll(".area")
         .data(vis.displayData);
 
-    categories.enter().append("path")
-        .attr("class", "area")
-        .on("mouseover", function (d) { $("#area-chart-tooltip").html(d.name) });
+    vis.newPaths = vis.categories.enter().append("path")
+        .attr("class", "area");
 
-    categories
+    vis.categories
         .style("fill", function (d) {
             return vis.colorScale(d.name);
         })
@@ -209,9 +203,29 @@ StackedAreaChart.prototype.updateVis = function () {
             return vis.area(d.values);
         });
 
-    categories.exit().remove();
+    vis.categories.exit().remove();
 
-    // TODO: update tooltip text
+    vis.updateUI();
+
+};
 
 
+// updates the axes labels and provides tooltip functionality
+StackedAreaChart.prototype.updateUI = function() {
+    var vis = this;
+
+    // update axis text based on text from index
+    vis.xLabel.text($('[class=' + vis.parentElement + '-option][value=' + vis.selectedOption + ']').text());
+
+    // add tooltip updates to entering categories
+    vis.newPaths
+        .on("mouseover", function (d) { return vis.updateTooltip(d) });
+};
+
+StackedAreaChart.prototype.updateTooltip = function(d) {
+
+    // update header
+    $("#area-chart-tooltip-header").html(convertAbbreviation(d.name));
+
+    // TODO update date and value based on mouse position
 };

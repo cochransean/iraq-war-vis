@@ -136,3 +136,21 @@ function prepTroopNumbersData(array) {
     });
     return preppedData
 }
+
+/*
+ * Converts abbreviations from the data set to pretty-printed full text for display
+ *
+ * Arguments: abbreviation from dataset (string)
+ * Returns: pretty-printed full-text string
+ */
+function convertAbbreviation(abbreviation) {
+
+    var abbreviationMapping = {
+        'ied_total': 'IEDs',
+        'df': 'Direct Fire (Gunfire)',
+        'idf': 'Indirect Fire (Mortars, Rockets)'
+    };
+
+    var fullText = abbreviationMapping[abbreviation];
+    return fullText
+}
