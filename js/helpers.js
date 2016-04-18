@@ -106,6 +106,12 @@ function prepEthnicData(array) {
         if (Shia == 0 && Sunni != 0 && Kurdish != 0) { ethnicDataObject[value.district].Composition = "Sunni and Kurdish"}
         if (Shia != 0 && Sunni != 0 && Kurdish != 0) { ethnicDataObject[value.district].Composition = "Shia, Sunni and Kurdish"}
 
+        // take standard deviation of each as a measure of the amount of ethnic mixing in each district (lower is more
+        // heterogeneous)
+        var ethnicHomogeneity = Math.pow(((Math.pow(Shia, 2) + Math.pow(Sunni, 2) + Math.pow(Kurdish, 2)) / 3), 0.5);
+        console.log(ethnicHomogeneity);
+        ethnicDataObject[value.district].ethnicHomogeneity = ethnicHomogeneity;
+
     });
 
     console.log(ethnicDataObject);

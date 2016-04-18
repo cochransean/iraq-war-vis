@@ -193,12 +193,16 @@ IraqMap.prototype.updateChoropleth = function() {
     var valuesForExtent = districts.map(function(district) {
         return vis.ethnicData[district][vis.selectedBackgroundValue];
     });
-    console.log(valuesForExtent);
 
     if (vis.selectedBackgroundValue == "Composition") {
         vis.colorScale = d3.scale.ordinal()
             .domain(["Shia", "Sunni", "Kurdish", "Shia and Sunni", "Sunni and Kurdish", "Shia, Sunni and Kurdish"])
             .range(colorbrewer.Greens[6]);
+    }
+    else if (vis.selectedBackgroundValue == "ethnicHomogeneity") {
+        vis.colorScale = d3.scale.quantize()
+            .domain(d3.extent(valuesForExtent))
+            .range(colorbrewer.RdYlGn[6]);
     }
     else {
         vis.colorScale = d3.scale.quantize()
