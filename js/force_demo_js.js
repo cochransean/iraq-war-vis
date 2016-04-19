@@ -11,15 +11,15 @@ var force = d3.layout.force()
 
 var data;
 
-d3.csv("data/esoc-iraq-v3_ethnicity.csv",function(error, links){
+d3.csv("data/ethnicity_cleaned.csv",function(error, links){
 
     if (error) throw error;
 
     links.filter(function(link){
-        link.sunni_pop_CIA_2003 = +link.sunni_pop_CIA_2003;
-        link.kurd_pop_CIA_2003 = +link.kurd_pop_CIA_2003;
-        link.shia_pop_CIA_2003 = +link.shia_pop_CIA_2003;
-        link.total_pop_CIA_2003 = +link.total_pop_CIA_2003;
+        link.sunni = +link.sunni;
+        link.kurd = +link.kurd;
+        link.shia = +link.shia;
+        link.total = +link.total;
     });
 
     console.log(links);
@@ -47,34 +47,36 @@ function updateVisualization(){
             return d.district == district;
         })
         .attr("r",function(d){
-            return d.sunni_pop_CIA_2003/1000;
-        });
+            return d.sunni;
+        })
+        .attr("fill","green");
 
     var node1 = gnodes.append("circle").attr("class", "node1")
         .filter(function(d){
             return d.district == district;
         })
         .attr("r",function(d){
-                return d.shia_pop_CIA_2003/500;
-        });
+            return d.shia;
+        })
+        .attr("fill","blue");
 
     var node2 = gnodes.append("circle").attr("class", "node2")
         .filter(function(d){
             return d.district == district;
         })
         .attr("r",function(d){
-            return d.kurd_pop_CIA_2003/1000;
-        });
+            return d.kurd;
+        })
+        .attr("fill","red");
 
     var node3 = gnodes.append("circle").attr("class", "node3")
-        .attr("fill", "red")
         .filter(function(d){
             return d.district == district;
         })
         .attr('opacity',0.5)
         .attr("r",function(d) {
-                return (d.total_pop_CIA_2003/500);
-            });
+            return (d.total);
+        });
 
     // ASK //
     //node3.exit().remove();
@@ -98,15 +100,15 @@ function updateVisualization(){
 
     function tick() {
         node.attr("cx", function(d){return d.x})
-            .attr("cy", function(d){return d.y});
-        node1.attr("cx", function(d){return d.x+125})
+            .attr("cy", function(d){return d.y+30});
+        node1.attr("cx", function(d){return d.x})
             .attr("cy", function(d){return d.y+50});
-        node2.attr("cx", function(d){return d.x+100})
-            .attr("cy", function(d){return d.y-75});
-        node3.attr("cx", function(d){return d.x+50})
-            .attr("cy", function(d){return d.y-30});
+        node2.attr("cx", function(d){return d.x})
+            .attr("cy", function(d){return d.y+75});
+        node3.attr("cx", function(d){return d.x})
+            .attr("cy", function(d){return d.y});
         //label.attr("x", function(d){return d.x})
-        //    .attr("y", function(d){return d.y})
+          //  .attr("y", function(d){return d.y})
 
     }
 }
