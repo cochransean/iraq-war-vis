@@ -7,6 +7,7 @@ var districtViolenceData = [];
 var totalViolenceData = [];
 var ethnicDistrictData;
 var troopNumbersData;
+var usCasualtiesMonthData;
 
 // globals for linking of map and stacked area chart
 var dateRange;
@@ -31,8 +32,9 @@ function loadData() {
         .defer(d3.csv, "data/violence/Violence_country_level_month.csv")
         .defer(d3.csv, "data/Ethnicity-Data.csv")
         .defer(d3.csv, "data/us-troop-numbers-month.csv")
+        .defer(d3.csv, "data/us-troop-casualties-by-month.csv")
         .await(function(error, districtData, placeData, districtViolence, countryViolence,
-                ethnicData, troopNumbers){
+                ethnicData, troopNumbers,usCasualtiesMonth){
 
             // if error, print and return
             if (error) {
@@ -56,6 +58,9 @@ function loadData() {
             // prep troop data
             troopNumbersData = prepTroopNumbersData(troopNumbers);
 
+            // prep US casualty data by month
+            usCasualtiesMonthData = prepUsCasualtiesMonth(usCasualtiesMonth);
+
 
             createVis();
         });
@@ -71,7 +76,7 @@ function createVis() {
         "margin": { top: 20, right: 40, bottom: 45, left: 60 }
     };
     areaChart = new StackedAreaChart("area-chart", areaChartDimensions, districtViolenceData, totalViolenceData,
-        troopNumbersData, "Set1");
+        troopNumbersData, usCasualtiesMonthData, "Set1");
     areaChart.initVis();
     $(document).on("datesChanged", function() { areaChart.wrangleData() });
     $("#area-chart-data-select").change(function() { areaChart.wrangleData() });
@@ -83,7 +88,7 @@ function createVis() {
         "margin": { top: 20, right: 40, bottom: 45, left: 60 }
     };
     timeSelect = new TimeSelect("area-chart", timeSelectDimensions, districtViolenceData, totalViolenceData,
-        troopNumbersData, "Greys");
+        troopNumbersData, usCasualtiesMonthData, "Greys");
     timeSelect.initVis();
     $("#area-chart-data-select").change(function() { timeSelect.wrangleData() });
 

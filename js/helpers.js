@@ -155,9 +155,37 @@ function convertAbbreviation(abbreviation) {
         'idf': 'Indirect Fire (Mortars, Rockets)',
         'suicide': 'Suicide Bombing',
         'usTroops': 'US Troops',
-        'intTroops': 'International Troops'
+        'intTroops': 'International Troops',
+        'wounded': "Wounded",
+        'fatalities': "Fatalities"
     };
 
 
     return abbreviationMapping[abbreviation]
+}
+
+
+/*
+ * Preps data for use
+ *
+ * Arguments: array of raw data
+ * Returns: Data formatted with numeric data types where appropriate
+ */
+function prepUsCasualtiesMonth(array) {
+
+    // create d3 date format
+    var dateFormat = d3.time.format("%b-%y");
+
+    var preppedData = array.map(function(value) {
+
+        var formattedDate = dateFormat.parse(value["Period"]);
+        return {
+            "date": formattedDate,
+            "fatalities": +value["Fatalities"],
+            "wounded": +value["Wounded"]
+        }
+
+    });
+
+    return preppedData
 }

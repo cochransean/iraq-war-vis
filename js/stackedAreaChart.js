@@ -8,12 +8,13 @@
  */
 
 StackedAreaChart = function (_parentElement, _dimensions, _districtViolenceData, _totalViolenceData,
-                             _troopNumbersData, _colorScale) {
+                             _troopNumbersData, _usCasualtiesMonthData, _colorScale) {
 
     this.parentElement = _parentElement;
     this.districtViolenceData = _districtViolenceData;
     this.totalViolenceData = _totalViolenceData;
     this.troopsBySource = _troopNumbersData;
+    this.usCasualtiesByMonth = _usCasualtiesMonthData;
     this.displayData = []; // see data wrangling
 
     // set dimensions; size based on width of div to allow for easier styling with bootstrap
@@ -33,8 +34,8 @@ StackedAreaChart.prototype.initVis = function () {
 
     var vis = this;
 
-    var controlsHeight = $("#controls").height();
-    vis.height = (vis.width - controlsHeight) * vis.heightRatio - vis.margin.top - vis.margin.bottom;
+    var otherDivsHeight = $("#controls").height() + $("#information").height();
+    vis.height = (vis.width - otherDivsHeight) * vis.heightRatio - vis.margin.top - vis.margin.bottom;
     vis.width = vis.width - vis.margin.left - vis.margin.right;
 
     // SVG drawing area
@@ -131,17 +132,33 @@ StackedAreaChart.prototype.wrangleData = function () {
 
     // object to map user selection to fields you want to display; update here as data types are added
     var selectionToCategories = {
-        "totalViolenceData": ["df", "idf", "ied_total", "suicide"],
-        "troopsBySource": ["usTroops", "intTroops"]
+        "totalViolenceData": ["suicide", "df", "idf", "ied_total"],
+        "troopsBySource": ["usTroops", "intTroops"],
+        "usCasualtiesByMonth": ["fatalities", "wounded"]
     };
 
     // get fields appropriate for the user selection
     var dataCategories = selectionToCategories[vis.selectedOption];
     vis.displayData = dataCategories.map(function (category) {
+        var noNaN = true;
         return {
             name: category,
             values: vis.displayData.map(function (d) {
-                return {date: d.date, y: d[category]};
+
+                // warn user if data is not available for entire range
+                if (isNaN(d[category]) && noNaN == true) {
+                    noNaN = false;
+
+                    // TODO update something on the DOM to reflect data is not available for whole range
+                    console.log("found a nan value for " + category);
+                    return {date: d.date, y: 0};
+                }
+                else if (isNaN(d[category])) {
+                    return {date: d.date, y: 0};
+                }
+                else {
+                    return {date: d.date, y: d[category]}
+                }
             })
         };
     });
@@ -211,7 +228,6 @@ StackedAreaChart.prototype.updateVis = function () {
 
     // if any categories are entering, remove and redraw tooltip elements (needed to prevent overlapping)
     if (vis.categories.enter().empty() !== true) {
-        console.log('categories entering');
         vis.focus.remove();
         vis.addTooltipElements();
     }

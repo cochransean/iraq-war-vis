@@ -27,7 +27,9 @@ IraqMap.prototype.initVis = function() {
     // size map based on width of its div (to take up all available space and allow for easier styling)
     vis.margin = {top: 20, right: 20, bottom: 20, left: 20};
     vis.width = $("#" + vis.parentElement).width();
-    vis.height = vis.width - vis.margin.top - vis.margin.bottom;
+
+    // make map entire height of stacked area chart + controls to use up all space
+    vis.height = $("#area-chart-div").height() - vis.margin.top - vis.margin.bottom;
     vis.width = vis.width - vis.margin.left - vis.margin.right;
 
     // SVG drawing area
@@ -41,7 +43,7 @@ IraqMap.prototype.initVis = function() {
     const widthToProjectRatio = 5.9;
     var projection = d3.geo.mercator()
         .translate([vis.width / 2, vis.height / 2])
-        .center([43.75, 33.2])
+        .center([43.75, 33.6])
         .scale(vis.width * widthToProjectRatio);
 
     var path = d3.geo.path()
@@ -239,7 +241,7 @@ IraqMap.prototype.updateBackgroundTooltip = function(d) {
     }
     // TODO need to clean up the code here so that rounding doesn't lead to percentages that don't added up to 100%
     else if(vis.selectedBackgroundValue == "ethnicHomogeneity") {
-        message = "Ethnic Composition of District " + d.properties.ADM3NAME + ": </br>" +
+        message = "Ethnic Composition of District " + d.properties.ADM3NAME + ": <" +
             "Shia: " + Math.floor(vis.ethnicData[d.properties.ADM3NAME]["Shia"] * 100) + "%</br>" +
             "Sunni: " + Math.floor(vis.ethnicData[d.properties.ADM3NAME]["Sunni"] * 100) + "%</br>" +
             "Kurish: " + Math.floor(vis.ethnicData[d.properties.ADM3NAME]["Kurdish"] * 100) + "%</br>";
