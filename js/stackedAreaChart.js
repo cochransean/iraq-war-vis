@@ -243,7 +243,8 @@ StackedAreaChart.prototype.addTooltipElements = function() {
     // tooltip setup
     // based on ideas from http://www.d3noob.org/2014/07/my-favourite-tooltip-method-for-line.html
     vis.focus = vis.svg.append("g");
-    vis.focus.style("display", "none");
+    vis.focus.style("display", "none")
+        .attr("class", "areaTooltip");
 
     // append the x line
     vis.focus.append("line")

@@ -8,6 +8,7 @@ var totalViolenceData = [];
 var ethnicDistrictData;
 var troopNumbersData;
 var usCasualtiesMonthData;
+var civilianCasualtiesData;
 
 // globals for linking of map and stacked area chart
 var dateRange;
@@ -33,8 +34,9 @@ function loadData() {
         .defer(d3.csv, "data/Ethnicity-Data.csv")
         .defer(d3.csv, "data/us-troop-numbers-month.csv")
         .defer(d3.csv, "data/us-troop-casualties-by-month.csv")
+        .defer(d3.csv, "data/Civilian-Casualty-Data.csv")
         .await(function(error, districtData, placeData, districtViolence, countryViolence,
-                ethnicData, troopNumbers,usCasualtiesMonth){
+                ethnicData, troopNumbers,usCasualtiesMonth, civilianCasualties){
 
             // if error, print and return
             if (error) {
@@ -60,6 +62,7 @@ function loadData() {
 
             // prep US casualty data by month
             usCasualtiesMonthData = prepUsCasualtiesMonth(usCasualtiesMonth);
+            civilianCasualtiesData = prepCivilianCasualties(civilianCasualties);
 
 
             createVis();
@@ -94,7 +97,7 @@ function createVis() {
 
     // Create map after timeline because timeline generates dates needed for map data selection
     iraqMap = new IraqMap("iraq-map", iraqMapDistricts, iraqMapExteriorBorders, iraqMapPlaces, districtViolenceData,
-        ethnicDistrictData);
+        ethnicDistrictData, civilianCasualtiesData);
     $("#district-level-data").change(function() { iraqMap.updateChoropleth() });
     $("#circle-data").change(function() { iraqMap.wrangleData() });
     $(document).on("datesChanged", function() { iraqMap.wrangleData() });

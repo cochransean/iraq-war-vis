@@ -5,7 +5,9 @@
  * @param _data -- the data used for the map
  */
 
-IraqMap = function(_parentElement, _districtData, _exteriorBorder, _placeData, _districtViolenceData, _ethnicData){
+IraqMap = function(_parentElement, _districtData, _exteriorBorder, _placeData, _districtViolenceData, _ethnicData,
+    _civilianCasualties){
+
     this.parentElement = _parentElement;
     this.districtData = _districtData;
     this.placeData = _placeData;
@@ -13,6 +15,7 @@ IraqMap = function(_parentElement, _districtData, _exteriorBorder, _placeData, _
     this.districtViolenceData = _districtViolenceData;
     this.districtCentroids = {};
     this.ethnicData = _ethnicData;
+    this.civilianCasualties = _civilianCasualties;
     this.displayData = {}; // see data wrangling
     this.displayDataArray = [];
 
@@ -121,7 +124,14 @@ IraqMap.prototype.wrangleData = function() {
     // start with the entire data set then filter by date
     // TODO we need to go back to all these functions that are hard coded for violence data and make them
     // TODO broadly applicable for whatever category is selected once it's all working
-    vis.displayDataArray = vis.districtViolenceData;
+    if (vis.selectedCircleValue == "ied_total" || vis.selectedCircleValue == "df" || vis.selectedCircleValue == "idf") {
+        vis.displayDataArray = vis.districtViolenceData;
+    }
+
+    else if (vis.selectedCircleValue == "min-civilian" || vis.selectedCircleValue == "max-civilian") {
+        vis.displayDataArray = vis.civilianCasualties;
+    }
+
     vis.displayDataArray = vis.displayDataArray.filter(filterByDate);
 
     // populate object with districts prior to augmented assignment below to prevent key error

@@ -120,6 +120,10 @@ h2 {
     opacity: 0.5;
 }
 
+.areaTooltip {
+    pointer-events: none;
+}
+
 /* MAP STYLES */
 svg .district-borders {
     stroke: black;

@@ -12,7 +12,7 @@ function brushend() {
     dateRange = timeSelect.brush.extent();
 
     // announce change with event handler
-    $(document).trigger( "datesChanged" );
+    $(document).trigger("datesChanged");
 
 }
 
@@ -42,7 +42,7 @@ function filterByDate(arrayDataPoint) {
  */
 function convertWeekToDate(endMonth, startMonth, startDate) {
     var monthsElapsed = endMonth - startMonth;
-    var convertedDate = new Date(new Date(startDate).setMonth(startDate.getMonth()+monthsElapsed));
+    var convertedDate = new Date(new Date(startDate).setMonth(startDate.getMonth() + monthsElapsed));
     return convertedDate
 }
 
@@ -62,8 +62,8 @@ function prepEsocWeeklyViolenceData(array) {
     var startDate = new Date(2004, 1, 1);
     var startMonth = 529;
 
-    return array.map(function(value) {
-        numericFields.forEach(function(field) {
+    return array.map(function (value) {
+        numericFields.forEach(function (field) {
             value[field] = +value[field];
         });
 
@@ -86,8 +86,8 @@ function prepEsocWeeklyViolenceData(array) {
 function prepEthnicData(array) {
 
     var ethnicDataObject = {};
-    
-    array.forEach(function(value) {
+
+    array.forEach(function (value) {
         ethnicDataObject[value.district] = {};
 
         var Shia = value.shia_pop_CIA_2003 / value.total_pop_CIA_2003;
@@ -98,13 +98,27 @@ function prepEthnicData(array) {
         ethnicDataObject[value.district].Sunni = Sunni;
         ethnicDataObject[value.district].Kurdish = Kurdish;
 
-        if (Shia == 1) { ethnicDataObject[value.district].Composition = "Shia"; }
-        if (Sunni == 1) { ethnicDataObject[value.district].Composition = "Sunni"; }
-        if (Kurdish == 1) { ethnicDataObject[value.district].Composition = "Kurdish"; }
-        if (Shia != 0 && Sunni != 0 && Kurdish == 0) { ethnicDataObject[value.district].Composition = "Shia and Sunni"}
-        if (Shia != 0 && Sunni == 0 && Kurdish != 0) { ethnicDataObject[value.district].Composition = "Shia and Kurdish"}
-        if (Shia == 0 && Sunni != 0 && Kurdish != 0) { ethnicDataObject[value.district].Composition = "Sunni and Kurdish"}
-        if (Shia != 0 && Sunni != 0 && Kurdish != 0) { ethnicDataObject[value.district].Composition = "Shia, Sunni and Kurdish"}
+        if (Shia == 1) {
+            ethnicDataObject[value.district].Composition = "Shia";
+        }
+        if (Sunni == 1) {
+            ethnicDataObject[value.district].Composition = "Sunni";
+        }
+        if (Kurdish == 1) {
+            ethnicDataObject[value.district].Composition = "Kurdish";
+        }
+        if (Shia != 0 && Sunni != 0 && Kurdish == 0) {
+            ethnicDataObject[value.district].Composition = "Shia and Sunni"
+        }
+        if (Shia != 0 && Sunni == 0 && Kurdish != 0) {
+            ethnicDataObject[value.district].Composition = "Shia and Kurdish"
+        }
+        if (Shia == 0 && Sunni != 0 && Kurdish != 0) {
+            ethnicDataObject[value.district].Composition = "Sunni and Kurdish"
+        }
+        if (Shia != 0 && Sunni != 0 && Kurdish != 0) {
+            ethnicDataObject[value.district].Composition = "Shia, Sunni and Kurdish"
+        }
 
         // take standard deviation of each as a measure of the amount of ethnic mixing in each district (lower is more
         // heterogeneous)
@@ -127,7 +141,7 @@ function prepTroopNumbersData(array) {
     // create d3 date format
     var dateFormat = d3.time.format("%B %Y");
 
-    var preppedData = array.map(function(value) {
+    var preppedData = array.map(function (value) {
 
         // turn string date into date object TODO later update this to reflect troop numbers are at end of month
         var formattedDate = dateFormat.parse(value["Month (end of)"]);
@@ -176,7 +190,7 @@ function prepUsCasualtiesMonth(array) {
     // create d3 date format
     var dateFormat = d3.time.format("%b-%y");
 
-    var preppedData = array.map(function(value) {
+    return array.map(function (value) {
 
         var formattedDate = dateFormat.parse(value["Period"]);
         return {
@@ -186,6 +200,32 @@ function prepUsCasualtiesMonth(array) {
         }
 
     });
+}
+
+function prepCivilianCasualties(array) {
+
+    // create d3 date format
+    var dateFormat = d3.time.format("%d-%b-%y");
+
+    // filter out data that can't be attributed to a district
+    var preppedData = array.filter(function (value) {
+            if (value["district"]) {
+                return true
+            }
+    });
+
+    preppedData = preppedData.map(function(value) {
+        var formattedDate = dateFormat.parse(value["Start"]);
+        return {
+            "date": formattedDate,
+            "min-civilian": +value["Min"],
+            "max-civilian": +value["Max"],
+            "district": value["district"]
+        }
+    });
+
+    console.log(preppedData);
 
     return preppedData
+
 }
