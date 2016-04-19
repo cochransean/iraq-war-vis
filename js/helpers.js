@@ -153,6 +153,7 @@ function convertAbbreviation(abbreviation) {
         'ied_total': 'IEDs',
         'df': 'Direct Fire (Gunfire)',
         'idf': 'Indirect Fire (Mortars, Rockets)',
+        'suicide': 'Suicide Bombing',
         'usTroops': 'US Troops',
         'intTroops': 'International Troops'
     };

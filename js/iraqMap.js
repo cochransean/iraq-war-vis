@@ -239,7 +239,7 @@ IraqMap.prototype.updateBackgroundTooltip = function(d) {
     }
     // TODO need to clean up the code here so that rounding doesn't lead to percentages that don't added up to 100%
     else if(vis.selectedBackgroundValue == "ethnicHomogeneity") {
-        message = "Ethnic Composition of District " + d.properties.ADM3NAME + ": " +
+        message = "Ethnic Composition of District " + d.properties.ADM3NAME + ": </br>" +
             "Shia: " + Math.floor(vis.ethnicData[d.properties.ADM3NAME]["Shia"] * 100) + "%</br>" +
             "Sunni: " + Math.floor(vis.ethnicData[d.properties.ADM3NAME]["Sunni"] * 100) + "%</br>" +
             "Kurish: " + Math.floor(vis.ethnicData[d.properties.ADM3NAME]["Kurdish"] * 100) + "%</br>";

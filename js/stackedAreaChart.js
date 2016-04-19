@@ -86,10 +86,14 @@ StackedAreaChart.prototype.initVis = function () {
             return vis.y(d.y + d.y0)
         });
 
+    // group for tooltips
+    vis.focus = vis.svg.append("g");
+
     // set time range globally (to extent of data on initial load, user can filter later)
     dateRange = d3.extent(vis.totalViolenceData, function (d) {
         return d.date;
     });
+
 
     // filter and format data for stacked area chart
     vis.wrangleData();
@@ -205,7 +209,12 @@ StackedAreaChart.prototype.updateVis = function () {
 
     vis.categories.exit().remove();
 
-    vis.addTooltipElements();
+    // if any categories are entering, remove and redraw tooltip elements (needed to prevent overlapping)
+    if (vis.categories.enter().empty() !== true) {
+        console.log('categories entering');
+        vis.focus.remove();
+        vis.addTooltipElements();
+    }
 
     vis.updateUI();
 
@@ -218,7 +227,6 @@ StackedAreaChart.prototype.addTooltipElements = function() {
     // tooltip setup
     // based on ideas from http://www.d3noob.org/2014/07/my-favourite-tooltip-method-for-line.html
     vis.focus = vis.svg.append("g");
-
     vis.focus.style("display", "none");
 
     // append the x line
@@ -237,41 +245,38 @@ StackedAreaChart.prototype.addTooltipElements = function() {
         .attr("class", "tooltipCircle")
         .attr("r", 4);
 
+    // build out group to contain tooltip elements
+    const BOX_HEIGHT = 65;
+    vis.focusBox = vis.focus.append("g");
+
     // background box
-    vis.tooltipBackground = vis.focus.append("rect")
+    vis.tooltipBackground = vis.focusBox.append("rect")
         .attr("class", "tooltipBackground")
-        .attr("width", 145)
-        .attr("height", 44)
-        .attr("x", 6)
-        .attr("y", -22);
+        .attr("width", BOX_HEIGHT)
+        .attr("height", 65);
 
-    // place the value at the intersection
-    vis.tooltipText = vis.focus.append("text")
+    // place the text elements
+    const TEXT_PADDING = 3;
+    vis.tooltipTitle = vis.focusBox.append("text")
+        .attr("class", "tooltipTitle")
+        .attr("dx", TEXT_PADDING)
+        .attr("dy", "1.2em");
+
+    vis.tooltipText = vis.focusBox.append("text")
         .attr("class", "tooltipValue")
-        .attr("dx", 8)
-        .attr("dy", "-.3em");
+        .attr("dx", TEXT_PADDING)
+        .attr("dy", "2.5em");
 
-    // place the date at the intersection
-    vis.focus.append("text")
+    vis.tooltipDate = vis.focusBox.append("text")
         .attr("class", "tooltipDate")
-        .attr("dx", 8)
-        .attr("dy", "1em");
-
-    vis.tooltipDate = vis.focus.append("text")
-        .attr("class", "tooltipDate")
-        .attr("dx", 8)
-        .attr("dy", "1em");
+        .attr("dx", TEXT_PADDING)
+        .attr("dy", "3.8em");
 
 };
 
 // updates the axes labels and provides tooltip functionality
 StackedAreaChart.prototype.updateUI = function() {
     var vis = this;
-
-    // get items from DOM to update
-    var tooltipDiv = d3.select("#area-chart-tooltip");
-    var timeField = d3.select("#area-chart-tooltip-time");
-    var valueField = d3.select("#area-chart-tooltip-value");
 
     // formatter for time
     var monthYear = d3.time.format("%B %Y");
@@ -285,8 +290,7 @@ StackedAreaChart.prototype.updateUI = function() {
     // add tooltip updates to entering categories
     vis.newPaths
         .on("mouseover", function (d) {
-            tooltipDiv.style("display", "initial");
-            $("#area-chart-tooltip-header").html(convertAbbreviation(d.name));
+            vis.tooltipTitle.text(convertAbbreviation(d.name));
             vis.focus.style("display", null);
         })
         .on("mousemove", function(d) {
@@ -311,10 +315,6 @@ StackedAreaChart.prototype.updateUI = function() {
                 closestIndex = indexNextHigherDate - 1;
             }
 
-            // update tooltip accordingly
-            timeField.text(monthYear(closestDate));
-            valueField.text(d.values[closestIndex].y);
-
             vis.focus
                 .attr("transform",
                     "translate(" + vis.x(closestDate) + "," +
@@ -326,26 +326,40 @@ StackedAreaChart.prototype.updateUI = function() {
             vis.focus.select(".tooltip-y")
                 .attr("x1", 0 - vis.x(closestDate));
 
+            // update text and get new width
             vis.tooltipText.text(d.values[closestIndex].y);
             vis.tooltipDate.text(monthYear(closestDate));
+            var textWidth = getTextWidth([vis.tooltipTitle, vis.tooltipText, vis.tooltipDate]);
 
             vis.tooltipBackground
-                .attr("width", getTextWidth(vis.tooltipDate));
+                .attr("width", textWidth);
 
-            function getTextWidth(text) {
+            // shift focus box to accommodate new width
+            const BOX_HEIGHT = 65;
+            const BOX_VERTICAL_PADDING = 10;
+            vis.focusBox
+                .attr("transform",
+                    "translate(" + (-textWidth) + "," + (-(BOX_HEIGHT + BOX_VERTICAL_PADDING)) + ")");
+
+            // returns greatest width from an array of nodes to check
+            function getTextWidth(nodes) {
 
                 const PADDING = 6;
 
                 // get bounding box
-                var BBox = text.node().getBBox();
+                var highestWidth = nodes[0].node().getBBox().width;
+
+                for (var i = 1; i < nodes.length; i++) {
+                    var currentWidth = nodes[i].node().getBBox().width;
+                    highestWidth = currentWidth > highestWidth ? currentWidth: highestWidth;
+                }
 
                 // return width plus padding
-                return BBox.width + PADDING;
+                return highestWidth + PADDING;
             }
 
         })
         .on("mouseout", function() {
-            tooltipDiv.style("display", "none");
             vis.focus.style("display", "none");
         })
 };

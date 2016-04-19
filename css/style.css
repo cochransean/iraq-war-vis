@@ -83,17 +83,6 @@ h2 {
     position: relative;
 }
 
-#area-chart-tooltip {
-    position: absolute;
-    left: 70px;
-    top: 20px;
-    display: none;
-}
-
-#area-chart-tooltip table {
-    width: 200px;
-}
-
 .tooltipCircle {
     fill: none;
     stroke: black;
@@ -108,6 +97,13 @@ h2 {
 .tooltipValue {
     font-size: 16px;
     font-weight: bold;
+    fill: black;
+}
+
+.tooltipTitle {
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: underline;
     fill: black;
 }
 
