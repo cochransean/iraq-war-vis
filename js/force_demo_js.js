@@ -35,24 +35,14 @@ function updateVisualization(){
 
     var district = d3.select("#button").property("value");
 
-    var node = svg.selectAll(".node")
-        .data(data);
-
-    var node1 = svg.selectAll(".node1")
-        .data(data);
-
-    var node2 = svg.selectAll('.node2')
-        .data(data);
-
-    var node3 = svg.selectAll('.node3')
-        .data(data);
-
-    node
+    var gnodes = svg.selectAll('gnode')
+        .data(data)
         .enter()
-        .append("circle").attr("class", "node")
+        .append('g')
+        .classed('gnode', true)
         .call(force.drag);
 
-    node
+    var node = gnodes.append("circle").attr("class", "node")
         .filter(function(d){
             return d.district == district;
         })
@@ -60,29 +50,15 @@ function updateVisualization(){
             return d.sunni_pop_CIA_2003/1000;
         });
 
-    node.exit().remove();
-
-    node1
-        .enter()
-        .append("circle").attr("class", "node1")
-        .call(force.drag);
-
-    node1
+    var node1 = gnodes.append("circle").attr("class", "node1")
         .filter(function(d){
             return d.district == district;
         })
         .attr("r",function(d){
-            return d.shia_pop_CIA_2003/1000;
+                return d.shia_pop_CIA_2003/500;
         });
 
-    node1.exit().remove();
-
-    node2
-        .enter()
-        .append("circle").attr("class", "node2")
-        .call(force.drag);
-
-    node2
+    var node2 = gnodes.append("circle").attr("class", "node2")
         .filter(function(d){
             return d.district == district;
         })
@@ -90,24 +66,30 @@ function updateVisualization(){
             return d.kurd_pop_CIA_2003/1000;
         });
 
-    node2.exit().remove();
-
-    node3
-        .enter()
-        .append("circle").attr("class", "node2")
+    var node3 = gnodes.append("circle").attr("class", "node3")
         .attr("fill", "red")
-        .call(force.drag);
-
-    node3
         .filter(function(d){
             return d.district == district;
         })
         .attr('opacity',0.5)
-        .attr("r",function(d){
-            return d.total_pop_CIA_2003/750;
-        });
+        .attr("r",function(d) {
+                return (d.total_pop_CIA_2003/500);
+            });
 
-    node3.exit().remove();
+    // ASK //
+    //node3.exit().remove();
+    // ASK //
+    node.transition()
+        .duration(10000);
+    node1.transition()
+        .duration(10000);
+    node2.transition()
+        .duration(10000);
+    node3.transition()
+        .duration(10000);
+    // ASK //
+    var label = gnodes.append("text")
+        .text("text");
 
     force
         .nodes(data)
@@ -123,5 +105,8 @@ function updateVisualization(){
             .attr("cy", function(d){return d.y-75});
         node3.attr("cx", function(d){return d.x+50})
             .attr("cy", function(d){return d.y-30});
+        //label.attr("x", function(d){return d.x})
+        //    .attr("y", function(d){return d.y})
+
     }
 }
