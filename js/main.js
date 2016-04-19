@@ -44,8 +44,6 @@ function loadData() {
             // load ethnic data in object with key as district for use by multiple visualizations
             ethnicDistrictData = prepEthnicData(ethnicData);
 
-            console.log(ethnicDistrictData);
-
             iraqMapExteriorBorders = topojson.mesh(districtData, districtData.objects.Iraq_districts, function(a, b) {
                 return a === b;
             });

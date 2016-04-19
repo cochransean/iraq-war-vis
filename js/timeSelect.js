@@ -17,8 +17,6 @@ function TimeSelect(_parentElement, _dimensions, _districtViolenceData, _totalVi
         StackedAreaChart.prototype.initVis.call(this);
         var vis = this;
 
-        console.log("time select updating");
-
         // remove y-axis
         vis.yAxisGroup.remove();
 
@@ -41,4 +39,10 @@ function TimeSelect(_parentElement, _dimensions, _districtViolenceData, _totalVi
         // override this method (no UI updating on time select)
         return false
     };
+
+    this.addTooltipElements = function() {
+
+        // override this method (no tooltips)
+        return false
+    }
 }

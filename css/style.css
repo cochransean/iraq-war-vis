@@ -87,6 +87,41 @@ h2 {
     position: absolute;
     left: 70px;
     top: 20px;
+    display: none;
+}
+
+#area-chart-tooltip table {
+    width: 200px;
+}
+
+.tooltipCircle {
+    fill: none;
+    stroke: black;
+    stroke-width: 2px;
+}
+
+.tooltipDate {
+    font-size: 16px;
+    fill: black;
+}
+
+.tooltipValue {
+    font-size: 16px;
+    font-weight: bold;
+    fill: black;
+}
+
+.tooltipBackground {
+    fill: white;
+    stroke-width: 2px;
+    stroke: black;
+    opacity: 0.6;
+}
+
+.tooltipLine {
+    stroke: black;
+    stroke-dasharray: 3,3;
+    opacity: 0.5;
 }
 
 /* MAP STYLES */

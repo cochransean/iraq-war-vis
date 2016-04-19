@@ -183,8 +183,6 @@ IraqMap.prototype.updateChoropleth = function() {
     var selectBox = document.getElementById("district-level-data");
     vis.selectedBackgroundValue = selectBox.options[selectBox.selectedIndex].value;
 
-    console.log(vis.ethnicData);
-
     // create color scale (needs to be done here now as the scale's type depends on data)
 
 
@@ -244,7 +242,7 @@ IraqMap.prototype.updateBackgroundTooltip = function(d) {
         message = "Ethnic Composition of District " + d.properties.ADM3NAME + ": " +
             "Shia: " + Math.floor(vis.ethnicData[d.properties.ADM3NAME]["Shia"] * 100) + "%</br>" +
             "Sunni: " + Math.floor(vis.ethnicData[d.properties.ADM3NAME]["Sunni"] * 100) + "%</br>" +
-            "Kurish: " + Math.floor(vis.ethnicData[d.properties.ADM3NAME]["Kurdish"] * 100) + "%</br>"
+            "Kurish: " + Math.floor(vis.ethnicData[d.properties.ADM3NAME]["Kurdish"] * 100) + "%</br>";
         return message
     }
     else {

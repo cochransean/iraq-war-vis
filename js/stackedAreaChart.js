@@ -205,27 +205,147 @@ StackedAreaChart.prototype.updateVis = function () {
 
     vis.categories.exit().remove();
 
+    vis.addTooltipElements();
+
     vis.updateUI();
 
 };
 
 
+StackedAreaChart.prototype.addTooltipElements = function() {
+    var vis = this;
+
+    // tooltip setup
+    // based on ideas from http://www.d3noob.org/2014/07/my-favourite-tooltip-method-for-line.html
+    vis.focus = vis.svg.append("g");
+
+    vis.focus.style("display", "none");
+
+    // append the x line
+    vis.focus.append("line")
+        .attr("class", "tooltipLine tooltip-x")
+        .attr("y1", 0)
+        .attr("y2", vis.height);
+
+    // append the y line
+    vis.focus.append("line")
+        .attr("class", "tooltipLine tooltip-y")
+        .attr("x1", 0)
+        .attr("x2", 0);
+
+    vis.focus.append("circle")
+        .attr("class", "tooltipCircle")
+        .attr("r", 4);
+
+    // background box
+    vis.tooltipBackground = vis.focus.append("rect")
+        .attr("class", "tooltipBackground")
+        .attr("width", 145)
+        .attr("height", 44)
+        .attr("x", 6)
+        .attr("y", -22);
+
+    // place the value at the intersection
+    vis.tooltipText = vis.focus.append("text")
+        .attr("class", "tooltipValue")
+        .attr("dx", 8)
+        .attr("dy", "-.3em");
+
+    // place the date at the intersection
+    vis.focus.append("text")
+        .attr("class", "tooltipDate")
+        .attr("dx", 8)
+        .attr("dy", "1em");
+
+    vis.tooltipDate = vis.focus.append("text")
+        .attr("class", "tooltipDate")
+        .attr("dx", 8)
+        .attr("dy", "1em");
+
+};
+
 // updates the axes labels and provides tooltip functionality
 StackedAreaChart.prototype.updateUI = function() {
     var vis = this;
+
+    // get items from DOM to update
+    var tooltipDiv = d3.select("#area-chart-tooltip");
+    var timeField = d3.select("#area-chart-tooltip-time");
+    var valueField = d3.select("#area-chart-tooltip-value");
+
+    // formatter for time
+    var monthYear = d3.time.format("%B %Y");
+
+    // bisector to get valid dates from mouse position
+    var bisectDate = d3.bisector(function(d) { return d.date; }).left;
 
     // update axis text based on text from index
     vis.xLabel.text($('[class=' + vis.parentElement + '-option][value=' + vis.selectedOption + ']').text());
 
     // add tooltip updates to entering categories
     vis.newPaths
-        .on("mouseover", function (d) { return vis.updateTooltip(d) });
-};
+        .on("mouseover", function (d) {
+            tooltipDiv.style("display", "initial");
+            $("#area-chart-tooltip-header").html(convertAbbreviation(d.name));
+            vis.focus.style("display", null);
+        })
+        .on("mousemove", function(d) {
 
-StackedAreaChart.prototype.updateTooltip = function(d) {
+            // get mouse position and corresponding values
+            vis.mousePosition = d3.mouse(this);
+            var mouseDate = vis.x.invert(vis.mousePosition[0]);
 
-    // update header
-    $("#area-chart-tooltip-header").html(convertAbbreviation(d.name));
+            // get the surrounding dates
+            var indexNextHigherDate = bisectDate(d.values, mouseDate),
+                d0 = d.values[indexNextHigherDate - 1].date,
+                d1 = d.values[indexNextHigherDate].date;
 
-    // TODO update date and value based on mouse position
+            // determine which potential date is closer to mouse position
+            if (mouseDate - d0 > d1 - mouseDate) {
+                var closestDate = d1,
+                    closestIndex = indexNextHigherDate;
+            }
+
+            else {
+                closestDate = d0;
+                closestIndex = indexNextHigherDate - 1;
+            }
+
+            // update tooltip accordingly
+            timeField.text(monthYear(closestDate));
+            valueField.text(d.values[closestIndex].y);
+
+            vis.focus
+                .attr("transform",
+                    "translate(" + vis.x(closestDate) + "," +
+                    vis.y(d.values[closestIndex].y + d.values[closestIndex].y0) + ")");
+
+            vis.focus.select(".tooltip-x")
+                .attr("y2", vis.height - vis.y(d.values[closestIndex].y + d.values[closestIndex].y0));
+
+            vis.focus.select(".tooltip-y")
+                .attr("x1", 0 - vis.x(closestDate));
+
+            vis.tooltipText.text(d.values[closestIndex].y);
+            vis.tooltipDate.text(monthYear(closestDate));
+
+            vis.tooltipBackground
+                .attr("width", getTextWidth(vis.tooltipDate));
+
+            function getTextWidth(text) {
+
+                const PADDING = 6;
+
+                // get bounding box
+                var BBox = text.node().getBBox();
+
+                // return width plus padding
+                return BBox.width + PADDING;
+            }
+
+        })
+        .on("mouseout", function() {
+            tooltipDiv.style("display", "none");
+            vis.focus.style("display", "none");
+        })
 };

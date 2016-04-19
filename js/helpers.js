@@ -109,12 +109,10 @@ function prepEthnicData(array) {
         // take standard deviation of each as a measure of the amount of ethnic mixing in each district (lower is more
         // heterogeneous)
         var ethnicHomogeneity = Math.pow(((Math.pow(Shia, 2) + Math.pow(Sunni, 2) + Math.pow(Kurdish, 2)) / 3), 0.5);
-        console.log(ethnicHomogeneity);
         ethnicDataObject[value.district].ethnicHomogeneity = ethnicHomogeneity;
 
     });
 
-    console.log(ethnicDataObject);
     return ethnicDataObject;
 }
 
@@ -154,9 +152,11 @@ function convertAbbreviation(abbreviation) {
     var abbreviationMapping = {
         'ied_total': 'IEDs',
         'df': 'Direct Fire (Gunfire)',
-        'idf': 'Indirect Fire (Mortars, Rockets)'
+        'idf': 'Indirect Fire (Mortars, Rockets)',
+        'usTroops': 'US Troops',
+        'intTroops': 'International Troops'
     };
 
-    var fullText = abbreviationMapping[abbreviation];
-    return fullText
+
+    return abbreviationMapping[abbreviation]
 }

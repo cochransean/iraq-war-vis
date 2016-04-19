@@ -37,7 +37,17 @@
                 <div id="area-chart-div">
                     <div id="area-chart">
                         <div id="area-chart-tooltip">
-                            <h5 id="area-chart-tooltip-header"></h5>
+                            <h4 id="area-chart-tooltip-header"></h4>
+                            <table class="table">
+                                <tr>
+                                    <td>Month</td>
+                                    <td id="area-chart-tooltip-time"></td>
+                                </tr>
+                                <tr>
+                                    <td>Number</td>
+                                    <td id="area-chart-tooltip-value"></td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                     <div id="controls" class="row">
@@ -79,7 +89,7 @@
                                         <div class="col-xs-10">
                                             <select id="area-chart-data-select" class="form-control">
                                                 <option class="area-chart-option" value="totalViolenceData">Monthly Violent Incidents by Type</option>
-                                                <option class="area-chart-option" value="troopsBySource">Number of Troops</option>
+                                                <option class="area-chart-option" value="troopsBySource">Monthly Number of Troops</option>
                                             </select>
                                         </div>
                                     </div>
