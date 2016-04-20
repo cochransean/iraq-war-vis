@@ -229,3 +229,46 @@ function prepCivilianCasualties(array) {
     return preppedData
 
 }
+
+
+// accepts the already-prepped daily data and converts to monthly data
+function prepCivilianCasualtiesMonthly(array) {
+
+    var preppedData = [];
+
+    // track previous month so you know when to start new spot on array
+    var previousMonth = 0;
+    var previousYear = 0;
+    var currentIndex = -1;
+
+    array.forEach(function(value) {
+
+        var currentMonth = value.date.getMonth();
+        var currentYear = value.date.getFullYear();
+
+        // check to see if we are on a new month
+        if (currentMonth > previousMonth || currentYear > previousYear) {
+
+            // if so, start on new spot on array
+            currentIndex++;
+            preppedData.push({
+                "min-civilian": +value["min-civilian"],
+                "max-civilian": +value["max-civilian"]
+            });
+        }
+
+        // otherwise, must be on same month
+        else {
+            preppedData[currentIndex]["min-civilian"] += +value["min-civilian"];
+            preppedData[currentIndex]["max-civilian"] += +value["max-civilian"];
+        }
+
+        // update date of previous for check on next iteration
+        previousMonth = currentMonth;
+        previousYear = currentYear;
+
+    });
+
+    console.log(preppedData);
+    return preppedData
+}

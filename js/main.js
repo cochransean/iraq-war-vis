@@ -9,6 +9,7 @@ var ethnicDistrictData;
 var troopNumbersData;
 var usCasualtiesMonthData;
 var civilianCasualtiesData;
+var civilianCasualtiesMonthly;
 
 // globals for linking of map and stacked area chart
 var dateRange;
@@ -62,7 +63,10 @@ function loadData() {
 
             // prep US casualty data by month
             usCasualtiesMonthData = prepUsCasualtiesMonth(usCasualtiesMonth);
+
+            // prep civ casualties data
             civilianCasualtiesData = prepCivilianCasualties(civilianCasualties);
+            civilianCasualtiesMonthly = prepCivilianCasualtiesMonthly(civilianCasualtiesData);
 
 
             createVis();
