@@ -11,8 +11,15 @@ function brushend() {
     // globally update dates
     dateRange = timeSelect.brush.extent();
 
+    // if brush has been deselected, select all
+    if (timeSelect.brush.empty()) {
+        dateRange = timeSelect.x.domain();
+    }
+
     // announce change with event handler
     $(document).trigger("datesChanged");
+
+
 
 }
 
