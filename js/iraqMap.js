@@ -121,15 +121,25 @@ IraqMap.prototype.wrangleData = function() {
     var selectBox = document.getElementById("circle-data");
     vis.selectedCircleValue = selectBox.options[selectBox.selectedIndex].value;
 
-    // start with the entire data set then filter by date
-    // TODO we need to go back to all these functions that are hard coded for violence data and make them
-    // TODO broadly applicable for whatever category is selected once it's all working
-    if (vis.selectedCircleValue == "ied_total" || vis.selectedCircleValue == "df" || vis.selectedCircleValue == "idf") {
+    // wrangle data based on selection
+    if (vis.selectedCircleValue == "ied_total" || vis.selectedCircleValue == "df" || vis.selectedCircleValue == "idf" ||
+        vis.selectedCircleValue == "totalViolenceData") {
         vis.displayDataArray = vis.districtViolenceData;
     }
 
     else if (vis.selectedCircleValue == "min-civilian" || vis.selectedCircleValue == "max-civilian") {
         vis.displayDataArray = vis.civilianCasualties;
+    }
+
+    // if not something with geographic component, post warning to user and break (don't continue with update)
+    else if (vis.selectedCircleValue == "troopsBySource" || vis.selectedCircleValue == "usCasualtiesByMonth" ||
+            vis.selectedCircleValue == "fatalities" || vis.selectedCircleValue == "wounded") {
+
+        $("#alert-div").html('<div class="alert alert-warning alert-dismissible fade in" role="alert">' +
+            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+            '<span aria-hidden="true">&times;</span></button>' +
+            '<strong>Sorry!</strong> Map data is unavailable for the selected data. </div>'
+        )
     }
 
     vis.displayDataArray = vis.displayDataArray.filter(filterByDate);

@@ -77,6 +77,9 @@ function prepEsocWeeklyViolenceData(array) {
         // convert date
         value.date = convertWeekToDate(value.month, startMonth, startDate);
 
+        // aggregate totals for later use
+        value.totalViolenceData = value["ied_total"] + value.df + value.idf;
+
         return value
     });
 }
@@ -231,8 +234,6 @@ function prepCivilianCasualties(array) {
         }
     });
 
-    console.log(preppedData);
-
     return preppedData
 
 }
@@ -260,7 +261,8 @@ function prepCivilianCasualtiesMonthly(array) {
             currentIndex++;
             preppedData.push({
                 "min-civilian": +value["min-civilian"],
-                "max-civilian": +value["max-civilian"]
+                "max-civilian": +value["max-civilian"],
+                "date": new Date(currentYear, currentMonth)
             });
         }
 
@@ -276,6 +278,5 @@ function prepCivilianCasualtiesMonthly(array) {
 
     });
 
-    console.log(preppedData);
     return preppedData
 }

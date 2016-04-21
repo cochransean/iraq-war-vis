@@ -80,24 +80,24 @@ function createVis() {
     var areaChartDimensions = {
         "width": null,
         "heightRatio": 4/5,
-        "margin": { top: 20, right: 40, bottom: 45, left: 60 }
+        "margin": { top: 40, right: 40, bottom: 40, left: 80 }
     };
     areaChart = new StackedAreaChart("area-chart", areaChartDimensions, districtViolenceData, totalViolenceData,
-        troopNumbersData, usCasualtiesMonthData, "Set1");
+        troopNumbersData, usCasualtiesMonthData, civilianCasualtiesMonthly, "Set1");
     areaChart.initVis();
     $(document).on("datesChanged", function() { areaChart.wrangleData() });
-    $("#area-chart-data-select").change(function() { areaChart.wrangleData() });
+    $("#circle-data").change(function() { areaChart.wrangleData() });
 
     // Timeline select: smaller version of area chart with brush functionality added
     var timeSelectDimensions = {
         "width": null,
         "heightRatio": 1/5,
-        "margin": { top: 20, right: 40, bottom: 45, left: 60 }
+        "margin": { top: 10, right: 40, bottom: 45, left: 80 }
     };
     timeSelect = new TimeSelect("area-chart", timeSelectDimensions, districtViolenceData, totalViolenceData,
-        troopNumbersData, usCasualtiesMonthData, "Greys");
+        troopNumbersData, usCasualtiesMonthData, civilianCasualtiesMonthly, "Greys");
     timeSelect.initVis();
-    $("#area-chart-data-select").change(function() { timeSelect.wrangleData() });
+    $("#circle-data").change(function() { timeSelect.wrangleData() });
 
     // Create map after timeline because timeline generates dates needed for map data selection
     iraqMap = new IraqMap("iraq-map", iraqMapDistricts, iraqMapExteriorBorders, iraqMapPlaces, districtViolenceData,

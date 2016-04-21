@@ -8,13 +8,14 @@
  */
 
 StackedAreaChart = function (_parentElement, _dimensions, _districtViolenceData, _totalViolenceData,
-                             _troopNumbersData, _usCasualtiesMonthData, _colorScale) {
+                             _troopNumbersData, _usCasualtiesMonthData, _civCasualtiesMonthly, _colorScale) {
 
     this.parentElement = _parentElement;
     this.districtViolenceData = _districtViolenceData;
     this.totalViolenceData = _totalViolenceData;
     this.troopsBySource = _troopNumbersData;
     this.usCasualtiesByMonth = _usCasualtiesMonthData;
+    this.civCasualtiesMonthly = _civCasualtiesMonthly;
     this.displayData = []; // see data wrangling
 
     // set dimensions; size based on width of div to allow for easier styling with bootstrap
@@ -45,6 +46,27 @@ StackedAreaChart.prototype.initVis = function () {
         .append("g")
         .attr("transform", "translate(" + vis.margin.left + "," + vis.margin.top + ")");
 
+    // append rectangle to listen for clicks on background (to reset back to parent category from sub-category)
+    vis.svg.append("rect")
+        .attr("width", vis.width)
+        .attr("height", vis.height)
+        .attr("class", "area-background")
+        .on("click", function() {
+            var select = $("#circle-data");
+            var currentSelection = select.children("option:selected");
+
+            // if down in hierarchy of selections
+            if (currentSelection.hasClass("level2")) {
+
+                // reset selection to previous level of hierarchy
+                var parentLevel = currentSelection.prevAll(".level1").val();
+                select.val(parentLevel);
+
+                // trigger change for update sequence
+                select.trigger("change");
+            }
+        });
+
     // Scales and axes
     vis.x = d3.time.scale()
         .range([0, vis.width]);
@@ -71,10 +93,15 @@ StackedAreaChart.prototype.initVis = function () {
     vis.xLabel = vis.xAxisGroup.append("text")
         .attr("x", vis.width / 2)
         .attr("y", 40)
-        .attr("text-anchor", "middle");
+        .attr("text-anchor", "middle")
+        .text("Time");
 
     vis.yAxisGroup = vis.svg.append("g")
         .attr("class", "y-axis axis");
+
+    vis.yLabel = vis.yAxisGroup.append("text")
+        .attr("transform", "translate(-70," + (vis.height / 2) + ") rotate(90)")
+        .attr("text-anchor", "middle");
 
     // Area generator
     vis.area = d3.svg.area()
@@ -112,9 +139,26 @@ StackedAreaChart.prototype.wrangleData = function () {
     // track old option to see if a new data type has been selected, requiring reseting of dates
     var oldOption = vis.selectedOption;
 
+    // map subcategories to categories to allow for subselections
+    var subcategoryToCategory = {
+        totalViolenceData: "totalViolenceData",
+        ied_total: "totalViolenceData",
+        idf: "totalViolenceData",
+        df: "totalViolenceData",
+        troopsBySource: "troopsBySource",
+        usTroops: "troopsBySource",
+        intTroops: "troopsBySource",
+        usCasualtiesByMonth: "usCasualtiesByMonth",
+        fatalities: "usCasualtiesByMonth",
+        wounded: "usCasualtiesByMonth",
+        "min-civilian": "civCasualtiesMonthly",
+        "max-civilian": "civCasualtiesMonthly"
+
+    };
+
     // update data selection based on user input
-    vis.selectedOption = $("#" + vis.parentElement + "-data-select").val();
-    vis.displayData = vis[vis.selectedOption];
+    vis.selectedOption = $("#circle-data").val();
+    vis.displayData = vis[subcategoryToCategory[vis.selectedOption]];
 
     // if new data selection, update date range
     if (oldOption !== vis.selectedOption) {
@@ -132,10 +176,21 @@ StackedAreaChart.prototype.wrangleData = function () {
     }
 
     // object to map user selection to fields you want to display; update here as data types are added
+    // sub-categories are listed so that filtering occurs by nature of map function below
     var selectionToCategories = {
-        "totalViolenceData": ["suicide", "df", "idf", "ied_total"],
-        "troopsBySource": ["usTroops", "intTroops"],
-        "usCasualtiesByMonth": ["fatalities", "wounded"]
+        totalViolenceData: ["suicide", "df", "idf", "ied_total"],
+        troopsBySource: ["usTroops", "intTroops"],
+        usCasualtiesByMonth: ["fatalities", "wounded"],
+        fatalities: ["fatalities"],
+        wounded: ["wounded"],
+        ied_total: ["ied_total"],
+        idf: ["idf"],
+        df: ["df"],
+        usTroops: ["usTroops"],
+        intTroops: ["intTroops"],
+        civCasualtiesMonthly: ["min-civilian", "max-civilian"],
+        "min-civilian": ["min-civilian"],
+        "max-civilian": ["max-civilian"]
     };
 
     // get fields appropriate for the user selection
@@ -150,7 +205,8 @@ StackedAreaChart.prototype.wrangleData = function () {
                 if (isNaN(d[category]) && noNaN == true) {
                     noNaN = false;
 
-                    // TODO update something on the DOM to reflect data is not available for whole range
+                    // TODO update something on the DOM to reflect data is not available for whole range (as in wounded
+                    // data which isn't available after 2011
                     console.log("found a nan value for " + category);
                     return {date: d.date, y: 0};
                 }
@@ -303,10 +359,19 @@ StackedAreaChart.prototype.updateUI = function() {
     var bisectDate = d3.bisector(function(d) { return d.date; }).left;
 
     // update axis text based on text from index
-    vis.xLabel.text($('[class=' + vis.parentElement + '-option][value=' + vis.selectedOption + ']').text());
+    vis.yLabel.text($('.chart-option[value=' + vis.selectedOption +']').text());
 
     // add tooltip updates to entering categories
     vis.newPaths
+        .on("click", function(d) {
+            var select = $("#circle-data");
+
+            // set value to element clicked on to trigger update sequence
+            select.val(d.name);
+
+            // trigger change since it won't trigger with .val along
+            select.trigger("change");
+        })
         .on("mouseover", function (d) {
             vis.tooltipTitle.text(convertAbbreviation(d.name));
             vis.focus.style("display", null);
@@ -357,7 +422,7 @@ StackedAreaChart.prototype.updateUI = function() {
             const BOX_VERTICAL_PADDING = 10;
             vis.focusBox
                 .attr("transform",
-                    "translate(" + (-textWidth) + "," + (-(BOX_HEIGHT + BOX_VERTICAL_PADDING)) + ")");
+                    "translate(" + (-textWidth / 2) + "," + (-(BOX_HEIGHT + BOX_VERTICAL_PADDING)) + ")");
 
             // returns greatest width from an array of nodes to check
             function getTextWidth(nodes) {

@@ -38,18 +38,17 @@
                     <div id="information">
                         <h3>Update This Headline with Storytelling</h3>
                         <h4>Put additional info here</h4>
-                        <p>Update this with warnings to user if required (data unavailable, etc.)</p>
+                        <div id="alert-div"></div>
                     </div>
                     <div id="area-chart"></div>
                     <div id="controls" class="row">
                         <div class="row">
-                            <div id="map-control" class="col-xs-6">
-                                <h5>Map</h5>
+                            <div id="map-control" class="col-xs-12">
                                 <form>
                                     <div class="form-horizontal">
                                         <div class="form-group">
-                                            <label for="district-level-data" class="col-xs-3 control-label">Background</label>
-                                            <div class="col-xs-9">
+                                            <label for="district-level-data" class="col-xs-4 control-label">Map Background</label>
+                                            <div class="col-xs-8">
                                                 <select id="district-level-data" class="form-control">
                                                     <option value="ethnicHomogeneity">Ethnic heterogeneity</option>
                                                     <option value="Composition">Ethnic composition per district</option>
@@ -60,31 +59,21 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="district-level-data" class="col-xs-2 control-label">Symbols</label>
-                                            <div class="col-xs-10">
+                                            <label for="circle-data" class="col-xs-4 control-label">Map Circles and Chart</label>
+                                            <div class="col-xs-8">
                                                 <select id="circle-data" class="form-control col-xs-10">
-                                                    <option value="ied_total">IEDs</option>
-                                                    <option value="idf">Indirect Fire</option>
-                                                    <option value="df">Direct Fire</option>
-                                                    <option value="min-civilian">Minimum Estimate of Civilians Killed</option>
-                                                    <option value="max-civilian">Maximum Estimate of Civilians Killed</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div id="area-chart-control" class="col-xs-6">
-                                <h5>Area Chart</h5>
-                                <form>
-                                    <div class="form-horizontal">
-                                        <div class="form-group">
-                                            <label for="area-chart-data-select" class="col-xs-2 control-label">Data</label>
-                                            <div class="col-xs-10">
-                                                <select id="area-chart-data-select" class="form-control">
-                                                    <option class="area-chart-option" value="totalViolenceData">Monthly Violent Incidents by Type</option>
-                                                    <option class="area-chart-option" value="troopsBySource">Monthly Number of Troops</option>
-                                                    <option class="area-chart-option" value="usCasualtiesByMonth">US Casualties by Month</option>
+                                                    <option class="chart-option level1" value="totalViolenceData">All Monthly Violence Incidents</option>
+                                                        <option class="chart-option level2" value="ied_total">IEDs</option>
+                                                        <option class="chart-option level2" value="idf">Indirect Fire</option>
+                                                        <option class="chart-option level2" value="df">Direct Fire</option>
+                                                    <option class="chart-option level1"  value="troopsBySource">Monthly Number of Troops</option>
+                                                        <option class="chart-option level2" value="usTroops">Monthly US Troop Numbers</option>
+                                                        <option class="chart-option level2" value="intTroops">Monthly International Troop Numbers</option>
+                                                    <option class="chart-option level1"  value="min-civilian">Minimum Estimate of Civilians Killed</option>
+                                                    <option class="chart-option level1"  value="max-civilian">Maximum Estimate of Civilians Killed</option>
+                                                    <option class="chart-option level1"  value="usCasualtiesByMonth">US Casualties by Month</option>
+                                                        <option class="chart-option level2" value="fatalities">US Fatalities By Month</option>
+                                                        <option class="chart-option level2" value="wounded">US Wounded By Month</option>
                                                 </select>
                                             </div>
                                         </div>

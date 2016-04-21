@@ -124,6 +124,10 @@ h2 {
     pointer-events: none;
 }
 
+svg .area-background {
+    fill: #f7f7f7;
+}
+
 /* MAP STYLES */
 svg .district-borders {
     stroke: black;

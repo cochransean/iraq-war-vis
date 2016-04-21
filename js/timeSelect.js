@@ -9,16 +9,17 @@ TimeSelect.prototype = StackedAreaChart.prototype;
 TimeSelect.prototype.constructor = TimeSelect;
 
 function TimeSelect(_parentElement, _dimensions, _districtViolenceData, _totalViolenceData,
-                    _troopNumbersData, usCasualtiesMonthData, _colorScale) {
+                    _troopNumbersData, _usCasualtiesMonthData, _civCasualtiesMonthly, _colorScale) {
     StackedAreaChart.call(this, _parentElement, _dimensions, _districtViolenceData, _totalViolenceData,
-                          _troopNumbersData, usCasualtiesMonthData, _colorScale);
+                          _troopNumbersData, _usCasualtiesMonthData, _civCasualtiesMonthly, _colorScale);
 
     this.initVis = function() {
         StackedAreaChart.prototype.initVis.call(this);
         var vis = this;
 
-        // remove y-axis
+        // remove unneeded labels
         vis.yAxisGroup.remove();
+        vis.xLabel.remove();
 
         // Initialize brush component
         vis.brush = d3.svg.brush()
