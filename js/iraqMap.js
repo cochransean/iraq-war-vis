@@ -53,8 +53,10 @@ IraqMap.prototype.initVis = function() {
         .projection(projection);
 
     // setup linear scale for proportionate symbol circle radii; update domain later because it will change on selection
+    vis.MAX_CIRCLE_RADIUS = 30;
+    vis.MIN_CIRCLE_RADIUS = 2;
     vis.circleScale = d3.scale.linear()
-        .range([0, 30]);
+        .range([0, vis.MAX_CIRCLE_RADIUS]);
 
     // set tooltips
     vis.tip = d3.tip()
@@ -107,6 +109,45 @@ IraqMap.prototype.initVis = function() {
             return projection(d.geometry.coordinates)[1] - verticalOffset;
         })
         .attr("class", "city-label");
+
+    // add groups for legends TODO update the positioning to respond to width of div
+    vis.circleLegend = vis.svg.append("g");
+    vis.circleLegend
+        .attr("transform", "translate(35, 5)");
+    const NUMBER_OF_CIRCLES = 5;
+    const DISTANCE_BETWEEN_CIRCLES = (vis.MAX_CIRCLE_RADIUS - vis.MIN_CIRCLE_RADIUS) / NUMBER_OF_CIRCLES;
+    var spaceFromTop = 0;
+
+    // remember which radii are actually displayed in the legend
+    vis.legendRadii = [];
+
+    // create a circle for every step up in circle radius displayed on map
+    for (var i = 0; i < NUMBER_OF_CIRCLES; i++) {
+
+        // track radius to get appropriate positioning
+        var radius = vis.MAX_CIRCLE_RADIUS - i * DISTANCE_BETWEEN_CIRCLES;
+        const CIRCLE_PADDING = 10;
+        spaceFromTop += radius * 2 + CIRCLE_PADDING;
+
+        vis.circleLegend.append("circle")
+            .attr("cx", 0)
+            .attr("r", radius)
+            .attr("cy", spaceFromTop )
+            .style({ "fill": "black", "opacity": "0.6" });
+
+        // track positioning and size for later appending of labels
+        vis.legendRadii.push({
+            radius: radius,
+            spaceFromTop: spaceFromTop
+        })
+    }
+
+    // add groups for color legend
+    vis.colorLegend = vis.svg.append("g");
+    vis.colorLegend.attr("x", 200)
+        .attr("y", 50);
+
+
 
     // Update the visualization
     vis.updateChoropleth();
@@ -175,13 +216,14 @@ IraqMap.prototype.updateCircles = function() {
             return d.value;
         }));
 
-    var circles = vis.svg.selectAll("circle")
+    var circles = vis.svg.selectAll(".circle-symbol")
         .data(vis.displayDataArray, function(d) { return d.district });
 
     circles.enter()
         .append("circle")
         .attr("cx", function (d) { return vis.districtCentroids[d.district][0]; } )
         .attr("cy", function (d) { return vis.districtCentroids[d.district][1]; } )
+        .attr("class", "circle-symbol")
         .style({ "fill": "black", "opacity": "0.6" });
 
     circles
@@ -189,7 +231,7 @@ IraqMap.prototype.updateCircles = function() {
             var scaledValue = vis.circleScale(d.value);
 
             // don't circles so small they aren't legible and look like noise
-            scaledValue = scaledValue < 2 ? 0: scaledValue;
+            scaledValue = scaledValue < vis.MIN_CIRCLE_RADIUS ? 0: scaledValue;
             return scaledValue;
         });
 
