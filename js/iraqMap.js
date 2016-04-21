@@ -110,10 +110,10 @@ IraqMap.prototype.initVis = function() {
         })
         .attr("class", "city-label");
 
-    // add groups for legends TODO update the positioning to respond to width of div
+    // add groups for legends; place based on size of div which is dynamically calculated on load
     vis.circleLegend = vis.svg.append("g");
     vis.circleLegend
-        .attr("transform", "translate(35, 5)");
+        .attr("transform", "translate(" + (0.0524737631 * vis.width) + ", " + (0.00727802038 * vis.height) + ")");
     const NUMBER_OF_CIRCLES = 5;
     const DISTANCE_BETWEEN_CIRCLES = (vis.MAX_CIRCLE_RADIUS - vis.MIN_CIRCLE_RADIUS) / NUMBER_OF_CIRCLES;
     var spaceFromTop = 0;
@@ -146,9 +146,9 @@ IraqMap.prototype.initVis = function() {
     // add groups for color legend
     vis.colorLegend = vis.svg.append("g");
 
-    // TODO update positioning based on width of div
+    // dynamically position based on size of div
     vis.colorLegend
-        .attr("transform", "translate(35, 500)");
+        .attr("transform", "translate(" + (0.0524737631 * vis.width) + "," + (0.75 * vis.height) + ")");
 
 
     // Update the visualization
