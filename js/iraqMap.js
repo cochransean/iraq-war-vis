@@ -133,6 +133,7 @@ IraqMap.prototype.initVis = function() {
             .attr("cx", 0)
             .attr("r", radius)
             .attr("cy", spaceFromTop )
+            .attr("class", "circle-legend")
             .style({ "fill": "black", "opacity": "0.6" });
 
         // track positioning and size for later appending of labels
@@ -237,6 +238,25 @@ IraqMap.prototype.updateCircles = function() {
 
     circles.exit()
         .remove();
+
+    // update text on circle legend
+    var circleLegendText = vis.circleLegend.selectAll(".circle-legend-text")
+        .data(vis.legendRadii);
+
+    circleLegendText.enter()
+        .append("text")
+        .attr("x", 35)
+        .attr("y", function(d) {
+            return d.spaceFromTop + 5;
+        })
+        .attr("class", "circle-legend-text");
+
+    // update text as required
+    circleLegendText
+        .text(function(d) {
+            var numberFormatter = d3.format(",.3s");
+            return numberFormatter(vis.circleScale.invert(d.radius))
+        });
 
 };
 

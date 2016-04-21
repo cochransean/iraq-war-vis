@@ -157,6 +157,10 @@ svg .city-label {
     font-weight: bold;
 }
 
+svg .circle-legend-text {
+    text-anchor: start;
+}
+
 /* D3.JS Tooltips */
 .d3-tip {
     line-height: 1;
