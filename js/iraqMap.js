@@ -145,9 +145,10 @@ IraqMap.prototype.initVis = function() {
 
     // add groups for color legend
     vis.colorLegend = vis.svg.append("g");
-    vis.colorLegend.attr("x", 200)
-        .attr("y", 50);
 
+    // TODO update positioning based on width of div
+    vis.colorLegend
+        .attr("transform", "translate(35, 500)");
 
 
     // Update the visualization
@@ -287,9 +288,19 @@ IraqMap.prototype.updateChoropleth = function() {
     });
 
     if (vis.selectedBackgroundValue == "Composition") {
+        var groupings = ["Shia", "Sunni", "Kurdish", "Shia and Sunni", "Sunni and Kurdish", "Shia, Sunni and Kurdish"];
+        var colors = colorbrewer.Set1[6];
+
         vis.colorScale = d3.scale.ordinal()
-            .domain(["Shia", "Sunni", "Kurdish", "Shia and Sunni", "Sunni and Kurdish", "Shia, Sunni and Kurdish"])
-            .range(colorbrewer.Greens[6]);
+            .domain(groupings)
+            .range(colors);
+
+        // create mapping from color to category since scales don't support inversion
+        vis.categoryColorMap = {};
+        for (var i = 0; i < colors.length; i++) {
+            vis.categoryColorMap[colors[i]] = groupings[i];
+        }
+
     }
     else if (vis.selectedBackgroundValue == "ethnicHomogeneity") {
         vis.colorScale = d3.scale.quantize()
@@ -308,6 +319,71 @@ IraqMap.prototype.updateChoropleth = function() {
             if (value) { return vis.colorScale(value); }
             else { return "#ccc"; }
         });
+
+    // update color scale by binding data from new color scale
+    const COLOR_SWATCH_WIDTH = 25;
+    const COLOR_SWATCH_HORIZONTAL_PADDING = 5;
+    var colorSwatches = vis.colorLegend.selectAll(".color-swatch")
+        .data(vis.colorScale.range());
+
+    colorSwatches.enter()
+        .append("rect")
+        .attr("width", COLOR_SWATCH_WIDTH)
+        .attr("height", COLOR_SWATCH_WIDTH)
+        .attr("x", 0)
+        .attr("y", function(d, i) {
+            return COLOR_SWATCH_WIDTH * i
+        });
+
+    colorSwatches
+        .attr("fill", function(d) { return d } )
+        .attr("class", "color-swatch");
+
+    var swatchText = vis.colorLegend.selectAll(".swatch-text")
+        .data(vis.colorScale.range());
+
+    swatchText.enter()
+        .append("text")
+        .attr("x", COLOR_SWATCH_WIDTH + COLOR_SWATCH_HORIZONTAL_PADDING)
+        .attr("y", function(d, i) {
+            const SWATCH_VERT_PADDING = 5;
+            return (COLOR_SWATCH_WIDTH * i + SWATCH_VERT_PADDING) + 16
+        })
+        .attr("class", "swatch-text");
+
+    swatchText
+        .text(function(d, i) { return updateSwatchText(d, i) });
+
+    function updateSwatchText(d, i) {
+
+        // update with text explaining scale (vs std dev values that won't make sense
+        if (vis.selectedBackgroundValue == "ethnicHomogeneity") {
+
+            var lastItem = vis.colorScale.range().length - 1;
+
+            // if first item in scale
+            if (i == 0) {
+                return "Most Heterogeneous District"
+            }
+
+            // if last item in scale
+            else if (i == lastItem) {
+                return "Completely Homogenous District"
+            }
+        }
+
+        // if ordinal scale selected
+        else if (vis.selectedBackgroundValue == "Composition") {
+            return(vis.categoryColorMap[d]);
+        }
+
+        // otherwise, scale must be in percentage. update with value represented by each color
+        else {
+            var formatter = d3.format(".3p");
+            var range = vis.colorScale.invertExtent(d);
+            return(formatter(range[0]) + " to " +formatter(range[1]));
+        }
+    }
 
 };
 
