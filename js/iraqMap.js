@@ -166,7 +166,7 @@ IraqMap.prototype.wrangleData = function() {
 
     // wrangle data based on selection
     if (vis.selectedCircleValue == "ied_total" || vis.selectedCircleValue == "df" || vis.selectedCircleValue == "idf" ||
-        vis.selectedCircleValue == "totalViolenceData") {
+        vis.selectedCircleValue == "totalViolenceData" || vis.selectedCircleValue == "suicide") {
         vis.displayDataArray = vis.districtViolenceData;
     }
 
