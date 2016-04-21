@@ -173,15 +173,22 @@ IraqMap.prototype.wrangleData = function() {
         vis.displayDataArray = vis.civilianCasualties;
     }
 
-    // if not something with geographic component, post warning to user and break (don't continue with update)
-    else if (vis.selectedCircleValue == "troopsBySource" || vis.selectedCircleValue == "usCasualtiesByMonth" ||
-            vis.selectedCircleValue == "fatalities" || vis.selectedCircleValue == "wounded") {
+    // otherwise must not be something with geographic component, post warning to user and break (don't continue with update)
+    else {
+
+        // hide circles in legend
+        vis.circleLegend.style("display", "none");
 
         $("#alert-div").html('<div class="alert alert-warning alert-dismissible fade in" role="alert">' +
             '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
             '<span aria-hidden="true">&times;</span></button>' +
             '<strong>Sorry!</strong> Map data is unavailable for the selected data. </div>'
-        )
+        );
+
+        // remove current circles and stop without updating data and circles
+        vis.circles.remove();
+        return
+
     }
 
     vis.displayDataArray = vis.displayDataArray.filter(filterByDate);
@@ -217,17 +224,17 @@ IraqMap.prototype.updateCircles = function() {
             return d.value;
         }));
 
-    var circles = vis.svg.selectAll(".circle-symbol")
+    vis.circles = vis.svg.selectAll(".circle-symbol")
         .data(vis.displayDataArray, function(d) { return d.district });
 
-    circles.enter()
+    vis.circles.enter()
         .append("circle")
         .attr("cx", function (d) { return vis.districtCentroids[d.district][0]; } )
         .attr("cy", function (d) { return vis.districtCentroids[d.district][1]; } )
         .attr("class", "circle-symbol")
         .style({ "fill": "black", "opacity": "0.6" });
 
-    circles
+    vis.circles
         .attr("r", function(d) {
             var scaledValue = vis.circleScale(d.value);
 
@@ -236,8 +243,11 @@ IraqMap.prototype.updateCircles = function() {
             return scaledValue;
         });
 
-    circles.exit()
+    vis.circles.exit()
         .remove();
+
+    // show circles for legend
+    vis.circleLegend.style("display", "initial");
 
     // update text on circle legend
     var circleLegendText = vis.circleLegend.selectAll(".circle-legend-text")
