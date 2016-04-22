@@ -152,8 +152,9 @@ StackedAreaChart.prototype.wrangleData = function () {
         usCasualtiesByMonth: "usCasualtiesByMonth",
         fatalities: "usCasualtiesByMonth",
         wounded: "usCasualtiesByMonth",
+        civCasualtiesMonthly: "civCasualtiesMonthly",
         "min-civilian": "civCasualtiesMonthly",
-        "max-civilian": "civCasualtiesMonthly"
+        "max-civilian":  "civCasualtiesMonthly"
 
     };
 
@@ -190,7 +191,7 @@ StackedAreaChart.prototype.wrangleData = function () {
         suicide: ["suicide"],
         usTroops: ["usTroops"],
         intTroops: ["intTroops"],
-        civCasualtiesMonthly: ["min-civilian", "max-civilian"],
+        civCasualtiesMonthly: ["min-civilian", "delta"],
         "min-civilian": ["min-civilian"],
         "max-civilian": ["max-civilian"]
     };
@@ -363,13 +364,22 @@ StackedAreaChart.prototype.updateUI = function() {
     // update axis text based on text from index
     vis.yLabel.text($('.chart-option[value=' + vis.selectedOption +']').text());
 
+
+
     // add tooltip updates to entering categories
     vis.newPaths
         .on("click", function(d) {
             var select = $("#circle-data");
 
-            // set value to element clicked on to trigger update sequence
-            select.val(d.name);
+            // if civ casualty delta clicked on; zoom in on max civilian casualties
+            if (d.name === "delta") {
+                select.val("max-civilian")
+            }
+
+            // else set value to element clicked on to trigger update sequence
+            else {
+                select.val(d.name);
+            }
 
             // trigger change since it won't trigger with .val along
             select.trigger("change");

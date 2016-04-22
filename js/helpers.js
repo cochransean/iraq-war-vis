@@ -181,7 +181,10 @@ function convertAbbreviation(abbreviation) {
         'usTroops': 'US Troops',
         'intTroops': 'International Troops',
         'wounded': "Wounded",
-        'fatalities': "Fatalities"
+        'fatalities': "Fatalities",
+        'min-civilian': "Minimum Estimate of Fatalities",
+        'max-civilian': "Maximum Estimate of Fatalities",
+        'delta': "Additional Fatalities Under Worst Estimate"
     };
 
 
@@ -226,10 +229,13 @@ function prepCivilianCasualties(array) {
 
     preppedData = preppedData.map(function(value) {
         var formattedDate = dateFormat.parse(value["Start"]);
+        var minCivilian = +value["Min"];
+        var maxCivilian = +value["Max"];
         return {
             "date": formattedDate,
-            "min-civilian": +value["Min"],
-            "max-civilian": +value["Max"],
+            "min-civilian": minCivilian,
+            "max-civilian": maxCivilian,
+            "delta": maxCivilian - minCivilian,
             "district": value["district"]
         }
     });
@@ -260,16 +266,18 @@ function prepCivilianCasualtiesMonthly(array) {
             // if so, start on new spot on array
             currentIndex++;
             preppedData.push({
-                "min-civilian": +value["min-civilian"],
-                "max-civilian": +value["max-civilian"],
+                "min-civilian": value["min-civilian"],
+                "max-civilian": value["max-civilian"],
+                "delta": value["delta"],
                 "date": new Date(currentYear, currentMonth)
             });
         }
 
         // otherwise, must be on same month
         else {
-            preppedData[currentIndex]["min-civilian"] += +value["min-civilian"];
-            preppedData[currentIndex]["max-civilian"] += +value["max-civilian"];
+            preppedData[currentIndex]["min-civilian"] += value["min-civilian"];
+            preppedData[currentIndex]["max-civilian"] += value["max-civilian"];
+            preppedData[currentIndex]["delta"] += value["delta"];
         }
 
         // update date of previous for check on next iteration
