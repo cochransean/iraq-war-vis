@@ -10,6 +10,7 @@ var troopNumbersData;
 var usCasualtiesMonthData;
 var civilianCasualtiesData;
 var civilianCasualtiesMonthly;
+var eventsData;
 
 // globals for linking of map and stacked area chart
 var dateRange;
@@ -36,8 +37,9 @@ function loadData() {
         .defer(d3.csv, "data/us-troop-numbers-month.csv")
         .defer(d3.csv, "data/us-troop-casualties-by-month.csv")
         .defer(d3.csv, "data/Civilian-Casualty-Data.csv")
+        .defer(d3.csv, "data/timeline-data.csv")
         .await(function(error, districtData, placeData, districtViolence, countryViolence,
-                ethnicData, troopNumbers,usCasualtiesMonth, civilianCasualties){
+                ethnicData, troopNumbers,usCasualtiesMonth, civilianCasualties, events){
 
             // if error, print and return
             if (error) {
@@ -55,8 +57,8 @@ function loadData() {
             iraqMapPlaces = topojson.feature(placeData, placeData.objects.places).features;
 
             // convert violence data as required (to numeric data types)
-            districtViolenceData = prepEsocWeeklyViolenceData(districtViolence);
-            totalViolenceData = prepEsocWeeklyViolenceData(countryViolence);
+            districtViolenceData = prepEsocMonthlyViolenceData(districtViolence);
+            totalViolenceData = prepEsocMonthlyViolenceData(countryViolence);
 
             // prep troop data
             troopNumbersData = prepTroopNumbersData(troopNumbers);
@@ -67,6 +69,9 @@ function loadData() {
             // prep civ casualties data
             civilianCasualtiesData = prepCivilianCasualties(civilianCasualties);
             civilianCasualtiesMonthly = prepCivilianCasualtiesMonthly(civilianCasualtiesData);
+
+            // prep timeline data
+            eventsData = prepEvents(events);
 
 
             createVis();
@@ -83,7 +88,7 @@ function createVis() {
         "margin": { top: 40, right: 40, bottom: 40, left: 80 }
     };
     areaChart = new StackedAreaChart("area-chart", areaChartDimensions, districtViolenceData, totalViolenceData,
-        troopNumbersData, usCasualtiesMonthData, civilianCasualtiesMonthly, "Set1");
+        troopNumbersData, usCasualtiesMonthData, civilianCasualtiesMonthly, eventsData, "Set1");
     areaChart.initVis();
     $(document).on("datesChanged", function() { areaChart.wrangleData() });
     $("#circle-data").change(function() { areaChart.wrangleData() });
@@ -95,7 +100,7 @@ function createVis() {
         "margin": { top: 10, right: 40, bottom: 45, left: 80 }
     };
     timeSelect = new TimeSelect("area-chart", timeSelectDimensions, districtViolenceData, totalViolenceData,
-        troopNumbersData, usCasualtiesMonthData, civilianCasualtiesMonthly, "Greys");
+        troopNumbersData, usCasualtiesMonthData, civilianCasualtiesMonthly, eventsData, "Greys");
     timeSelect.initVis();
     $("#circle-data").change(function() { timeSelect.wrangleData() });
 

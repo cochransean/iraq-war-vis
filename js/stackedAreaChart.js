@@ -8,7 +8,8 @@
  */
 
 StackedAreaChart = function (_parentElement, _dimensions, _districtViolenceData, _totalViolenceData,
-                             _troopNumbersData, _usCasualtiesMonthData, _civCasualtiesMonthly, _colorScale) {
+                             _troopNumbersData, _usCasualtiesMonthData, _civCasualtiesMonthly, eventsData,
+                             _colorScale) {
 
     this.parentElement = _parentElement;
     this.districtViolenceData = _districtViolenceData;
@@ -364,7 +365,12 @@ StackedAreaChart.prototype.updateUI = function() {
     // update axis text based on text from index
     vis.yLabel.text($('.chart-option[value=' + vis.selectedOption +']').text());
 
+    // TODO add timeline lines
+    // filter events by date
 
+    // enter, update, and exit lines for timeline
+
+    // enter, update, and exit text for each line
 
     // add tooltip updates to entering categories
     vis.newPaths

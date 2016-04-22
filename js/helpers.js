@@ -47,7 +47,7 @@ function filterByDate(arrayDataPoint) {
  *
  * Returns: A javascript date object corresponding to the week from the ESOC dataset
  */
-function convertWeekToDate(endMonth, startMonth, startDate) {
+function convertMonthToDate(endMonth, startMonth, startDate) {
     var monthsElapsed = endMonth - startMonth;
     var convertedDate = new Date(new Date(startDate).setMonth(startDate.getMonth() + monthsElapsed));
     return convertedDate
@@ -62,7 +62,7 @@ function convertWeekToDate(endMonth, startMonth, startDate) {
  *
  * Returns: The data-set converted
  */
-function prepEsocWeeklyViolenceData(array) {
+function prepEsocMonthlyViolenceData(array) {
     var numericFields = ["SIGACT", "SIG_1", "df", "idf", "suicide", "ied_attack", "ied_clear", "ied_total", "month"];
 
     // dates per code book and data
@@ -75,7 +75,7 @@ function prepEsocWeeklyViolenceData(array) {
         });
 
         // convert date
-        value.date = convertWeekToDate(value.month, startMonth, startDate);
+        value.date = convertMonthToDate(value.month, startMonth, startDate);
 
         // aggregate totals for later use
         value.totalViolenceData = value["ied_total"] + value.df + value.idf;
@@ -287,4 +287,23 @@ function prepCivilianCasualtiesMonthly(array) {
     });
 
     return preppedData
+}
+
+
+// prep events data for use
+function prepEvents(array) {
+
+    // create d3 date format
+    var dateFormat = d3.time.format("%d-%b-%y");
+
+    var preppedData = array.map(function(value) {
+        return {
+            date: dateFormat.parse(value.Date),
+            event: value.Event,
+            importance: value.Importance
+        }
+    });
+
+    return preppedData;
+
 }

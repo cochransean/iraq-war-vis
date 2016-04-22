@@ -9,9 +9,9 @@ TimeSelect.prototype = StackedAreaChart.prototype;
 TimeSelect.prototype.constructor = TimeSelect;
 
 function TimeSelect(_parentElement, _dimensions, _districtViolenceData, _totalViolenceData,
-                    _troopNumbersData, _usCasualtiesMonthData, _civCasualtiesMonthly, _colorScale) {
+                    _troopNumbersData, _usCasualtiesMonthData, _civCasualtiesMonthly, eventsData, _colorScale) {
     StackedAreaChart.call(this, _parentElement, _dimensions, _districtViolenceData, _totalViolenceData,
-                          _troopNumbersData, _usCasualtiesMonthData, _civCasualtiesMonthly, _colorScale);
+                          _troopNumbersData, _usCasualtiesMonthData, _civCasualtiesMonthly, eventsData, _colorScale);
 
     this.initVis = function() {
         StackedAreaChart.prototype.initVis.call(this);
