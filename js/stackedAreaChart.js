@@ -8,7 +8,7 @@
  */
 
 StackedAreaChart = function (_parentElement, _dimensions, _districtViolenceData, _totalViolenceData,
-                             _troopNumbersData, _usCasualtiesMonthData, _civCasualtiesMonthly, eventsData,
+                             _troopNumbersData, _usCasualtiesMonthData, _civCasualtiesMonthly, _eventsData,
                              _colorScale) {
 
     this.parentElement = _parentElement;
@@ -18,6 +18,8 @@ StackedAreaChart = function (_parentElement, _dimensions, _districtViolenceData,
     this.usCasualtiesByMonth = _usCasualtiesMonthData;
     this.civCasualtiesMonthly = _civCasualtiesMonthly;
     this.displayData = []; // see data wrangling
+    this.eventsData = _eventsData;
+    this.displayEvents = []; // see updateUI function
 
     // set dimensions; size based on width of div to allow for easier styling with bootstrap
     this.width = $("#" + this.parentElement).width();
@@ -367,12 +369,15 @@ StackedAreaChart.prototype.updateUI = function() {
 
     // TODO add timeline lines
     // filter events by date
+    vis.displayEvents = vis.eventsData.filter(filterByDate);
 
     // enter, update, and exit lines for timeline
 
     // enter, update, and exit text for each line
 
     // add tooltip updates to entering categories
+
+
     vis.newPaths
         .on("click", function(d) {
             var select = $("#circle-data");
