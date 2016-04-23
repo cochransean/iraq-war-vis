@@ -28,12 +28,11 @@ IraqMap.prototype.initVis = function() {
     var vis = this;
 
     // size map based on width of its div (to take up all available space and allow for easier styling)
-    vis.margin = {top: 20, right: 20, bottom: 20, left: 20};
-    vis.width = $("#" + vis.parentElement).width();
+    vis.margin = {top: 20, right: 20, bottom: 40, left: 20};
+    vis.width = $("#" + vis.parentElement).width() - vis.margin.left - vis.margin.right;
 
     // make map entire height of stacked area chart + controls to use up all space
     vis.height = $("#area-chart-div").height() - vis.margin.top - vis.margin.bottom;
-    vis.width = vis.width - vis.margin.left - vis.margin.right;
 
     // SVG drawing area
     vis.svg = d3.select("#" + vis.parentElement).append("svg")
@@ -59,10 +58,10 @@ IraqMap.prototype.initVis = function() {
         .range([0, vis.MAX_CIRCLE_RADIUS]);
 
     // set tooltips
-    vis.tip = d3.tip()
+    vis.tipDistrict = d3.tip()
         .attr('class', 'd3-tip')
         .html(function(d) { return vis.updateBackgroundTooltip(d) });
-    vis.svg.call(vis.tip);
+    vis.svg.call(vis.tipDistrict);
 
     // Render the Iraq map (no need to update borders so include here and not update vis)
     vis.svg.append("path")
@@ -76,18 +75,20 @@ IraqMap.prototype.initVis = function() {
         .append("path")
         .attr("d", path)
         .attr("class", "map district-borders")
-        .on('mouseover', vis.tip.show)
-        .on('mouseout', vis.tip.hide)
-        .style({
-            "stroke": "black",
-            "stroke-width": "0.5"
-        });
+        .on('mouseover', vis.tipDistrict.show)
+        .on('mouseout', vis.tipDistrict.hide);
 
     // get district centroids and place into object for constant time access
     vis.svg.selectAll(".district-borders")
         .each(function (d) {
             vis.districtCentroids[d.properties.ADM3NAME] = path.centroid(d);
         });
+
+    // Right now, map is a bit crowded. I've put city names into a tooltip for now
+    vis.tipCity = d3.tip()
+        .attr('class', 'd3-tip')
+        .html(function(d) { return d.properties.name; });
+    vis.svg.call(vis.tipCity);
 
     vis.svg.selectAll(".city")
         .data(vis.placeData)
@@ -96,8 +97,11 @@ IraqMap.prototype.initVis = function() {
         .attr("cx", function (d) { return projection(d.geometry.coordinates)[0]; })
         .attr("cy", function (d) { return projection(d.geometry.coordinates)[1]; })
         .attr("class", "map city point")
-        .attr("r", "3px");
+        .attr("r", "4px")
+        .on('mouseover', vis.tipCity.show)
+        .on('mouseout', vis.tipCity.hide);
 
+    /** commented out (city name moved into tooltip):
     vis.svg.selectAll(".city-label")
         .data(vis.placeData)
         .enter()
@@ -109,13 +113,14 @@ IraqMap.prototype.initVis = function() {
             return projection(d.geometry.coordinates)[1] - verticalOffset;
         })
         .attr("class", "city-label");
+     */
 
     // add groups for legends; place based on size of div which is dynamically calculated on load
     vis.circleLegend = vis.svg.append("g");
     vis.circleLegend
         .attr("transform", "translate(" + (0.0524737631 * vis.width) + ", " + (0.00727802038 * vis.height) + ")");
     const NUMBER_OF_CIRCLES = 5;
-    const DISTANCE_BETWEEN_CIRCLES = (vis.MAX_CIRCLE_RADIUS - vis.MIN_CIRCLE_RADIUS) / NUMBER_OF_CIRCLES;
+    const DIFFERENCE_BETWEEN_CIRCLE_RADIUS = (vis.MAX_CIRCLE_RADIUS - vis.MIN_CIRCLE_RADIUS) / NUMBER_OF_CIRCLES;
     var spaceFromTop = 0;
 
     // remember which radii are actually displayed in the legend
@@ -125,7 +130,7 @@ IraqMap.prototype.initVis = function() {
     for (var i = 0; i < NUMBER_OF_CIRCLES; i++) {
 
         // track radius to get appropriate positioning
-        var radius = vis.MAX_CIRCLE_RADIUS - i * DISTANCE_BETWEEN_CIRCLES;
+        var radius = vis.MAX_CIRCLE_RADIUS - i * DIFFERENCE_BETWEEN_CIRCLE_RADIUS;
         const CIRCLE_PADDING = 10;
         spaceFromTop += radius * 2 + CIRCLE_PADDING;
 

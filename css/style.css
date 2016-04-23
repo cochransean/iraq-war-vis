@@ -130,15 +130,16 @@ svg .area-background {
 
 /* MAP STYLES */
 svg .district-borders {
-    stroke: black;
-    stroke-width: 1px;
+    stroke: white;
+    stroke-width: 1.5px;
     stroke-linejoin: round;
     stroke-opacity: 0.5;
     fill: none;
 }
 
+/* Need a darker background, but white district borders are much more supportive (to my eyes :)) */
 svg .exterior-borders {
-    stroke: black;
+    stroke: white;
     stroke-width: 2px;
     stroke-linejoin: round;
     fill: none;
@@ -149,6 +150,12 @@ svg .point {
     stroke-width: 1px;
     stroke-linejoin: round;
     fill: black;
+}
+
+svg .city {
+    fill: red;
+    stroke: white;
+    stroke-width: 2px;
 }
 
 svg .city-label {
