@@ -278,9 +278,6 @@ IraqMap.prototype.updateChoropleth = function() {
     var selectBox = document.getElementById("district-level-data");
     vis.selectedBackgroundValue = selectBox.options[selectBox.selectedIndex].value;
 
-    // create color scale (needs to be done here now as the scale's type depends on data)
-
-
     // update color scale
     var districts = d3.keys(vis.ethnicData);
     var valuesForExtent = districts.map(function(district) {
@@ -308,16 +305,15 @@ IraqMap.prototype.updateChoropleth = function() {
             .range(colorbrewer.RdYlGn[6]);
     }
     else {
-        vis.colorScale = d3.scale.quantize()
-            .domain(d3.extent(valuesForExtent))
-            .range(colorbrewer.Greens[6]);
+        vis.colorScale = d3.scale.threshold()
+            .domain([0.02, 0.2, 0.4, 0.6, 0.8, 1.001])
+            .range(["grey","#edf8e9","#bae4b3","#74c476","#31a354","#006d2c"]);
     }
 
     vis.svg.selectAll(".district-borders")
         .style("fill", function (d) {
             var value = vis.ethnicData[d.properties.ADM3NAME][vis.selectedBackgroundValue];
-            if (value) { return vis.colorScale(value); }
-            else { return "#ccc"; }
+            return vis.colorScale(value);
         });
 
     const COLOR_SWATCH_WIDTH = 25;
@@ -387,7 +383,10 @@ IraqMap.prototype.updateChoropleth = function() {
         else {
             var formatter = d3.format(".3p");
             var range = vis.colorScale.invertExtent(d);
-            return(formatter(range[0]) + " to " +formatter(range[1]));
+            if (isNaN(vis.colorScale.invertExtent(d)[0]))
+                { return "Below " + formatter(range[1]); }
+            else
+                return(formatter(range[0]) + " to " + formatter(range[1]));
         }
     }
 
