@@ -151,11 +151,6 @@ IraqMap.prototype.initVis = function() {
     // add groups for color legend
     vis.colorLegend = vis.svg.append("g");
 
-    // dynamically position based on size of div
-    vis.colorLegend
-        .attr("transform", "translate(" + (0.0524737631 * vis.width) + "," + (0.75 * vis.height) + ")");
-
-
     // Update the visualization
     vis.updateChoropleth();
     vis.wrangleData();
@@ -325,9 +320,15 @@ IraqMap.prototype.updateChoropleth = function() {
             else { return "#ccc"; }
         });
 
-    // update color scale by binding data from new color scale
     const COLOR_SWATCH_WIDTH = 25;
     const COLOR_SWATCH_HORIZONTAL_PADDING = 5;
+
+    // dynamically position based on size of div and number of colors
+    vis.colorLegend
+        .attr("transform", "translate(" + (0.0524737631 * vis.width) + "," + ( vis.height -
+            vis.colorScale.range().length * COLOR_SWATCH_WIDTH ) + ")");
+
+    // update color scale by binding data from new color scale
     var colorSwatches = vis.colorLegend.selectAll(".color-swatch")
         .data(vis.colorScale.range());
 
