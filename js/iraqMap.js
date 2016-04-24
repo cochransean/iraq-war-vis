@@ -5,16 +5,16 @@
  * @param _data -- the data used for the map
  */
 
-IraqMap = function(_parentElement, _districtData, _exteriorBorder, _placeData, _districtViolenceData, _ethnicData,
+IraqMap = function(_parentElement, _districtBorders, _exteriorBorder, _placeData, _districtViolenceData, _districtData,
     _civilianCasualties){
 
     this.parentElement = _parentElement;
-    this.districtData = _districtData;
+    this.districtBorders = _districtBorders;
     this.placeData = _placeData;
     this.exteriorBorder = _exteriorBorder;
     this.districtViolenceData = _districtViolenceData;
     this.districtCentroids = {};
-    this.ethnicData = _ethnicData;
+    this.districtData = _districtData;
     this.civilianCasualties = _civilianCasualties;
     this.displayData = {}; // see data wrangling
     this.displayDataArray = [];
@@ -70,7 +70,7 @@ IraqMap.prototype.initVis = function() {
         .attr("class", "map exterior-borders");
 
     vis.svg.selectAll(".district-borders")
-        .data(vis.districtData)
+        .data(vis.districtBorders)
         .enter()
         .append("path")
         .attr("d", path)
@@ -195,7 +195,7 @@ IraqMap.prototype.wrangleData = function() {
     vis.displayDataArray = vis.displayDataArray.filter(filterByDate);
 
     // populate object with districts prior to augmented assignment below to prevent key error
-    var districts = d3.keys(vis.ethnicData);
+    var districts = d3.keys(vis.districtData);
     districts.forEach(function(district) {
         vis.displayData[district] = 0;
     });
@@ -279,12 +279,13 @@ IraqMap.prototype.updateChoropleth = function() {
     vis.selectedBackgroundValue = selectBox.options[selectBox.selectedIndex].value;
 
     // update color scale
-    var districts = d3.keys(vis.ethnicData);
+    var districts = d3.keys(vis.districtData);
     var valuesForExtent = districts.map(function(district) {
-        return vis.ethnicData[district][vis.selectedBackgroundValue];
+        return vis.districtData[district][vis.selectedBackgroundValue];
     });
 
     if (vis.selectedBackgroundValue == "Composition") {
+
         var groupings = ["Shia", "Sunni", "Kurdish", "Shia and Sunni", "Sunni and Kurdish", "Shia, Sunni and Kurdish"];
         var colors = colorbrewer.Set1[6];
 
@@ -299,20 +300,36 @@ IraqMap.prototype.updateChoropleth = function() {
         }
 
     }
-    else if (vis.selectedBackgroundValue == "ethnicHomogeneity") {
-        vis.colorScale = d3.scale.quantize()
-            .domain(d3.extent(valuesForExtent))
-            .range(colorbrewer.RdYlGn[6]);
-    }
-    else {
+
+    else if (vis.selectedBackgroundValue == "Shia" || vis.selectedBackgroundValue == "Sunni" || vis.selectedBackgroundValue == "Kurdish") {
         vis.colorScale = d3.scale.threshold()
             .domain([0.02, 0.2, 0.4, 0.6, 0.8, 1.001])
             .range(["grey","#edf8e9","#bae4b3","#74c476","#31a354","#006d2c"]);
     }
 
+    else if (vis.selectedBackgroundValue == "ethnicHomogeneity") {
+        vis.colorScale = d3.scale.quantize()
+            .domain(d3.extent(valuesForExtent))
+            .range(colorbrewer.RdYlGn[6]);
+    }
+
+    // I used quintiles for above 0
+    else if (vis.selectedBackgroundValue == "OilGas") {
+        vis.colorScale = d3.scale.threshold()
+            .domain([1, 383, 551, 1442, 2921, 50000])
+            .range(["grey","#feedde","#fdbe85","#fd8d3c","#e6550d","#a63603"]);
+    }
+
+    // I used quantiles with six buckets
+    else if (vis.selectedBackgroundValue == "Unemployment") {
+        vis.colorScale = d3.scale.threshold()
+            .domain([0.0580, 0.0909, 0.1102, 0.1350, 0.1557, d3.max(valuesForExtent)])
+            .range(colorbrewer.Oranges[6]);
+    }
+
     vis.svg.selectAll(".district-borders")
         .style("fill", function (d) {
-            var value = vis.ethnicData[d.properties.ADM3NAME][vis.selectedBackgroundValue];
+            var value = vis.districtData[d.properties.ADM3NAME][vis.selectedBackgroundValue];
             return vis.colorScale(value);
         });
 
@@ -379,6 +396,12 @@ IraqMap.prototype.updateChoropleth = function() {
             return(vis.categoryColorMap[d]);
         }
 
+        else if (vis.selectedBackgroundValue == "OilGas") {
+            var range = vis.colorScale.invertExtent(d);
+            if ( isNaN( vis.colorScale.invertExtent(d)[0] )) { return "No oil and gas reserves"; }
+            else return ( range[0] + " to " + range[1] + " billions of barrels" );
+        }
+
         // otherwise, scale must be in percentage. update with value represented by each color
         else {
             var formatter = d3.format(".3p");
@@ -403,26 +426,48 @@ IraqMap.prototype.updateBackgroundTooltip = function(d) {
 
         var ethnicGroupName = vis.selectedBackgroundValue;
         var message = ethnicGroupName + " population in District " + d.properties.ADM3NAME + ": " +
-        Math.floor(vis.ethnicData[d.properties.ADM3NAME][ethnicGroupName] * 100) + "%";
+        Math.floor(vis.districtData[d.properties.ADM3NAME][ethnicGroupName] * 100) + "%";
         return message
     }
+
     else if (vis.selectedBackgroundValue == "Composition") {
         ethnicGroupName = vis.selectedBackgroundValue;
         message = "Population in District " + d.properties.ADM3NAME + ": " +
-            vis.ethnicData[d.properties.ADM3NAME][ethnicGroupName];
+            vis.districtData[d.properties.ADM3NAME][ethnicGroupName];
         return message
     }
+
     // TODO need to clean up the code here so that rounding doesn't lead to percentages that don't added up to 100%
-    else if(vis.selectedBackgroundValue == "ethnicHomogeneity") {
+    // Code now overestimates Shia, but that was the fastest solution I could think of.
+    else if (vis.selectedBackgroundValue == "ethnicHomogeneity") {
+
+        var SunniTooltip = Math.floor(vis.districtData[d.properties.ADM3NAME]["Sunni"] * 100);
+        var KurdishTooltip = Math.floor(vis.districtData[d.properties.ADM3NAME]["Kurdish"] * 100);
+
         message = "Ethnic Composition of District " + d.properties.ADM3NAME + ": <br>" +
-            "Shia: " + Math.floor(vis.ethnicData[d.properties.ADM3NAME]["Shia"] * 100) + "%</br>" +
-            "Sunni: " + Math.floor(vis.ethnicData[d.properties.ADM3NAME]["Sunni"] * 100) + "%</br>" +
-            "Kurish: " + Math.floor(vis.ethnicData[d.properties.ADM3NAME]["Kurdish"] * 100) + "%</br>";
+            "Shia: " + (100 - SunniTooltip - KurdishTooltip) + "%</br>" +
+            "Sunni: " + SunniTooltip + "%</br>" +
+            "Kurdish: " + KurdishTooltip + "%</br>";
+
         return message
     }
+
+    else if (vis.selectedBackgroundValue == "OilGas") {
+        message = "Gas and oil reserves in district " + d.properties.ADM3NAME + ": " +
+            Math.floor(vis.districtData[d.properties.ADM3NAME][vis.selectedBackgroundValue]);
+        return message
+    }
+
+    else if (vis.selectedBackgroundValue == "Unemployment") {
+        message = "Unemployment in district " + d.properties.ADM3NAME + ": " +
+            Math.floor(vis.districtData[d.properties.ADM3NAME][vis.selectedBackgroundValue] * 100) + "%";
+        return message
+    }
+
     else {
         return "No data for current selection"
     }
+
     // TODO: add other cases for different background selections here
     // else if...
     // else...

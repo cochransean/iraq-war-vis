@@ -93,51 +93,68 @@ function prepEsocMonthlyViolenceData(array) {
  * Returns:
  *      an object arranged with key as district and numeric strings converted to numeric data types
  */
-function prepEthnicData(array) {
+function prepDistrictData(Eth, Oil, Unem) {
 
-    var ethnicDataObject = {};
+    var districtDataObject = {};
 
-    array.forEach(function (value) {
-        ethnicDataObject[value.district] = {};
+    Eth.forEach(function (value) {
+        districtDataObject[value.district] = {};
 
         var Shia = value.shia_pop_CIA_2003 / value.total_pop_CIA_2003;
         var Sunni = value.sunni_pop_CIA_2003 / value.total_pop_CIA_2003;
         var Kurdish = value.kurd_pop_CIA_2003 / value.total_pop_CIA_2003;
 
-        ethnicDataObject[value.district].Shia = Shia;
-        ethnicDataObject[value.district].Sunni = Sunni;
-        ethnicDataObject[value.district].Kurdish = Kurdish;
+        districtDataObject[value.district].Shia = Shia;
+        districtDataObject[value.district].Sunni = Sunni;
+        districtDataObject[value.district].Kurdish = Kurdish;
 
         if (Shia == 1) {
-            ethnicDataObject[value.district].Composition = "Shia";
+            districtDataObject[value.district].Composition = "Shia";
         }
         if (Sunni == 1) {
-            ethnicDataObject[value.district].Composition = "Sunni";
+            districtDataObject[value.district].Composition = "Sunni";
         }
         if (Kurdish == 1) {
-            ethnicDataObject[value.district].Composition = "Kurdish";
+            districtDataObject[value.district].Composition = "Kurdish";
         }
         if (Shia != 0 && Sunni != 0 && Kurdish == 0) {
-            ethnicDataObject[value.district].Composition = "Shia and Sunni"
+            districtDataObject[value.district].Composition = "Shia and Sunni"
         }
         if (Shia != 0 && Sunni == 0 && Kurdish != 0) {
-            ethnicDataObject[value.district].Composition = "Shia and Kurdish"
+            districtDataObject[value.district].Composition = "Shia and Kurdish"
         }
         if (Shia == 0 && Sunni != 0 && Kurdish != 0) {
-            ethnicDataObject[value.district].Composition = "Sunni and Kurdish"
+            districtDataObject[value.district].Composition = "Sunni and Kurdish"
         }
         if (Shia != 0 && Sunni != 0 && Kurdish != 0) {
-            ethnicDataObject[value.district].Composition = "Shia, Sunni and Kurdish"
+            districtDataObject[value.district].Composition = "Shia, Sunni and Kurdish"
         }
 
         // take standard deviation of each as a measure of the amount of ethnic mixing in each district (lower is more
         // heterogeneous)
         var ethnicHomogeneity = Math.pow(((Math.pow(Shia, 2) + Math.pow(Sunni, 2) + Math.pow(Kurdish, 2)) / 3), 0.5);
-        ethnicDataObject[value.district].ethnicHomogeneity = ethnicHomogeneity;
+        districtDataObject[value.district].ethnicHomogeneity = ethnicHomogeneity;
 
     });
 
-    return ethnicDataObject;
+    // Takes too long. I could delete all irrelevant data manually from csv, but that's lame. 
+    Oil.forEach(function (value) {
+
+        if (value.YEAR == 2004 && value.MONTH == 1) {
+            districtDataObject[value.District].OilGas = parseFloat(value.dist_resv);
+        }
+
+    });
+
+    // This data seems super unreliable.
+    Unem.forEach(function (value) {
+
+        if (value.year == 2006) {
+            districtDataObject[value.district].Unemployment = parseFloat(value.urate);
+        }
+    });
+
+    return districtDataObject;
 }
 
 /*

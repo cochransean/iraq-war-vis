@@ -5,7 +5,7 @@ var iraqMapPlaces = [];
 var iraqMapExteriorBorders;
 var districtViolenceData = [];
 var totalViolenceData = [];
-var ethnicDistrictData;
+var DistrictData;
 var troopNumbersData;
 var usCasualtiesMonthData;
 var civilianCasualtiesData;
@@ -38,8 +38,10 @@ function loadData() {
         .defer(d3.csv, "data/us-troop-casualties-by-month.csv")
         .defer(d3.csv, "data/Civilian-Casualty-Data.csv")
         .defer(d3.csv, "data/timeline-data.csv")
+        .defer(d3.csv, "data/Natural-Resource-Data.csv")
+        .defer(d3.csv, "data/Household-Income-Size-Unemployment.csv")
         .await(function(error, districtData, placeData, districtViolence, countryViolence,
-                ethnicData, troopNumbers,usCasualtiesMonth, civilianCasualties, events){
+                ethnicData, troopNumbers,usCasualtiesMonth, civilianCasualties, events, OilGas, Unemployment){
 
             // if error, print and return
             if (error) {
@@ -49,7 +51,7 @@ function loadData() {
             iraqMapDistricts = topojson.feature(districtData, districtData.objects.Iraq_districts).features;
 
             // load ethnic data in object with key as district for use by multiple visualizations
-            ethnicDistrictData = prepEthnicData(ethnicData);
+            DistrictData = prepDistrictData(ethnicData, OilGas, Unemployment);
 
             iraqMapExteriorBorders = topojson.mesh(districtData, districtData.objects.Iraq_districts, function(a, b) {
                 return a === b;
@@ -106,7 +108,7 @@ function createVis() {
 
     // Create map after timeline because timeline generates dates needed for map data selection
     iraqMap = new IraqMap("iraq-map", iraqMapDistricts, iraqMapExteriorBorders, iraqMapPlaces, districtViolenceData,
-        ethnicDistrictData, civilianCasualtiesData);
+        DistrictData, civilianCasualtiesData);
     $("#district-level-data").change(function() { iraqMap.updateChoropleth() });
     $("#circle-data").change(function() { iraqMap.wrangleData() });
     $(document).on("datesChanged", function() { iraqMap.wrangleData() });
