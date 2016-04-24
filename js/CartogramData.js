@@ -6,25 +6,26 @@
  *     1. original US map
  *     2. cartogram casualties
  *     3. cartogram population
- *  Why add a cartogram population? I don't think that the cartogram casualties is that shocking as the states
- *  (like Texas) are big anyway. What would be more intersting is to compare cartogram casualties to cartogram population.
+ *  Why add a cartogram population?
+ *  I don't think that the cartogram casualties is that shocking as the states (like Texas) are big anyway.
+ *  What would be more interesting is to compare cartogram casualties to cartogram population.
  *  But well, we would need to put more work into it :-)
  */
 
-// This code is based on the script in index.html from this repository: from http://prag.ma/code/d3-cartogram/
+// This code is based on the script in index.html from this repository: https://github.com/shawnbot/topogram
 
-// create group for state paths
+// create group for US states paths
 var states = d3.select("#map")
     .append("g")
     .attr("id", "states")
     .selectAll("path");
 
-// set up projection and variable to call cartogram
+// set up projection and cartogram
 var projection = d3.geo.albersUsa();
 var cartogram = d3.cartogram()
     .projection(projection)
     .properties(function(d) {
-        // TODO I don't understand why id is added to d.id
+        // TODO I don't understand why id is added to d.id, but it works :-)
         return stateCasualtiesObject[d.id];
     });
 
@@ -52,6 +53,7 @@ function init() {
 
     // add features to cartogram
     var features = cartogram.features(topology, geometries);
+
     var path = d3.geo.path()
         .projection(projection);
 
@@ -66,7 +68,7 @@ function init() {
         .attr("fill", "red")
         .attr("d", path);
 
-    // add tooltips for casualty numbers
+    // add empty tooltips for casualty numbers
     states.append("title");
 
     update();
@@ -79,7 +81,7 @@ function update() {
             return +d.properties["Casualties"];
         };
 
-    // use quartiles (calculated in excel) as thresholds
+    // use quartiles (calculated in excel) as thresholds for the color scale
     var color = d3.scale.threshold()
         .domain([25, 62, 88, 500])
         .range(["#fee5d9","#fcae91","#fb6a4a","#cb181d"]);
@@ -92,7 +94,7 @@ function update() {
     // generate the new features (pre-projected)
     var features = cartogram(topology, geometries).features;
 
-    // update the data
+    // update the features and add text to the tooltips
     states.data(features)
         .select("title")
         .text(function(d) {
@@ -101,7 +103,7 @@ function update() {
         });
 
     // set transition
-    // TODO makes little sense with just one view
+    // TODO makes little sense with one view
     states.transition()
         .duration(2000)
         .ease("linear")
