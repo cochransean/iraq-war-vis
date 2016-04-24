@@ -1,8 +1,17 @@
 
 // TODO embed it nicely in DOM
-// TODO now it automatically updates and shows casualties, but it would obviously be much nicer if the user
-// TODO could switch between two views: the original US map and the cartogram
-// TODO see CartogramDataOriginal.js for the original code (from http://prag.ma/code/d3-cartogram/)
+
+// TODO now it automatically updates and shows casualties, but it would be nicer if the user could choose a view
+/** What would be ideal is to have three views:
+ *     1. original US map
+ *     2. cartogram casualties
+ *     3. cartogram population
+ *  Why add a cartogram population? I don't think that the cartogram casualties is that shocking as the states
+ *  (like Texas) are big anyway. What would be more intersting is to compare cartogram casualties to cartogram population.
+ *  But well, we would need to put more work into it :-)
+ */
+
+// This code is based on the script in index.html from this repository: from http://prag.ma/code/d3-cartogram/
 
 // create group for state paths
 var states = d3.select("#map")
@@ -91,7 +100,7 @@ function update() {
             return value(d) + " US soldiers that died came from " + [d.properties.Name];
         });
 
-    // set transition 
+    // set transition
     // TODO makes little sense with just one view
     states.transition()
         .duration(2000)
