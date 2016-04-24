@@ -1,3 +1,81 @@
+
+ForceMap = function(_parentElement, _districtData){
+
+    this.parentElement = _parentElement;
+    this.districtData = _districtData;
+
+    this.initVis();
+};
+
+ForceMap.prototype.initVis = function() {
+
+    var vis = this;
+
+    var height = 400;
+    var width = 400;
+    var padding = 40;
+    var radiusEthnic = 20;
+
+    var svg_force = d3.select("#force-layout")
+        .append("svg")
+        .attr({"width": width, "height": height});
+
+    var circleEthnic = [
+        {"group": "Shia", "x": (width / 2), "y": (radiusEthnic + padding)},
+        {"group": "Sunni", "x": (radiusEthnic + padding), "y": (height - radiusEthnic - padding)},
+        {"group": "Kurdish", "x": (width - radiusEthnic - padding), "y": (height - radiusEthnic - padding)}
+    ];
+
+    /** Create a circle for each ethnic group: */
+    var nodesEthnic = svg_force.selectAll("#nodesEthnic")
+        .data(circleEthnic)
+        .enter()
+        .append("circle")
+        .attr("r", radiusEthnic)
+        .attr("cx", function (d) {
+            return d.x
+        })
+        .attr("cy", function (d) {
+            return d.y
+        });
+
+    var districts = d3.keys(vis.districtData);
+
+    /** Create a circle for each ethnic group: */
+    var nodesDistricts = svg_force.selectAll("circle")
+        .data(districts)
+        .enter()
+        .append("circle")
+        // radius should be proportional to violence (not done in this first "sketch")
+        .attr("r", 10)
+        .attr("cx", function(d) {
+            if (vis.districtData[d].Shia == 0) {
+                return (width - 2*radiusEthnic - 2*padding) * vis.districtData[d].Kurdish + radiusEthnic + padding;
+            }
+            else if (vis.districtData[d].Kurdish == 0) {
+                return (height - (height - 2*radiusEthnic - 2*padding) * vis.districtData[d].Sunni) / 2;
+            }
+            else {
+                return ((width - 2*radiusEthnic - 2*padding) * vis.districtData[d].Kurdish) * (1 - vis.districtData[d].Shia) + radiusEthnic + padding + (width - 2*radiusEthnic - 2*padding) * vis.districtData[d].Shia;
+            }
+        })
+        .attr("cy", function(d) {
+            if (vis.districtData[d].Shia == 0) {
+                return height - radiusEthnic - padding;
+            }
+            else if (vis.districtData[d].Kurdish == 0) {
+                return (height - 2*radiusEthnic - 2*padding) * vis.districtData[d].Sunni + radiusEthnic + padding;
+            }
+            else {
+                return (height - 2*radiusEthnic - 2*padding) * (1 - vis.districtData[d].Shia) + radiusEthnic + padding;
+            }
+        })
+        .style("fill", "red");
+
+};
+
+/** Teddy's code:
+
 var width = 500,
     height = 500;
 
@@ -112,3 +190,5 @@ function updateVisualization(){
 
     }
 }
+ 
+ */
