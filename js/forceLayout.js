@@ -41,8 +41,8 @@ ForceMap.prototype.initVis = function() {
 
     var districts = d3.keys(vis.districtData);
 
-    /** Create a circle for each ethnic group: */
-    var nodesDistricts = svg_force.selectAll("circle")
+    /** Create a circle for each district: */
+    var nodesDistricts = svg_force.selectAll("#nodesDistricts")
         .data(districts)
         .enter()
         .append("circle")
