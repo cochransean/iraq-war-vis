@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <title>Final Project - Force Layout</title>
+</head>
+<body>
+<div id="force-area" align="CENTER">
+    <form class="form-inline">
+        <div class="form-group">
+            <label for="rankingType">District</label>
+            <select class="form-control" id="button" onchange="updateVisualization()">
+                <option value="Abu Al-Khaseeb">Abu Al-Khaseeb</option>
+                <option value="Abu Ghraib">Abu Ghraib</option>
+                <option value="Adhamiya">Adhamiya</option>
+                <option value="Afaq">Afaq</option>
+                <option value="Ain Al-Tamur">Ain Al-Tamur</option>
+                <option value="Akre">Akre</option>
+                <option value="Al Resafa">Al Resafa</option>
+                <option value="Al Sadr">Al Sadr</option>
+                <option value="Al-Ba'aj">Al-Ba'aj</option>
+                <option value="Al-Chibayish">Al-Chibayish</option>
+                <option value="Al-Daur">Al-Daur</option>
+                <option value="Al-Hai">Al-Hai</option>
+                <option value="Al-Hamdaniya">Al-Hamdaniya</option>
+                <option value="Al-Hawiga">Al-Hawiga</option>
+                <option value="Al-Hindiya">Al-Hindiya</option>
+                <option value="Al-Ka'im">Al-Ka'im</option>
+                <option value="Al-Kahla">Al-Kahla</option>
+                <option value="Al-Khalis">Al-Khalis</option>
+                <option value="Al-Khidhir">Al-Khidhir</option>
+                <option value="Al-Mahawil">Al-Mahawil</option>
+                <option value="Al-Maimouna">Al-Maimouna</option>
+                <option value="Al-Manathera">Al-Manathera</option>
+                <option value="Al-Mejar Al-Kabi">Al-Mejar Al-Kabi</option>
+                <option value="Al-Midaina">Al-Midaina</option>
+                <option value="Al-Muqdadiya">Al-Muqdadiya</option>
+                <option value="Al-Musayab">Al-Musayab</option>
+                <option value="Al-Na'maniya">Al-Na'maniya</option>
+                <option value="Al-Qurna">Al-Qurna</option>
+                <option value="Al-Rifa'i">Al-Rifa'i</option>
+                <option value="Al-Rumaitha">Al-Rumaitha</option>
+                <option value="Al-Rutba">Al-Rutba</option>
+                <option value="Al-Salman">Al-Salman</option>
+                <option value="Al-Samawa">Al-Samawa</option>
+                <option value="Al-Shamiya">Al-Shamiya</option>
+                <option value="Al-Shatra">Al-Shatra</option>
+                <option value="Al-Shikhan">Al-Shikhan</option>
+                <option value="Al-Shirqat">Al-Shirqat</option>
+                <option value="Al-Suwaira">Al-Suwaira</option>
+                <option value="Al-Zubair">Al-Zubair</option>
+                <option value="Ali Al-Gharbi">Ali Al-Gharbi</option>
+                <option value="Amara">Amara</option>
+                <option value="Amedi">Amedi</option>
+                <option value="Ana">Ana</option>
+                <option value="Ba'quba">Ba'quba</option>
+                <option value="Badra">Badra</option>
+                <option value="Baiji">Baiji</option>
+                <option value="Balad">Balad</option>
+                <option value="Baladrooz">Baladrooz</option>
+                <option value="Basrah">Basrah</option>
+                <option value="Chamchamal">Chamchamal</option>
+                <option value="Choman">Choman</option>
+                <option value="Dahuk">Dahuk</option>
+                <option value="Daquq">Daquq</option>
+                <option value="Darbandihkan">Darbandihkan</option>
+                <option value="Dibis">Dibis</option>
+                <option value="Diwaniya">Diwaniya</option>
+                <option value="Dokan">Dokan</option>
+                <option value="Erbil">Erbil</option>
+                <option value="Falluja">Falluja</option>
+                <option value="Fao">Fao</option>
+                <option value="Haditha">Haditha</option>
+                <option value="Halabja">Halabja</option>
+                <option value="Hamza">Hamza</option>
+                <option value="Hashimiya">Hashimiya</option>
+                <option value="Hatra">Hatra</option>
+                <option value="Heet">Heet</option>
+                <option value="Hilla">Hilla</option>
+                <option value="Kalar">Kalar</option>
+                <option value="Karkh">Karkh</option>
+                <option value="Kerbala">Kerbala</option>
+                <option value="Khadamiya">Khadamiya</option>
+                <option value="Khanaqin">Khanaqin</option>
+                <option value="Kifri">Kifri</option>
+                <option value="Kirkuk">Kirkuk</option>
+                <option value="Koisnjaq">Koisnjaq</option>
+                <option value="Kufa">Kufa</option>
+                <option value="Kut">Kut</option>
+                <option value="Mada'in">Mada'in</option>
+                <option value="Mahmoudiya">Mahmoudiya</option>
+                <option value="Makhmur">Makhmur</option>
+                <option value="Mergasur">Mergasur</option>
+                <option value="Mosul">Mosul</option>
+                <option value="Najaf">Najaf</option>
+                <option value="Nassriya">Nassriya</option>
+                <option value="Penjwin">Penjwin</option>
+                <option value="Pshdar">Pshdar</option>
+                <option value="Qal'at Saleh">Qal'at Saleh</option>
+                <option value="Ramadi">Ramadi</option>
+                <option value="Rania">Rania</option>
+                <option value="Samarra">Samarra</option>
+                <option value="Shaqlawa">Shaqlawa</option>
+                <option value="Sharbazher">Sharbazher</option>
+                <option value="Shatt Al-Arab">Shatt Al-Arab</option>
+                <option value="Sinjar">Sinjar</option>
+                <option value="Soran">Soran</option>
+                <option value="Sulaymaniya">Sulaymaniya</option>
+                <option value="Sumel">Sumel</option>
+                <option value="Suq Al-Shoyokh">Suq Al-Shoyokh</option>
+                <option value="Tarmia">Tarmia</option>
+                <option value="Telafar">Telafar</option>
+                <option value="Tikrit">Tikrit</option>
+                <option value="Tilkaif">Tilkaif</option>
+                <option value="Tooz">Tooz</option>
+                <option value="Zakho">Zakho</option>
+            </select>
+        </div>
+    </form>
+</div>
+
+<script src="js/d3.min.js"></script>
+<script src="js/force_demo_js.js"></script>
+<script src="js/topojson.v1.min.js"></script>
+<script src="js/queue.v1.min.js"></script>
+<script src="js/jquery-latest.min.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/d3.tip.js"></script>
+</body>
+</html>
