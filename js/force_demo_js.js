@@ -35,14 +35,15 @@ function updateVisualization(){
 
     var district = d3.select("#button").property("value");
 
-    var gnodes = svg.selectAll('gnode')
-        .data(data)
-        .enter()
-        .append('g')
-        .classed('gnode', true)
-        .call(force.drag);
+    var circle1 = svg.selectAll('.circle1')
+        .data(data);
 
-    var node = gnodes.append("circle").attr("class", "node")
+    circle1
+        .enter()
+        .append('circle')
+        .attr("circle1");
+
+    circle1
         .filter(function(d){
             return d.district == district;
         })
@@ -52,264 +53,212 @@ function updateVisualization(){
         .attr("cx",250)
         .attr("fill","green")
         .attr("cy", function(d){
-            if (d.total > 0 && d.total < 10) {
+            if (d.total_0 > 0 && d.total_0 < 10) {
                 if (d.sunni_0 > d.shia_0 && d.sunni_0 > d.kurd_0) {
-                    return (d.y + 10)
+                    return (150)
                 }
                 if (d.sunni_0 > d.shia_0 || d.sunni_0 > d.kurd_0) {
-                    return (d.y + 20)
+                    return (160)
                 } else {
-                    return (d.y + 30)
+                    return (170)
                 }
             } if (d.total_0 > 10 && d.total_0 < 20) {
                 if (d.sunni_0 > d.shia_0 && d.sunni_0 > d.kurd_0) {
-                    return (d.y + 30)
+                    return (180)
                 }
                 if (d.sunni_0 > d.shia_0 || d.sunni_0 > d.kurd_0) {
-                    return (d.y + 50)
+                    return (200)
                 } else {
-                    return (d.y + 75)}
+                    return (220)}
             } if (d.total_0 > 20 && d.total_0 < 50) {
                 if (d.sunni_0 > d.shia_0 && d.sunni_0 > d.kurd_0) {
-                    return (d.y + 50)
+                    return (225)
                 }
                 if (d.sunni_0 > d.shia_0 || d.sunni_0 > d.kurd_0) {
-                    return (d.y + 70)
+                    return (250)
                 } else {
-                    return (d.y + 100)}
+                    return (275)}
             } if (d.total_0 > 50 && d.total_0 < 100) {
                 if (d.sunni_0 > d.shia_0 && d.sunni_0 > d.kurd_0) {
-                    return (d.y + 70)
+                    return (280)
                 }
                 if (d.sunni_0 > d.shia_0 || d.sunni_0 > d.kurd_0) {
-                    return (d.y + 90)
+                    return (310)
                 } else {
-                    return (d.y + 120)
-                }
-            } if (d.total_0 > 100 && d.total_0 < 125) {
-                if (d.sunni_0 > d.shia_0 && d.sunni_0 > d.kurd_0) {
-                    return (d.y + 90)
-                }
-                if (d.sunni_0 > d.shia_0 || d.sunni_0 > d.kurd_0) {
-                    return (d.y + 120)
-                } else {
-                    return (d.y + 150)
-                }
-            } if (d.total_0 > 125 && d.total_0 < 150) {
-                if (d.sunni_0 > d.shia_0 && d.sunni_0 > d.kurd_0) {
-                    return (d.y + 125)
-                }
-                if (d.sunni_0 > d.shia_0 || d.sunni_0 > d.kurd_0) {
-                    return (d.y + 165)
-                } else {
-                    return (d.y + 200)
-                }
-            } if (d.total_0 > 150 && d.total_0 < 175) {
-                if (d.sunni_0 > d.shia_0 && d.sunni_0 > d.kurd_0) {
-                    return (d.y + 165)
-                }
-                if (d.sunni_0 > d.shia_0 || d.sunni_0 > d.kurd_0) {
-                    return (d.y + 190)
-                } else {
-                    return (d.y + 210)
+                    return (340)
                 }
             } else {
                 if (d.sunni_0 > d.shia_0 && d.sunni_0 > d.kurd_0) {
-                    return (d.y + 200)
+                    return (350)
                 }
                 if (d.sunni_0 > d.shia_0 || d.sunni_0 > d.kurd_0) {
-                    return (d.y + 225)
+                    return (400)
                 } else {
-                    return (d.y + 250)
+                    return (450)
                 }
             }
         });
 
-    var node1 = gnodes.append("circle").attr("class", "node1")
+    var circle2 = svg.selectAll('.circle2')
+        .data(data);
+
+    circle2
+        .enter()
+        .append('circle')
+        .attr("circle2");
+
+    circle2
         .filter(function(d){
             return d.district == district;
         })
         .attr("r",function(d){
             return d.shia_0;
         })
-        .attr("fill","blue")
         .attr("cx",250)
+        .attr("fill","blue")
         .attr("cy", function(d){
             if (d.total_0 > 0 && d.total_0 < 10) {
                 if (d.shia_0 > d.sunni_0 && d.shia_0 > d.kurd_0) {
-                    return (d.y + 10)
+                    return (150)
                 }
                 if (d.shia_0 > d.sunni_0 || d.shia_0 > d.kurd_0) {
-                    return (d.y + 20)
+                    return (160)
                 } else {
-                    return (d.y + 30)
+                    return (170)
                 }
             } if (d.total_0 > 10 && d.total_0 < 20) {
                 if (d.shia_0 > d.sunni_0 && d.shia_0 > d.kurd_0) {
-                    return (d.y + 30)
+                    return (180)
                 }
                 if (d.shia_0 > d.sunni_0 || d.shia_0 > d.kurd_0) {
-                    return (d.y + 50)
+                    return (200)
                 } else {
-                    return (d.y + 75)}
+                    return (220)}
             } if (d.total_0 > 20 && d.total_0 < 50) {
                 if (d.shia_0 > d.sunni_0 && d.shia_0 > d.kurd_0) {
-                    return (d.y + 50)
+                    return (225)
                 }
                 if (d.shia_0 > d.sunni_0 || d.shia_0 > d.kurd_0) {
-                    return (d.y + 70)
+                    return (250)
                 } else {
-                    return (d.y + 100)}
+                    return (275)}
             } if (d.total_0 > 50 && d.total_0 < 100) {
                 if (d.shia_0 > d.sunni_0 && d.shia_0 > d.kurd_0) {
-                    return (d.y + 70)
+                    return (280)
                 }
                 if (d.shia_0 > d.sunni_0 || d.shia_0 > d.kurd_0) {
-                    return (d.y + 90)
+                    return (310)
                 } else {
-                    return (d.y + 120)
-                }
-            } if (d.total_0 > 100 && d.total_0 < 125) {
-                if (d.shia_0 > d.sunni_0 && d.shia_0 > d.kurd_0) {
-                    return (d.y + 90)
-                }
-                if (d.shia_0 > d.sunni_0 || d.shia_0 > d.kurd_0) {
-                    return (d.y + 120)
-                } else {
-                    return (d.y + 150)
-                }
-            } if (d.total_0 > 125 && d.total_0 < 150) {
-                if (d.shia_0 > d.sunni_0 && d.shia_0 > d.kurd_0) {
-                    return (d.y + 125)
-                }
-                if (d.shia_0 > d.sunni_0 || d.shia_0 > d.kurd_0) {
-                    return (d.y + 165)
-                } else {
-                    return (d.y + 200)
-                }
-            } if (d.total_0 > 150 && d.total_0 < 175) {
-                if (d.shia_0 > d.sunni_0 && d.shia_0 > d.kurd_0) {
-                    return (d.y + 165)
-                }
-                if (d.shia_0 > d.sunni_0 || d.shia_0 > d.kurd_0) {
-                    return (d.y + 190)
-                } else {
-                    return (d.y + 210)
+                    return (340)
                 }
             } else {
                 if (d.shia_0 > d.sunni_0 && d.shia_0 > d.kurd_0) {
-                    return (d.y + 200)
+                    return (350)
                 }
                 if (d.shia_0 > d.sunni_0 || d.shia_0 > d.kurd_0) {
-                    return (d.y + 225)
+                    return (400)
                 } else {
-                    return (d.y + 250)
+                    return (450)
                 }
             }
         });
 
-    var node2 = gnodes.append("circle").attr("class", "node2")
+    var circle3 = svg.selectAll('.circle3')
+        .data(data);
+
+    circle3
+        .enter()
+        .append('circle')
+        .attr("circle3");
+
+    circle3
         .filter(function(d){
             return d.district == district;
         })
         .attr("r",function(d){
             return d.kurd_0;
         })
+        .attr("cx",250)
         .attr("fill","red")
-        .attr("cx", 250)
         .attr("cy", function(d){
             if (d.total_0 > 0 && d.total_0 < 10) {
                 if (d.kurd_0 > d.shia_0 && d.kurd_0 > d.sunni_0) {
-                    return (d.y + 10)
+                    return (150)
                 }
                 if (d.kurd_0 > d.shia_0 || d.kurd_0 > d.sunni_0) {
-                    return (d.y + 20)
+                    return (160)
                 } else {
-                    return (d.y + 30)
+                    return (170)
                 }
             } if (d.total_0 > 10 && d.total_0 < 20) {
                 if (d.kurd_0 > d.shia_0 && d.kurd_0 > d.sunni_0) {
-                    return (d.y + 30)
+                    return (180)
                 }
                 if (d.kurd_0 > d.shia_0 || d.kurd_0 > d.sunni_0) {
-                    return (d.y + 50)
+                    return (200)
                 } else {
-                    return (d.y + 75)}
+                    return (220)}
             } if (d.total_0 > 20 && d.total_0 < 50) {
                 if (d.kurd_0 > d.shia_0 && d.kurd_0 > d.sunni_0) {
-                    return (d.y + 50)
+                    return (225)
                 }
                 if (d.kurd_0 > d.shia_0 || d.kurd_0 > d.sunni_0) {
-                    return (d.y + 70)
+                    return (250)
                 } else {
-                    return (d.y + 100)}
+                    return (275)}
             } if (d.total_0 > 50 && d.total_0 < 100) {
                 if (d.kurd_0 > d.shia_0 && d.kurd_0 > d.sunni_0) {
-                    return (d.y + 70)
+                    return (280)
                 }
                 if (d.kurd_0 > d.shia_0 || d.kurd_0 > d.sunni_0) {
-                    return (d.y + 90)
+                    return (310)
                 } else {
-                    return (d.y + 120)
-                }
-            } if (d.total_0 > 100 && d.total_0 < 125) {
-                if (d.kurd_0 > d.shia_0 && d.kurd_0 > d.sunni_0) {
-                    return (d.y + 90)
-                }
-                if (d.kurd_0 > d.shia_0 || d.kurd_0 > d.sunni_0) {
-                    return (d.y + 120)
-                } else {
-                    return (d.y + 150)
-                }
-            } if (d.total_0 > 125 && d.total_0 < 150) {
-                if (d.kurd_0 > d.shia_0 && d.kurd_0 > d.sunni_0) {
-                    return (d.y + 125)
-                }
-                if (d.kurd_0 > d.shia_0 || d.kurd_0 > d.sunni_0) {
-                    return (d.y + 165)
-                } else {
-                    return (d.y + 200)
-                }
-            } if (d.total_0 > 150 && d.total_0 < 175) {
-                if (d.kurd_0 > d.shia_0 && d.kurd_0 > d.shia_0) {
-                    return (d.y + 165)
-                }
-                if (d.kurd_0 > d.shia_0 || d.kurd_0 > d.sunni_0) {
-                    return (d.y + 190)
-                } else {
-                    return (d.y + 210)
+                    return (340)
                 }
             } else {
                 if (d.kurd_0 > d.shia_0 && d.kurd_0 > d.sunni_0) {
-                    return (d.y + 200)
+                    return (350)
                 }
                 if (d.kurd_0 > d.shia_0 || d.kurd_0 > d.sunni_0) {
-                    return (d.y + 225)
+                    return (400)
                 } else {
-                    return (d.y + 250)
+                    return (450)
                 }
             }
         });
 
-    var node3 = gnodes.append("circle").attr("class", "node3")
+    var circle4 = svg.selectAll('.circle4')
+        .data(data);
+
+    circle4
+        .enter()
+        .append('circle')
+        .attr("circle4");
+
+    circle4
         .filter(function(d){
             return d.district == district;
         })
-        .attr('opacity',0.5)
-        .attr("r",function(d) {
-            return (d.total_0);
+        .attr("r",function(d){
+            return d.total_0;
         })
         .attr("cx",250)
+        .attr("fill","grey")
         .attr("cy", 100);
 
-    node.transition()
-        .duration(10000);
-    node1.transition()
-        .duration(10000);
-    node2.transition()
-        .duration(10000);
-    node3.transition()
-        .duration(10000);
+    circle1.transition()
+        .duration(1000);
+    circle2.transition()
+        .duration(1000);
+    circle3.transition()
+        .duration(1000);
+    circle4.transition()
+        .duration(1000);
+
+    circle1.exit().remove();
+    circle2.exit().remove();
+    circle3.exit().remove();
+    circle4.exit().remove();
 
     force
         .nodes(data)
