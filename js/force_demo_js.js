@@ -243,24 +243,23 @@ function updateVisualization(){
             return d.total_0;
         })
         .attr("cx",250)
+        .attr("cy", 100)
         .attr("fill","grey")
-        .attr("cy", 100);
+        .transition()
+        .duration(1500)
+        .attr("cy",100)
+        .attr("r", 0)
+        .each("end",function(){
+            d3.select(this).
+                transition()
+                .attr("r",function(d){
+                    return d.total_0;
+                })});
 
-    circle1.transition()
-        .duration(1000);
-    circle2.transition()
-        .duration(1000);
-    circle3.transition()
-        .duration(1000);
-    circle4.transition()
-        .duration(1000);
-
-    circle1.exit().remove();
-    circle2.exit().remove();
-    circle3.exit().remove();
     circle4.exit().remove();
 
     force
         .nodes(data)
         .start();
+
 }
