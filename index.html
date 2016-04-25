@@ -103,16 +103,24 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div id="force-layout"></div>
-            </div>
-        </div>
     </div>
 
     <!-- attempt to implement cartogram -->
-    <div class="cartogram">
-        <svg id="map"></svg>
+    <h3 id="homefront">The toll on the homefront in the United States</h3>
+    <div class="row">
+        <div class="col-md-8" id="cartogram">
+            <svg id="map"></svg>
+        </div>
+        <div class="col-md-4">
+            <h4>Adjusted for population, the midwest bore a disproportionate share of US casualties</h4>
+            <label for="cartogram-data" class="col-xs-4 control-label">Map Data</label>
+            <div class="col-xs-8">
+                <select id="cartogram-data" class="form-control">
+                    <option value="normedCasualties">Casualties Per 100,000 Residents</option>
+                    <option value="rawCasualties">Total Number of Casualties</option>
+                </select>
+            </div>
+        </div>
     </div>
 
 	<!-- Load JS libraries -->

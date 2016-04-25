@@ -23,3 +23,5 @@ Aggregated US Troop Casualties and Coalition Troop Numbers
     The Guardian: Iraq War - The Conflict in Statistics
     http://www.theguardian.com/news/datablog/2010/sep/01/iraq-war-conflict-in-statistics
     The aggregated fatality data linked above was updated based on current reports (though 22 April 2016).
+    More recent troop numbers
+    http://www.military.com/daily-news/2016/02/03/number-us-troops-iraq-more-than-4000-exceeds-previous-claims.html

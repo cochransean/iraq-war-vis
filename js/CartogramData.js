@@ -33,7 +33,9 @@ var cartogram = d3.cartogram()
 var topology;
 var geometries;
 var casualties;
+var populations = {};
 var stateCasualtiesObject = {};
+const NORMING_UNIT = 100000;
 
 // load data
 d3.json("data/us-states.topojson", function(topo) {
@@ -41,6 +43,7 @@ d3.json("data/us-states.topojson", function(topo) {
     geometries = topology.objects.states.geometries;
     d3.csv("data/CasualtiesUSStates.csv", function(data) {
         casualties = data;
+        console.log(casualties);
         stateCasualtiesObject = d3.nest()
             .key(function(d) { return d.Name; })
             .rollup(function(d) { return d[0]; })
@@ -49,10 +52,18 @@ d3.json("data/us-states.topojson", function(topo) {
     });
 });
 
+// load population by state
+d3.csv("data/2010-census-population.csv", function(data) {
+    data.forEach(function(state) {
+        populations[state.NAME] = +state.POPESTIMATE2010;
+    });
+});
+
 function init() {
 
     // add features to cartogram
     var features = cartogram.features(topology, geometries);
+    console.log(features);
 
     var path = d3.geo.path()
         .projection(projection);
@@ -72,19 +83,46 @@ function init() {
     states.append("title");
 
     update();
+
+    // update on DOM changes
+    $("#cartogram-data").change(update);
 }
 
 function update() {
 
-    // create array and sort casualty numbers
-    var value = function(d) {
-            return +d.properties["Casualties"];
-        };
+        // get selected option
+        var selectedOption = $("#cartogram-data").val();
 
-    // use quartiles (calculated in excel) as thresholds for the color scale
-    var color = d3.scale.threshold()
-        .domain([25, 62, 88, 500])
-        .range(["#fee5d9","#fcae91","#fb6a4a","#cb181d"]);
+        // TODO: we should create the color scales on the init and just update domain / range as required, not
+        // every time the visualization is updated
+        if (selectedOption == 'normedCasualties') {
+
+            // create array and sort casualty numbers
+            var value = function(d) {
+                var normingUnitsPerState = populations[d.id] / NORMING_UNIT;
+                return +d.properties["Casualties"] / normingUnitsPerState;
+            };
+
+            var color = d3.scale.quantize()
+                .range(colorbrewer.Reds[6]);
+        }
+
+
+        // TODO: update this with an else if, if we add more than 2 options
+        else {
+
+            // create array and sort casualty numbers
+            var value = function(d) {
+                return +d.properties["Casualties"];
+            };
+
+            // use quartiles (calculated in excel) as thresholds for the color scale
+            var color = d3.scale.threshold()
+                .domain([25, 62, 88, 500])
+                .range(["#fee5d9","#fcae91","#fb6a4a","#cb181d"]);
+
+        }
+
 
     // tell the cartogram which values to use
     cartogram.value(function(d) {
@@ -94,12 +132,29 @@ function update() {
     // generate the new features (pre-projected)
     var features = cartogram(topology, geometries).features;
 
+    // update color scale of normed values since we have not precalculated values as yet
+    // TODO maybe precalculate thresholds for the scale as in the raw data example; could also do this more efficiently
+    // (we calculate using the value() function repeatedly when we could just get the values for all our options
+    // when the data is first loaded and store if for future use
+    if (selectedOption == 'normedCasualties') {
+        color
+            .domain(d3.extent(features, function(d) {
+                return value(d)
+            }));
+    }
+
     // update the features and add text to the tooltips
     states.data(features)
         .select("title")
         .text(function(d) {
-            // TODO how do you call them? I don't think soldiers is correct.
-            return value(d) + " US soldiers that died came from " + [d.properties.Name];
+            if (selectedOption == 'normedCasualties') {
+                return value(d) + " US service members died per 100,000 residents in " + [d.properties.Name];
+            }
+
+            // TODO update this if we add more options (to else if)
+            else {
+                return value(d) + " US service members that died came from " + [d.properties.Name];
+            }
         });
 
     // set transition

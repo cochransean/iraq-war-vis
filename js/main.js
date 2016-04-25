@@ -17,7 +17,7 @@ var dateRange;
 
 
 // Variables for the visualization instances
-var iraqMap, areaChart, timeSelect, forceMap;
+var iraqMap, areaChart, timeSelect;
 
 
 // Start application by loading the data
@@ -114,5 +114,4 @@ function createVis() {
     $(document).on("datesChanged", function() { iraqMap.wrangleData() });
     $(document).on("dateRangeChanged", function() { iraqMap.wrangleData() });
 
-    var forceMap = new ForceMap("force-layout", DistrictData);
 }
