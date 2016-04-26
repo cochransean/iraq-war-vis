@@ -33,13 +33,10 @@ svg text {
 }
 
 h1 {
-    font-weight: 100;
     margin-top: 50px;
 }
 
 h2 {
-    font-weight: 300;
-    font-size: 18px;
     margin-bottom: 40px;
 }
 
@@ -126,6 +123,26 @@ h2 {
 
 svg .area-background {
     fill: #f7f7f7;
+}
+
+svg .event {
+    stroke: black;
+    stroke-width: 5px;
+    opacity: 0.7;
+    cursor: default;
+}
+
+/* Get rid of extenders on timeline event tooltips (lead to confusion) */
+.d3-tip-timeline {
+    line-height: 1;
+    font-weight: bold;
+    padding: 12px;
+    background-color: white;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    -moz-box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.5);
+    box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
 }
 
 /* MAP STYLES */
@@ -242,11 +259,20 @@ svg .circle-legend-text {
 }
 
 #homefront {
-    margin-top: 50px;
+    margin-top: 45px;
+    margin-bottom: 20px;
 }
 
 #cartogram {
     height: 500px;
+}
+
+#cartogram-controls {
+    margin-top: 10px;
+}
+
+#cartogram-ul {
+    text-align: left;
 }
 
 path.state {

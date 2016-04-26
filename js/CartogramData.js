@@ -43,7 +43,6 @@ d3.json("data/us-states.topojson", function(topo) {
     geometries = topology.objects.states.geometries;
     d3.csv("data/CasualtiesUSStates.csv", function(data) {
         casualties = data;
-        console.log(casualties);
         stateCasualtiesObject = d3.nest()
             .key(function(d) { return d.Name; })
             .rollup(function(d) { return d[0]; })
@@ -63,7 +62,6 @@ function init() {
 
     // add features to cartogram
     var features = cartogram.features(topology, geometries);
-    console.log(features);
 
     var path = d3.geo.path()
         .projection(projection);

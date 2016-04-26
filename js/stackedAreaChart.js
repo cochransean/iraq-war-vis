@@ -127,6 +127,13 @@ StackedAreaChart.prototype.initVis = function () {
     });
 
 
+    // tooltips for timeline events
+    vis.timelineTooltip = d3.tip()
+        .attr('class', 'd3-tip-timeline')
+        .html(function(d) { return d.event; })
+        .offset([vis.height / 2, 0]);
+    vis.svg.call(vis.timelineTooltip);
+
     // filter and format data for stacked area chart
     vis.wrangleData();
 
@@ -352,11 +359,35 @@ StackedAreaChart.prototype.addTooltipElements = function() {
         .attr("dx", TEXT_PADDING)
         .attr("dy", "3.8em");
 
+
 };
 
 // updates the axes labels and provides tooltip functionality
 StackedAreaChart.prototype.updateUI = function() {
     var vis = this;
+
+    console.log('I am stacked')
+
+    // add timeline lines
+    // filter events by date
+    vis.displayEvents = vis.eventsData.filter(filterByDate);
+    vis.displayEvents = vis.displayEvents.filter(filterByImportance);
+    console.log(vis.displayEvents);
+
+    // remove any current lines (otherwise they will be behind paths)
+    vis.svg.selectAll(".event")
+        .remove();
+
+    vis.svg.selectAll(".event")
+        .data(vis.displayEvents).enter()
+        .append("line")
+        .attr("x1", function(d) {return vis.x(d.date)})
+        .attr("x2", function(d) {return vis.x(d.date)})
+        .attr("y1", 0)
+        .attr("y2", vis.height)
+        .attr("class", "event")
+        .on("mouseover", vis.timelineTooltip.show)
+        .on("mouseout", vis.timelineTooltip.hide);
 
     // formatter for time
     var monthYear = d3.time.format("%B %Y");
@@ -367,17 +398,8 @@ StackedAreaChart.prototype.updateUI = function() {
     // update axis text based on text from index
     vis.yLabel.text($('.chart-option[value=' + vis.selectedOption +']').text());
 
-    // TODO add timeline lines
-    // filter events by date
-    vis.displayEvents = vis.eventsData.filter(filterByDate);
-
-    // enter, update, and exit lines for timeline
-
-    // enter, update, and exit text for each line
 
     // add tooltip updates to entering categories
-
-
     vis.newPaths
         .on("click", function(d) {
             var select = $("#circle-data");
@@ -467,5 +489,6 @@ StackedAreaChart.prototype.updateUI = function() {
         })
         .on("mouseout", function() {
             vis.focus.style("display", "none");
-        })
+        });
+
 };

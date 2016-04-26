@@ -36,6 +36,23 @@ function filterByDate(arrayDataPoint) {
     }
 }
 
+/* filter events based on the current zoom level and the importance from the event dataset */
+function filterByImportance(arrayDataPoint) {
+    var currentRangeInDays = (dateRange[1] - dateRange[0]) / 86400000;
+    const ALL_THRESHOLD = 730;
+    const HIGH_THRESHOLD = 1460;
+    if (currentRangeInDays < ALL_THRESHOLD) {
+        return true
+    }
+    else if (currentRangeInDays >= ALL_THRESHOLD && currentRangeInDays <= HIGH_THRESHOLD) {
+        return arrayDataPoint.importance == "Very High" ||  arrayDataPoint.importance == "High"
+    }
+    else {
+        return arrayDataPoint.importance == "Very High"
+    }
+
+}
+
 
 /*
  * Convert week from data set to date object

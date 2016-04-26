@@ -13,6 +13,9 @@ function TimeSelect(_parentElement, _dimensions, _districtViolenceData, _totalVi
     StackedAreaChart.call(this, _parentElement, _dimensions, _districtViolenceData, _totalViolenceData,
                           _troopNumbersData, _usCasualtiesMonthData, _civCasualtiesMonthly, _eventsData, _colorScale);
 
+    this.brush = d3.svg.brush()
+        .on("brushend", brushend);
+
     this.initVis = function() {
         StackedAreaChart.prototype.initVis.call(this);
         var vis = this;
@@ -21,29 +24,42 @@ function TimeSelect(_parentElement, _dimensions, _districtViolenceData, _totalVi
         vis.yAxisGroup.remove();
         vis.xLabel.remove();
 
-        // Initialize brush component
-        vis.brush = d3.svg.brush()
-            .x(vis.x)
-            .on("brushend", brushend);
+        // update axis for brush now that it exists
+        vis.brush
+            .x(vis.x);
 
-        // Append brush component
+        // add brush
+        console.log("adding brush");
         vis.svg.append("g")
             .attr("class", "x brush")
             .call(vis.brush)
             .selectAll("rect")
             .attr("y", -6)
             .attr("height", vis.height + 7);
+
     };
 
     this.updateUI = function() {
 
-        // override this method (no UI updating on time select)
+        // override (not needed on timeline)
         return false
+
     };
 
     this.addTooltipElements = function() {
 
-        // override this method (no tooltips)
-        return false
+        var vis = this;
+
+        // Remove then append brush component (to prevent overlap)
+        vis.svg.selectAll(".brush")
+            .remove();
+
+        console.log("updating brush");
+        vis.svg.append("g")
+            .attr("class", "x brush")
+            .call(vis.brush)
+            .selectAll("rect")
+            .attr("y", -6)
+            .attr("height", vis.height + 7);
     }
 }
