@@ -117,7 +117,7 @@ function createVis() {
     $(document).on("dateRangeChanged", function() { iraqMap.wrangleData() });
 
     // create controller for the timeline and map storytelling
-    storyController = new StoryController("story-forward", "story-back");
+    storyController = new StoryController("story-forward", "story-back", "exit-story");
 
 
 }
