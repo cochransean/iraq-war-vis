@@ -19,6 +19,8 @@ var dateRange;
 // Variables for the visualization instances
 var iraqMap, areaChart, timeSelect;
 
+// controller for the storytelling interaction
+var storyController;
 
 // Start application by loading the data
 loadData();
@@ -113,5 +115,9 @@ function createVis() {
     $("#circle-data").change(function() { iraqMap.wrangleData() });
     $(document).on("datesChanged", function() { iraqMap.wrangleData() });
     $(document).on("dateRangeChanged", function() { iraqMap.wrangleData() });
+
+    // create controller for the timeline and map storytelling
+    storyController = new StoryController("story-forward", "story-back");
+
 
 }

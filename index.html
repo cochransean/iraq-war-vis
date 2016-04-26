@@ -40,8 +40,8 @@
             <div class="col-md-6">
                 <div id="area-chart-div">
                     <div id="information">
-                        <h3>This will be updated based on selection and tour buttons</h3>
-                        <h4>This will be updated based on selection and tour buttons at bottom</h4>
+                        <h3 id="information-headline">This will be updated based on selection and tour buttons</h3>
+                        <h4 id="information-subtitle">This will be updated based on selection and tour buttons at bottom</h4>
                         <div id="alert-div"></div>
                     </div>
                     <div id="area-chart"></div>
@@ -91,10 +91,10 @@
                         </div>
                         <div class="row">
                             <div class="btn-group" role="group" aria-label="Next and Previous Story Controls">
-                                <button type="button" class="btn btn-primary" aria-label="Go Forward">
+                                <button type="button" id="story-back" class="btn btn-primary" aria-label="Go Back">
                                     <span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
                                 </button>
-                                <button type="button" class="btn btn-primary" aria-label="Go Back">
+                                <button type="button" id="story-forward" class="btn btn-primary" aria-label="Go Forward">
                                     <span class="glyphicon glyphicon-forward" aria-hidden="true"></span>
                                 </button>
                             </div>
@@ -152,6 +152,7 @@
     <script src="js/forceLayout.js"></script>
     <script src="js/CartogramUS.js"></script>
     <script src="js/CartogramData.js"></script>
+    <script src="js/storyController.js"></script>
 
 	<!-- Load data, create visualizations -->
 	<script src="js/main.js"></script>
