@@ -284,7 +284,7 @@ StackedAreaChart.prototype.updateVis = function () {
         .data(vis.displayData);
 
     vis.newPaths = vis.categories.enter().append("path")
-        .attr("class", "area");
+        .attr("class", "area stacked-category");
 
     vis.categories
         .style("fill", function (d) {

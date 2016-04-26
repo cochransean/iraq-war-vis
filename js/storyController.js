@@ -5,17 +5,33 @@
  */
 
 StoryController = function(nextButtonID, backButtonID, exitID) {
+    var controller = this;
 
-    this.backgroundSelect = $("#district-level-data");
-    this.dataSelect = $("#circle-data");
-    this.nextButton = $("#" + nextButtonID);
-    this.backButton = $("#" + backButtonID);
-    this.exitButton = $("#" + exitID);
+    controller.backgroundSelect = $("#district-level-data");
+    controller.dataSelect = $("#circle-data");
+    controller.nextButton = $("#" + nextButtonID);
+    controller.backButton = $("#" + backButtonID);
+    controller.exitButton = $("#" + exitID);
 
     // call views function (closure is needed to ensure sub-functions know what "this" is
-    this.views = this.views();
+    controller.views = controller.views();
 
-    this.enterStory(0);
+    // save interaction elements to enable / disable interactions
+    controller.interactionElements = d3.selectAll(".stacked-category, .brush, .area-background");
+
+    // add listeners for buttons
+    controller.nextButton.on("click", function() { controller.advanceView(1) });
+    controller.backButton.on("click", function() { controller.advanceView(-1) });
+
+    // get max and min slides to make sure repeated button presses don't go into number ranges not corresponding to slide
+    controller.minSlide = 0;
+    controller.maxSlide = d3.keys(controller.views).length - 1;
+
+    // create a rectangle to display the extent of dates changed in storytelling mode
+    controller.extentRectangle = timeSelect.svg.append("rect")
+        .attr("class", "story-extent");
+
+    controller.enterStory(0);
 
 };
 
@@ -23,27 +39,28 @@ StoryController.prototype.enterStory = function(slideNumber) {
 
     var controller = this;
 
+    // disable user interactions
+    controller.interactionElements.style("pointer-events", "none");
+
+    // change the text on the button to indicate that it exits story mode and update functionality
+    controller.exitButton.text("Exit Story Mode");
+
+    // select d3's brush extent and make disappear by altering width
+    d3.selectAll(".extent").attr("width", 0);
+
     // reset current view
     controller.currentView = slideNumber;
 
     // display first slide
     controller.views[controller.currentView.toString()]();
 
-    // remove any current button listeners to prevent repeated function calls
-    controller.nextButton.off();
-    controller.backButton.off();
-
-    // add listeners
-    controller.nextButton.on("click", function() { controller.advanceView(1) });
-    controller.backButton.on("click", function() { controller.advanceView(-1) });
+    // remove then add listeners for exit button (to prevent repeated calls)
+    controller.exitButton.off();
     controller.exitButton.on("click", function() { controller.exitStory() });
 
     // disable user selections initially
     controller.backgroundSelect.attr("disabled", "true");
     controller.dataSelect.attr("disabled", "true");
-
-    // get last true slide to call up when back button is hit after story mode has been exited
-    controller.lastSlide = d3.keys(controller.views).length - 2;
 
 };
 
@@ -100,7 +117,19 @@ StoryController.prototype.views = function() {
 StoryController.prototype.advanceView = function(incrementAmount) {
     var controller = this;
     controller.currentView += incrementAmount;
-    var currentViewString = controller.currentView.toString();
+    var currentViewString;
+
+    // factor for repeated button presses that can take current view out of slide range
+    if (controller.currentView < controller.minSlide) {
+         currentViewString = controller.minSlide.toString();
+    }
+    else if (controller.currentView > controller.maxSlide) {
+        currentViewString = controller.maxSlide.toString();
+    }
+    else {
+        currentViewString = controller.currentView.toString();
+    }
+
     controller.views[currentViewString]();
 };
 
@@ -109,34 +138,46 @@ StoryController.prototype.advanceView = function(incrementAmount) {
 StoryController.prototype.exitStory = function() {
     var controller = this;
 
+    // change the text on the button to indicate that it reenters story mode and update button functionality too
+    controller.exitButton.text("Enter Story Mode");
+    controller.exitButton.off();
+    controller.exitButton.on("click", function() { controller.enterStory(0) });
+
     // set dates to entire extent of data
     dateRange = timeSelect.x.domain();
     $(document).trigger("datesChanged");
 
-    // remove listeners for forward and back buttons
-    controller.nextButton.off();
-    controller.backButton.off();
+    // allow user interaction with brush and stacked area chart
+    controller.interactionElements.style("pointer-events", "all");
+
 
     controller.backgroundSelect.removeAttr("disabled");
     controller.dataSelect.removeAttr("disabled");
-    controller.backButton.prop('disabled', false);
+    controller.backButton.prop('disabled', true);
     controller.nextButton.prop('disabled', true);
 
     // add text
     $("#information-headline").text("Explore the data on your own");
     $("#information-subtitle").text("Use the select boxes to filter by category and the gray timeline to filter by date");
 
-    // if back buttons is hit, reenter story mode at last slide
-    controller.backButton.on("click", function() { controller.enterStory(controller.lastSlide) });
+    // change width of rectangle to make it go away
+    controller.extentRectangle
+        .attr("width", 0);
+
 };
 
 
 // updates brush extent and date object itself (so visuals and dates selected match)
 StoryController.prototype.changeDates = function(dateString1, dateString2) {
-
+    var controller = this;
     dateRange = [new Date(dateString1), new Date(dateString2)];
 
-    // TODO create a rectangle to show which dates are selected (changing the extent itself doesn't update display)
+    // update extent rectangle to match display
+    controller.extentRectangle
+        .attr("x", function() { return timeSelect.x(dateRange[0])})
+        .attr("y", -6)
+        .attr("height", function() { return timeSelect.height + 7 })
+        .attr("width", function() { return timeSelect.x(dateRange[1]) - timeSelect.x(dateRange[0])});
 
     $(document).trigger("datesChanged");
 

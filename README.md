@@ -1,6 +1,10 @@
 # iraq-war-vis
 A D3-based visualization of the Iraq War.
 
+# Libraries used:
+D3
+Cartogram.js (used for cartogram)
+
 # Data Citations:
 Timeline Data:
     NYTimes: Timeline of Major Events in the Iraq War

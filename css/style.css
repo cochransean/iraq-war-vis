@@ -71,6 +71,12 @@ h2 {
     shape-rendering: crispEdges;
 }
 
+.story-extent {
+    stroke: #fff;
+    fill-opacity: .125;
+    shape-rendering: crispEdges;
+}
+
 #controls h5 {
     font-weight: bold;
 }
