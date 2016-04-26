@@ -131,7 +131,7 @@ StackedAreaChart.prototype.initVis = function () {
     vis.timelineTooltip = d3.tip()
         .attr('class', 'd3-tip-timeline')
         .html(function(d) { return d.event; })
-        .offset([vis.height / 2, 0]);
+        .offset([vis.height / 3, 0]);
     vis.svg.call(vis.timelineTooltip);
 
     // filter and format data for stacked area chart
