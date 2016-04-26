@@ -15,19 +15,19 @@ StoryController = function(nextButtonID, backButtonID, exitID) {
     // call views function (closure is needed to ensure sub-functions know what "this" is
     this.views = this.views();
 
-    this.enterStory();
+    this.enterStory(0);
 
 };
 
-StoryController.prototype.enterStory = function() {
+StoryController.prototype.enterStory = function(slideNumber) {
 
     var controller = this;
 
     // reset current view
-    controller.currentView = 0;
+    controller.currentView = slideNumber;
 
     // display first slide
-    controller.views["0"]();
+    controller.views[controller.currentView.toString()]();
 
     // remove any current button listeners to prevent repeated function calls
     controller.nextButton.off();
@@ -42,6 +42,9 @@ StoryController.prototype.enterStory = function() {
     controller.backgroundSelect.attr("disabled", "true");
     controller.dataSelect.attr("disabled", "true");
 
+    // get last true slide to call up when back button is hit after story mode has been exited
+    controller.lastSlide = d3.keys(controller.views).length - 2;
+
 };
 
 
@@ -52,17 +55,42 @@ StoryController.prototype.views = function() {
     return {
 
         '0': function() {
+
+            // set selects (whatever first slide is, needs this line)
             controller.backButton.prop('disabled', true);
             controller.nextButton.prop('disabled', false);
-            $("#information-headline").text("Slide 1 Headline Here");
-            $("#information-subtitle").text("Slide 1 Subtitle Here");
+
+            // set data
+            controller.backgroundSelect.val("ethnicHomogeneity");
+            controller.dataSelect.val("totalViolenceData");
+
+            // set dates
+            controller.changeDates("Sun Feb 01 2004 00:00:00 GMT-0500 (EST)", "Fri Jul 06 2007 22:28:54 GMT-0400 (EDT)");
+
+            // set text
+            $("#information-headline").text("In early 2006, violence rose dramatically");
+            $("#information-subtitle").text("Al Qaeda's bombing of the the Shia al-Askari mosque in Samarra, a Shia holy site, set off violent sectarian conflict.");
         },
 
         '1': function() {
+
+            // set selects (whatever second slide is, needs this line)
             controller.backButton.prop('disabled', false);
-            controller.nextButton.prop('disabled', true);
-            $("#information-headline").text("Slide 2 Headline Here");
-            $("#information-subtitle").text("Slide 2 Subtitle Here");
+
+            // set data
+            controller.backgroundSelect.val("ethnicHomogeneity");
+            controller.dataSelect.val("totalViolenceData");
+
+            // set dates
+            controller.changeDates("Thu May 31 2007 06:19:16 GMT-0400 (EDT)", "Sun Feb 01 2009 00:00:00 GMT-0500 (EST)");
+
+            // set text
+            $("#information-headline").text("In summer of 2007, violence began to fall");
+            $("#information-subtitle").text("The US's \"surge\" strategy, along with the Sunni Awakening was credited with the striking reduction.");
+        },
+
+        '2': function() {
+            controller.exitStory();
         }
 
     }
@@ -81,6 +109,10 @@ StoryController.prototype.advanceView = function(incrementAmount) {
 StoryController.prototype.exitStory = function() {
     var controller = this;
 
+    // set dates to entire extent of data
+    dateRange = timeSelect.x.domain();
+    $(document).trigger("datesChanged");
+
     // remove listeners for forward and back buttons
     controller.nextButton.off();
     controller.backButton.off();
@@ -88,9 +120,24 @@ StoryController.prototype.exitStory = function() {
     controller.backgroundSelect.removeAttr("disabled");
     controller.dataSelect.removeAttr("disabled");
     controller.backButton.prop('disabled', false);
-    controller.nextButton.prop('disabled', false);
+    controller.nextButton.prop('disabled', true);
 
-    // if forward or back buttons are hit, reenter story mode at first slide
-    controller.nextButton.on("click", function() { controller.enterStory() });
-    controller.backButton.on("click", function() { controller.enterStory() });
+    // add text
+    $("#information-headline").text("Explore the data on your own");
+    $("#information-subtitle").text("Use the select boxes to filter by category and the gray timeline to filter by date");
+
+    // if back buttons is hit, reenter story mode at last slide
+    controller.backButton.on("click", function() { controller.enterStory(controller.lastSlide) });
+};
+
+
+// updates brush extent and date object itself (so visuals and dates selected match)
+StoryController.prototype.changeDates = function(dateString1, dateString2) {
+
+    dateRange = [new Date(dateString1), new Date(dateString2)];
+
+    // TODO create a rectangle to show which dates are selected (changing the extent itself doesn't update display)
+
+    $(document).trigger("datesChanged");
+
 };

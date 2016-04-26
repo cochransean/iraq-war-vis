@@ -296,13 +296,12 @@ StackedAreaChart.prototype.updateVis = function () {
 
     vis.categories.exit().remove();
 
-    // if any categories are entering, remove and redraw tooltip elements (needed to prevent overlapping)
-    if (vis.categories.enter().empty() !== true) {
-        vis.focus.remove();
-        vis.addTooltipElements();
-    }
 
     vis.updateUI();
+
+    // always redraw tooltip elements, otherwise they will be behind the timeline lines
+    vis.focus.remove();
+    vis.addTooltipElements();
 
 };
 
@@ -366,13 +365,10 @@ StackedAreaChart.prototype.addTooltipElements = function() {
 StackedAreaChart.prototype.updateUI = function() {
     var vis = this;
 
-    console.log('I am stacked')
-
     // add timeline lines
     // filter events by date
     vis.displayEvents = vis.eventsData.filter(filterByDate);
     vis.displayEvents = vis.displayEvents.filter(filterByImportance);
-    console.log(vis.displayEvents);
 
     // remove any current lines (otherwise they will be behind paths)
     vis.svg.selectAll(".event")

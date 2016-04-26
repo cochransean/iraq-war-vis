@@ -29,7 +29,6 @@ function TimeSelect(_parentElement, _dimensions, _districtViolenceData, _totalVi
             .x(vis.x);
 
         // add brush
-        console.log("adding brush");
         vis.svg.append("g")
             .attr("class", "x brush")
             .call(vis.brush)
@@ -54,7 +53,6 @@ function TimeSelect(_parentElement, _dimensions, _districtViolenceData, _totalVi
         vis.svg.selectAll(".brush")
             .remove();
 
-        console.log("updating brush");
         vis.svg.append("g")
             .attr("class", "x brush")
             .call(vis.brush)
