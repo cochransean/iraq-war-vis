@@ -159,6 +159,9 @@ StoryController.prototype.exitStory = function() {
     var controller = this;
     storyMode = false;
 
+    // hide any tooltips showing
+    areaChart.timelineTooltip.hide();
+
     // change the text on the button to indicate that it reenters story mode and update button functionality too
     controller.exitButton.text("Enter Story Mode");
     controller.exitButton.off();
@@ -187,7 +190,7 @@ StoryController.prototype.exitStory = function() {
         .call(timeSelect.brush)
         .selectAll("rect")
         .attr("y", -6)
-        .attr("height", vis.height + 7);
+        .attr("height", timeSelect.height + 7);
 
 };
 

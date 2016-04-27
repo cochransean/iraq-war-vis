@@ -301,17 +301,23 @@ StackedAreaChart.prototype.updateVis = function (datesChanged) {
     // only transition the areas if the dates have not changed (otherwise it gets confusing and muddled)
     if (!datesChanged) {
         vis.categories
+            .style("opacity", 0.5)
             .transition()
             .duration(1500)
             .attr("d", function (d) {
                 return vis.area(d.values);
-            });
+            })
+            .style("opacity", 1);
     }
     else {
         vis.categories
+            .style("opacity", 0.5)
             .attr("d", function (d) {
                 return vis.area(d.values);
-            });
+            })
+            .transition()
+            .duration(1500)
+            .style("opacity", 1);
     }
 
 
