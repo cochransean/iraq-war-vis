@@ -27,6 +27,9 @@ StackedAreaChart = function (_parentElement, _dimensions, _districtViolenceData,
     this.margin = _dimensions.margin;
     this.selectedColors = _colorScale;
 
+    // set width of alert div here since it needs to be same width as stacked area chart
+    $("#alert-div").css("width", this.width);
+
 };
 
 

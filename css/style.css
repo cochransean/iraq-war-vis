@@ -11,6 +11,15 @@
     height: 500px;
 }
 
+#area-chart {
+    position: relative;
+}
+
+#alert-div {
+    position: absolute;
+    left: 0;
+}
+
 .overlay-text {
     bottom:0;
     left:0;
