@@ -16,8 +16,6 @@ StoryController = function(nextButtonID, backButtonID, exitID) {
     // call views function (closure is needed to ensure sub-functions know what "this" is
     controller.views = controller.views();
 
-    // save interaction elements to enable / disable interactions
-    controller.interactionElements = d3.selectAll(".stacked-category, .brush, .area-background");
 
     // add listeners for buttons
     controller.nextButton.on("click", function() { controller.advanceView(1) });
@@ -38,9 +36,10 @@ StoryController = function(nextButtonID, backButtonID, exitID) {
 StoryController.prototype.enterStory = function(slideNumber) {
 
     var controller = this;
+    storyMode = true;
 
-    // disable user interactions
-    controller.interactionElements.style("pointer-events", "none");
+    // remove brush elements to prevent user date changes
+    timeSelect.svg.selectAll(".brush").remove();
 
     // change the text on the button to indicate that it exits story mode and update functionality
     controller.exitButton.text("Exit Story Mode");
@@ -87,9 +86,19 @@ StoryController.prototype.views = function() {
             // set text
             $("#information-headline").text("In early 2006, violence rose dramatically");
             $("#information-subtitle").text("Al Qaeda's bombing of the the Shia al-Askari mosque in Samarra, a Shia holy site, set off violent sectarian conflict.");
+
+            // show timeline tooltip and change line color using ID to select
+            d3.select("#event12")
+                .attr("class", "event event-highlighted")
+                .each(function(d) { areaChart.timelineTooltip.show(d, this) });
+
         },
 
         '1': function() {
+
+            // cleanup previous slide
+            d3.select("#event12")
+                .attr("class", "event");
 
             // set selects (whatever second slide is, needs this line)
             controller.backButton.prop('disabled', false);
@@ -99,14 +108,25 @@ StoryController.prototype.views = function() {
             controller.dataSelect.val("totalViolenceData");
 
             // set dates
-            controller.changeDates("Thu May 31 2007 06:19:16 GMT-0400 (EDT)", "Sun Feb 01 2009 00:00:00 GMT-0500 (EST)");
+            controller.changeDates("Sun Dec 31 2006 00:28:38 GMT-0500 (EST)", "Sun Feb 01 2009 00:00:00 GMT-0500 (EST)");
 
             // set text
             $("#information-headline").text("In summer of 2007, violence began to fall");
             $("#information-subtitle").text("The US's \"surge\" strategy, along with the Sunni Awakening was credited with the striking reduction.");
+
+            // show timeline tooltip and change line color using ID to select
+            d3.select("#event17")
+                .attr("class", "event event-highlighted")
+                .each(function(d) { areaChart.timelineTooltip.show(d, this) });
+
         },
 
         '2': function() {
+
+            // cleanup previous slide
+            d3.select("#event17")
+                .attr("class", "event");
+
             controller.exitStory();
         }
 
@@ -137,6 +157,7 @@ StoryController.prototype.advanceView = function(incrementAmount) {
 // exits the storytelling mode and gives user all controls
 StoryController.prototype.exitStory = function() {
     var controller = this;
+    storyMode = false;
 
     // change the text on the button to indicate that it reenters story mode and update button functionality too
     controller.exitButton.text("Enter Story Mode");
@@ -146,10 +167,6 @@ StoryController.prototype.exitStory = function() {
     // set dates to entire extent of data
     dateRange = timeSelect.x.domain();
     $(document).trigger("datesChanged");
-
-    // allow user interaction with brush and stacked area chart
-    controller.interactionElements.style("pointer-events", "all");
-
 
     controller.backgroundSelect.removeAttr("disabled");
     controller.dataSelect.removeAttr("disabled");
@@ -163,6 +180,14 @@ StoryController.prototype.exitStory = function() {
     // change width of rectangle to make it go away
     controller.extentRectangle
         .attr("width", 0);
+
+    // add brush elements
+    timeSelect.svg.append("g")
+        .attr("class", "x brush")
+        .call(timeSelect.brush)
+        .selectAll("rect")
+        .attr("y", -6)
+        .attr("height", vis.height + 7);
 
 };
 

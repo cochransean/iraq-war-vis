@@ -151,7 +151,14 @@ svg .area-background {
 svg .event {
     stroke: black;
     stroke-width: 5px;
-    opacity: 0.7;
+    opacity: 0.5;
+    cursor: default;
+}
+
+svg .event-highlighted {
+    stroke: red;
+    stroke-width: 5px;
+    opacity: 1;
     cursor: default;
 }
 

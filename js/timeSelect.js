@@ -5,7 +5,7 @@
  *
  */
 
-TimeSelect.prototype = StackedAreaChart.prototype;
+TimeSelect.prototype = Object.create(StackedAreaChart.prototype);
 TimeSelect.prototype.constructor = TimeSelect;
 
 function TimeSelect(_parentElement, _dimensions, _districtViolenceData, _totalViolenceData,
@@ -28,14 +28,6 @@ function TimeSelect(_parentElement, _dimensions, _districtViolenceData, _totalVi
         vis.brush
             .x(vis.x);
 
-        // add brush
-        vis.svg.append("g")
-            .attr("class", "x brush")
-            .call(vis.brush)
-            .selectAll("rect")
-            .attr("y", -6)
-            .attr("height", vis.height + 7);
-
     };
 
     this.updateUI = function() {
@@ -49,15 +41,19 @@ function TimeSelect(_parentElement, _dimensions, _districtViolenceData, _totalVi
 
         var vis = this;
 
-        // Remove then append brush component (to prevent overlap)
-        vis.svg.selectAll(".brush")
-            .remove();
+        // only append brush elements if not in story mode
+        if (!storyMode) {
 
-        vis.svg.append("g")
-            .attr("class", "x brush")
-            .call(vis.brush)
-            .selectAll("rect")
-            .attr("y", -6)
-            .attr("height", vis.height + 7);
+            // Remove then append brush component (to prevent overlap)
+            vis.svg.selectAll(".brush")
+                .remove();
+
+            vis.svg.append("g")
+                .attr("class", "x brush")
+                .call(vis.brush)
+                .selectAll("rect")
+                .attr("y", -6)
+                .attr("height", vis.height + 7);
+        }
     }
 }

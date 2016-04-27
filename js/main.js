@@ -14,7 +14,7 @@ var eventsData;
 
 // globals for linking of map and stacked area chart
 var dateRange;
-
+var storyMode;
 
 // Variables for the visualization instances
 var iraqMap, areaChart, timeSelect;
@@ -85,6 +85,9 @@ function loadData() {
 
 function createVis() {
 
+    // DOM element with data for circles and area chart
+    var circleData = $("#circle-data");
+
     // Area chart with different dimensions from corresponding timeline select
     var areaChartDimensions = {
         "width": null,
@@ -94,8 +97,9 @@ function createVis() {
     areaChart = new StackedAreaChart("area-chart", areaChartDimensions, districtViolenceData, totalViolenceData,
         troopNumbersData, usCasualtiesMonthData, civilianCasualtiesMonthly, eventsData, "Set1");
     areaChart.initVis();
-    $(document).on("datesChanged", function() { areaChart.wrangleData() });
-    $("#circle-data").change(function() { areaChart.wrangleData() });
+    var datesChanged = true;
+    $(document).on("datesChanged", function() { areaChart.wrangleData(datesChanged) });
+    circleData.change(function() { areaChart.wrangleData() });
 
     // Timeline select: smaller version of area chart with brush functionality added
     var timeSelectDimensions = {
@@ -106,13 +110,14 @@ function createVis() {
     timeSelect = new TimeSelect("area-chart", timeSelectDimensions, districtViolenceData, totalViolenceData,
         troopNumbersData, usCasualtiesMonthData, civilianCasualtiesMonthly, eventsData, "Greys");
     timeSelect.initVis();
-    $("#circle-data").change(function() { timeSelect.wrangleData() });
+    $(document).on("datesChanged", function() { timeSelect.wrangleData(datesChanged) });
+    circleData.change(function() { timeSelect.wrangleData() });
 
     // Create map after timeline because timeline generates dates needed for map data selection
     iraqMap = new IraqMap("iraq-map", iraqMapDistricts, iraqMapExteriorBorders, iraqMapPlaces, districtViolenceData,
         DistrictData, civilianCasualtiesData);
     $("#district-level-data").change(function() { iraqMap.updateChoropleth() });
-    $("#circle-data").change(function() { iraqMap.wrangleData() });
+    circleData.change(function() { iraqMap.wrangleData() });
     $(document).on("datesChanged", function() { iraqMap.wrangleData() });
     $(document).on("dateRangeChanged", function() { iraqMap.wrangleData() });
 

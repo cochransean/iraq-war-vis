@@ -27,6 +27,25 @@ StackedAreaChart = function (_parentElement, _dimensions, _districtViolenceData,
     this.margin = _dimensions.margin;
     this.selectedColors = _colorScale;
 
+    // map subcategories to categories to allow for subselections
+    this.subcategoryToCategory = {
+        totalViolenceData: "totalViolenceData",
+        ied_total: "totalViolenceData",
+        idf: "totalViolenceData",
+        suicide: "totalViolenceData",
+        df: "totalViolenceData",
+        troopsBySource: "troopsBySource",
+        usTroops: "troopsBySource",
+        intTroops: "troopsBySource",
+        usCasualtiesByMonth: "usCasualtiesByMonth",
+        fatalities: "usCasualtiesByMonth",
+        wounded: "usCasualtiesByMonth",
+        civCasualtiesMonthly: "civCasualtiesMonthly",
+        "min-civilian": "civCasualtiesMonthly",
+        "max-civilian":  "civCasualtiesMonthly"
+
+    };
+
     // set width of alert div here since it needs to be same width as stacked area chart
     $("#alert-div").css("width", this.width);
 
@@ -146,47 +165,18 @@ StackedAreaChart.prototype.initVis = function () {
 /*
  * Data wrangling
  */
-StackedAreaChart.prototype.wrangleData = function () {
+StackedAreaChart.prototype.wrangleData = function (datesChanged) {
     var vis = this;
 
     // track old option to see if a new data type has been selected, requiring reseting of dates
     var oldOption = vis.selectedOption;
 
-    // map subcategories to categories to allow for subselections
-    var subcategoryToCategory = {
-        totalViolenceData: "totalViolenceData",
-        ied_total: "totalViolenceData",
-        idf: "totalViolenceData",
-        suicide: "totalViolenceData",
-        df: "totalViolenceData",
-        troopsBySource: "troopsBySource",
-        usTroops: "troopsBySource",
-        intTroops: "troopsBySource",
-        usCasualtiesByMonth: "usCasualtiesByMonth",
-        fatalities: "usCasualtiesByMonth",
-        wounded: "usCasualtiesByMonth",
-        civCasualtiesMonthly: "civCasualtiesMonthly",
-        "min-civilian": "civCasualtiesMonthly",
-        "max-civilian":  "civCasualtiesMonthly"
-
-    };
-
     // update data selection based on user input
     vis.selectedOption = $("#circle-data").val();
-    vis.displayData = vis[subcategoryToCategory[vis.selectedOption]];
+    vis.displayData = vis[vis.subcategoryToCategory[vis.selectedOption]];
 
-    // if new data selection, update date range
-    if (oldOption !== vis.selectedOption) {
-        dateRange = d3.extent(vis.displayData, function (d) {
-            return d.date
-        });
-
-        // announce change with event handler
-        $(document).trigger("dateRangeChanged");
-    }
-
-    // if same as old data selection, filter by date
-    else {
+    // if not a timeline, update based on date range
+    if (!(vis instanceof TimeSelect)) {
         vis.displayData = vis.displayData.filter(filterByDate);
     }
 
@@ -247,7 +237,7 @@ StackedAreaChart.prototype.wrangleData = function () {
     vis.displayData = stack(vis.displayData);
 
     // Update the visualization
-    vis.updateVis();
+    vis.updateVis(datesChanged);
 
 };
 
@@ -256,7 +246,7 @@ StackedAreaChart.prototype.wrangleData = function () {
  * The drawing function - should use the D3 update sequence (enter, update, exit)
  * Function parameters only needed if different kinds of updates are needed
  */
-StackedAreaChart.prototype.updateVis = function () {
+StackedAreaChart.prototype.updateVis = function (datesChanged) {
     var vis = this;
 
     // update the axes
@@ -267,7 +257,16 @@ StackedAreaChart.prototype.updateVis = function () {
         });
     })
     ]);
-    vis.x.domain(dateRange);
+
+    // update based on if full area chart of time select, otherwise leave at full extent of data
+    if (!(vis instanceof TimeSelect)) {
+        vis.x.domain(dateRange);
+    }
+    else {
+        vis.x.domain(d3.extent(vis[vis.subcategoryToCategory[vis.selectedOption]], function (d) {
+            return d.date
+        }));
+    }
 
     // update color scale
     var categoryNames = vis.displayData.map(function (d) {
@@ -279,23 +278,42 @@ StackedAreaChart.prototype.updateVis = function () {
         .range(colorbrewer[vis.selectedColors][numberColors]);
 
     // Call axis functions with the new domain
-    vis.xAxisGroup.call(vis.xAxis);
-    vis.yAxisGroup.call(vis.yAxis);
+    vis.xAxisGroup
+        .transition()
+        .duration(1500)
+        .call(vis.xAxis);
+    vis.yAxisGroup
+        .transition()
+        .duration(1500)
+        .call(vis.yAxis);
 
     // Draw the layers
     vis.categories = vis.svg.selectAll(".area")
-        .data(vis.displayData);
+        .data(vis.displayData, function(d) { return d.name });
 
     vis.newPaths = vis.categories.enter().append("path")
-        .attr("class", "area stacked-category");
-
-    vis.categories
         .style("fill", function (d) {
             return vis.colorScale(d.name);
         })
-        .attr("d", function (d) {
-            return vis.area(d.values);
-        });
+        .attr("class", "area stacked-category");
+
+
+    // only transition the areas if the dates have not changed (otherwise it gets confusing and muddled)
+    if (!datesChanged) {
+        vis.categories
+            .transition()
+            .duration(1500)
+            .attr("d", function (d) {
+                return vis.area(d.values);
+            });
+    }
+    else {
+        vis.categories
+            .attr("d", function (d) {
+                return vis.area(d.values);
+            });
+    }
+
 
     vis.categories.exit().remove();
 
@@ -384,9 +402,10 @@ StackedAreaChart.prototype.updateUI = function() {
         .attr("x2", function(d) {return vis.x(d.date)})
         .attr("y1", 0)
         .attr("y2", vis.height)
+        .attr("id", function(d) { return d.id })
         .attr("class", "event")
-        .on("mouseover", vis.timelineTooltip.show)
-        .on("mouseout", vis.timelineTooltip.hide);
+        .on("mouseover", function(d) { vis.timelineTooltip.show(d, this) })
+        .on("mouseout", function(d) { vis.timelineTooltip.hide(d, this) });
 
     // formatter for time
     var monthYear = d3.time.format("%B %Y");
@@ -415,7 +434,9 @@ StackedAreaChart.prototype.updateUI = function() {
 
             // trigger change since it won't trigger with .val along
             select.trigger("change");
-        })
+        });
+
+    vis.newPaths
         .on("mouseover", function (d) {
             vis.tooltipTitle.text(convertAbbreviation(d.name));
             vis.focus.style("display", null);

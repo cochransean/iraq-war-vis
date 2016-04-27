@@ -330,11 +330,16 @@ function prepEvents(array) {
     // create d3 date format
     var dateFormat = d3.time.format("%d-%b-%y");
 
+    // track number for unique ID
+    var i = 0;
+
     var preppedData = array.map(function(value) {
+        i++;
         return {
             date: dateFormat.parse(value.Date),
             event: value.Event,
-            importance: value.Importance
+            importance: value.Importance,
+            id: "event" + i
         }
     });
 
