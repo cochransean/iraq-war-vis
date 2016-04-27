@@ -9,7 +9,7 @@
 function brushend() {
 
     // globally update dates
-    dateRange = timeSelect.brush.extent();
+    dateRange = niceExtent(timeSelect.brush.extent());
 
     // if brush has been deselected, select all
     if (timeSelect.brush.empty()) {
@@ -19,7 +19,12 @@ function brushend() {
     // announce change with event handler
     $(document).trigger("datesChanged");
 
-
+    function niceExtent(dateArray) {
+        var nicedDates = [];
+        nicedDates.push(niceDate(dateArray[0]));
+        nicedDates.push(niceDate(dateArray[1]));
+        return nicedDates
+    }
 
 }
 
@@ -345,4 +350,27 @@ function prepEvents(array) {
 
     return preppedData;
 
+}
+
+// takes a date and makes it match the closest true value found in the timeselect's data
+function niceDate(date) {
+
+    // bisector to get valid dates from mouse position
+    var bisectDate = d3.bisector(function(d) { return d.date; }).left;
+
+    // get the surrounding dates
+    var indexNextHigherDate = bisectDate(timeSelect.displayData[0].values, date),
+        d0 = timeSelect.displayData[0].values[indexNextHigherDate - 1].date,
+        d1 = timeSelect.displayData[0].values[indexNextHigherDate].date;
+
+    // determine which potential date is closer to mouse position
+    if (date - d0 > d1 - date) {
+        var closestDate = d1;
+    }
+
+    else {
+        closestDate = d0;
+    }
+
+    return closestDate
 }
