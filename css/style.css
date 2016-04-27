@@ -15,6 +15,14 @@
     position: relative;
 }
 
+#area-chart-div {
+    padding: 10px;
+}
+
+#information {
+    height: 75px;
+}
+
 #alert-div {
     position: absolute;
     left: 0;
