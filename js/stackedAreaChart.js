@@ -182,6 +182,16 @@ StackedAreaChart.prototype.wrangleData = function (datesChanged) {
     vis.selectedOption = $("#circle-data").val();
     vis.displayData = vis[vis.subcategoryToCategory[vis.selectedOption]];
 
+    // if new data selection, update date range
+    if (oldOption !== vis.selectedOption) {
+        dateRange = d3.extent(vis.displayData, function (d) {
+            return d.date
+        });
+
+        // announce change with event handler
+        $(document).trigger("dateRangeChanged");
+    }
+
     // if not a timeline, update based on date range
     if (!(vis instanceof TimeSelect)) {
         vis.displayData = vis.displayData.filter(filterByDate);
