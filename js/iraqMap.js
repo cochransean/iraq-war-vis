@@ -52,8 +52,8 @@ IraqMap.prototype.initVis = function() {
         .projection(projection);
 
     // setup linear scale for proportionate symbol circle radii; update domain later because it will change on selection
-    vis.MAX_CIRCLE_RADIUS = 30;
-    vis.MIN_CIRCLE_RADIUS = 2;
+    vis.MAX_CIRCLE_RADIUS = vis.width * 0.0449101796;
+    vis.MIN_CIRCLE_RADIUS = vis.width * 0.00299401198;
     vis.circleScale = d3.scale.linear()
         .range([0, vis.MAX_CIRCLE_RADIUS]);
 
@@ -131,7 +131,7 @@ IraqMap.prototype.initVis = function() {
 
         // track radius to get appropriate positioning
         var radius = vis.MAX_CIRCLE_RADIUS - i * DIFFERENCE_BETWEEN_CIRCLE_RADIUS;
-        const CIRCLE_PADDING = 10;
+        const CIRCLE_PADDING = 0.01497005988 * vis.width;
         spaceFromTop += radius * 2 + CIRCLE_PADDING;
 
         vis.circleLegend.append("circle")
@@ -256,11 +256,12 @@ IraqMap.prototype.updateCircles = function() {
 
     circleLegendText.enter()
         .append("text")
-        .attr("x", 35)
+        .attr("x", function() { return vis.width * 0.0523952096 })
         .attr("y", function(d) {
             return d.spaceFromTop + 5;
         })
-        .attr("class", "circle-legend-text");
+        .attr("class", "circle-legend-text")
+        .attr("font-size", function() { return Math.round(0.0209580838 * vis.width) } );
 
     // update text as required
     circleLegendText
