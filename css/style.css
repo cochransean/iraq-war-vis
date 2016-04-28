@@ -8,6 +8,20 @@
     background-color: #060000;
 }
 
+.section {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.top-sub-title {
+    margin-top: 8px;
+    font-weight: 500;
+}
+
+#background li {
+    font-size: 16px;
+}
+
 #header-image {
     height: 500px;
 }
@@ -36,24 +50,16 @@
     right: 50px;
     bottom: 50px;
     color: #f7f7f7;
+    text-align: center;
 }
 
 body {
     font-family: 'Roboto', sans-serif;
     background-color: #f7f7f7;
-    text-align: center;
 }
 
 svg text {
     font-family: 'Roboto', sans-serif;
-}
-
-h1 {
-    margin-top: 50px;
-}
-
-h2 {
-    margin-bottom: 40px;
 }
 
 .container-fluid {
@@ -292,21 +298,12 @@ svg .circle-legend-text {
     margin: 0;
 }
 
-#homefront {
-    margin-top: 45px;
-    margin-bottom: 20px;
-}
-
 #cartogram {
     height: 500px;
 }
 
 #cartogram-controls {
     margin-top: 10px;
-}
-
-#cartogram-ul {
-    text-align: left;
 }
 
 path.state {

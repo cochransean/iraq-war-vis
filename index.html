@@ -26,111 +26,156 @@
         </div>
     </div>
 
+    <div class="container">
+
+        <!-- Background -->
+        <div id="background" class="row">
+            <div class="col-sm-4">
+                <h3 class="top-sub-title">Key Facts</h3>
+                <ul>
+                    <li>
+                        <strong>RISK: </strong>About <strong>3.2 billion</strong> people – almost half of the world’s
+                        population – are at risk of malaria.
+                    </li>
+                    <li><strong>CASES: 214 million</strong> malaria cases reported worldwide in 2015.</li>
+                    <li><strong>INCIDENCE: 37%</strong> global decrease in malaria incidence between 2000 and 2015.</li>
+                    <li><strong>MORTALITY: 60%</strong> decrease in global malaria mortality rates between 2000 and 2015.</li>
+                </ul>
+            </div>
+            <div class="col-sm-8">
+                <h3 class="top-sub-title sub-title">
+                    Malaria is a life-threatening disease caused by parasites that are transmitted to people through
+                    the bites of infected female mosquitoes.
+                </h3>
+                <p class="lead">
+                    Malaria is caused by the <em>Plasmodium</em> parasite and is transmitted by female <em> Anopheles
+                </em> mosquitoes which bite between dusk and dawn. People infected with malaria often experience fever,
+                    chills and flu-like illness at first. Left untreated, the disease can lead to severe complications
+                    and, in some cases, death.
+                </p>
+                <p class="lead">
+                    Young children, pregnant women and non-immune travellers from malaria-free areas are particularly
+                    vulnerable to the disease when they become infected.
+                </p>
+            </div>
+        </div>
+    </div>
+
     <div class="container-fluid">
 
         <!-- Visualizations -->
-        <div class="row">
-            <div class="col-md-6">
-                <div id="iraq-map"></div>
+        <div class="section">
+            <div class="text-center row">
+                <h2 class="sub-heading">The War's Effects in Iraq</h2>
             </div>
-            <div class="col-md-6">
-                <div id="area-chart-div">
-                    <div id="information">
-                        <h3 id="information-headline">Explore the data on your own</h3>
-                        <h4 id="information-subtitle">Use the select boxes to filter by category and the gray timeline to filter by date.</h4>
-                    </div>
-                    <div id="area-chart">
-                        <div id="area-chart-tooltip" class="hidden d3-tip-timeline">
-                            <p id="area-chart-tooltip-title">Title</p>
-                            <p id="area-chart-tooltip-p">Para</p>
-                            <p id="area-chart-tooltip-date">Date</p>
+            <div class="row">
+                <div class="col-md-6">
+                    <div id="iraq-map"></div>
+                </div>
+                <div class="col-md-6">
+                    <div id="area-chart-div">
+                        <div id="information" class="text-center">
+                            <h3 id="information-headline" class="top-sub-title">Explore the data on your own</h3>
+                            <h4 id="information-subtitle" class="lead">Use the select boxes to filter by category and the gray timeline to filter by date.</h4>
                         </div>
-                        <div id="alert-div"></div>
-                    </div>
-                    <div id="controls" class="row">
-                        <div class="row">
-                            <div id="map-control" class="col-xs-12">
-                                <form>
-                                    <div class="form-horizontal">
-                                        <div class="form-group">
-                                            <label for="district-level-data" class="col-xs-4 control-label">Map Background</label>
-                                            <div class="col-xs-8">
-                                                <select id="district-level-data" class="form-control">
-                                                    <option value="ethnicHomogeneity">Ethnic heterogeneity</option>
-                                                    <option value="Composition">Ethnic composition</option>
-                                                    <option value="Shia">Shia population in percentage per district</option>
-                                                    <option value="Sunni">Sunni population in percentage per district</option>
-                                                    <option value="Kurdish">Kurdish population in percentage per district</option>
-                                                    <option value="OilGas">Gas and oil reserves in billions of barrel</option>
-                                                    <option value="Unemployment">Unemployment rate (2006)</option>
-                                                </select>
+                        <div id="area-chart">
+                            <div id="area-chart-tooltip" class="hidden d3-tip-timeline">
+                                <p id="area-chart-tooltip-title">Title</p>
+                                <p id="area-chart-tooltip-p">Para</p>
+                                <p id="area-chart-tooltip-date">Date</p>
+                            </div>
+                            <div id="alert-div"></div>
+                        </div>
+                        <div id="controls" class="row">
+                            <div class="row">
+                                <div id="map-control" class="col-xs-12">
+                                    <form>
+                                        <div class="form-horizontal">
+                                            <div class="form-group">
+                                                <label for="district-level-data" class="col-xs-4 control-label">Map Background</label>
+                                                <div class="col-xs-8">
+                                                    <select id="district-level-data" class="form-control">
+                                                        <option value="ethnicHomogeneity">Ethnic heterogeneity</option>
+                                                        <option value="Composition">Ethnic composition</option>
+                                                        <option value="Shia">Shia population in percentage per district</option>
+                                                        <option value="Sunni">Sunni population in percentage per district</option>
+                                                        <option value="Kurdish">Kurdish population in percentage per district</option>
+                                                        <option value="OilGas">Gas and oil reserves in billions of barrel</option>
+                                                        <option value="Unemployment">Unemployment rate (2006)</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="circle-data" class="col-xs-4 control-label">Map Circles and Chart</label>
+                                                <div class="col-xs-8">
+                                                    <select id="circle-data" class="form-control col-xs-10">
+                                                        <option class="chart-option level1" value="totalViolenceData">All Monthly Violence Incidents</option>
+                                                            <option class="chart-option level2" value="ied_total">Monthly IEDs</option>
+                                                            <option class="chart-option level2" value="idf">Monthly Indirect Fire Incidents</option>
+                                                            <option class="chart-option level2" value="df">Monthly Direct Fire Incidents</option>
+                                                            <option class="chart-option level2" value="suicide">Monthly Suicide Bombings</option>
+                                                        <option class="chart-option level1"  value="troopsBySource">Monthly Number of Troops</option>
+                                                            <option class="chart-option level2" value="usTroops">Monthly US Troop Numbers</option>
+                                                            <option class="chart-option level2" value="intTroops">Monthly International Troop Numbers</option>
+                                                        <option class="chart-option level1"  value="civCasualtiesMonthly">Monthly Civilians Killed</option>
+                                                            <option class="chart-option level2" value="min-civilian">Minimum Monthly Estimate of Civilians Killed</option>
+                                                            <option class="chart-option level2" value="max-civilian">Maximum Monthly Estimate of Civilians Killed</option>
+                                                        <option class="chart-option level1"  value="usCasualtiesByMonth">US Casualties by Month</option>
+                                                            <option class="chart-option level2" value="fatalities">US Fatalities By Month</option>
+                                                            <option class="chart-option level2" value="wounded">US Wounded By Month</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="circle-data" class="col-xs-4 control-label">Map Circles and Chart</label>
-                                            <div class="col-xs-8">
-                                                <select id="circle-data" class="form-control col-xs-10">
-                                                    <option class="chart-option level1" value="totalViolenceData">All Monthly Violence Incidents</option>
-                                                        <option class="chart-option level2" value="ied_total">Monthly IEDs</option>
-                                                        <option class="chart-option level2" value="idf">Monthly Indirect Fire Incidents</option>
-                                                        <option class="chart-option level2" value="df">Monthly Direct Fire Incidents</option>
-                                                        <option class="chart-option level2" value="suicide">Monthly Suicide Bombings</option>
-                                                    <option class="chart-option level1"  value="troopsBySource">Monthly Number of Troops</option>
-                                                        <option class="chart-option level2" value="usTroops">Monthly US Troop Numbers</option>
-                                                        <option class="chart-option level2" value="intTroops">Monthly International Troop Numbers</option>
-                                                    <option class="chart-option level1"  value="civCasualtiesMonthly">Monthly Civilians Killed</option>
-                                                        <option class="chart-option level2" value="min-civilian">Minimum Monthly Estimate of Civilians Killed</option>
-                                                        <option class="chart-option level2" value="max-civilian">Maximum Monthly Estimate of Civilians Killed</option>
-                                                    <option class="chart-option level1"  value="usCasualtiesByMonth">US Casualties by Month</option>
-                                                        <option class="chart-option level2" value="fatalities">US Fatalities By Month</option>
-                                                        <option class="chart-option level2" value="wounded">US Wounded By Month</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="btn-group" role="group" aria-label="Next and Previous Story Controls">
-                                <button type="button" id="story-back" class="btn btn-primary" aria-label="Go Back">
-                                    <span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
-                                </button>
-                                <button type="button" id="story-forward" class="btn btn-primary" aria-label="Go Forward">
-                                    <span class="glyphicon glyphicon-forward" aria-hidden="true"></span>
-                                </button>
+                            <div class="row text-center">
+                                <div class="btn-group" role="group" aria-label="Next and Previous Story Controls">
+                                    <button type="button" id="story-back" class="btn btn-primary" aria-label="Go Back">
+                                        <span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
+                                    </button>
+                                    <button type="button" id="story-forward" class="btn btn-primary" aria-label="Go Forward">
+                                        <span class="glyphicon glyphicon-forward" aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                                <button type="button" id="exit-story" class="btn btn-warning">Exit Story Mode</button>
                             </div>
-                            <button type="button" id="exit-story" class="btn btn-warning">Exit Story Mode</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- attempt to implement cartogram -->
-    <h2 id="homefront">Adjusted for population, the midwest bore a disproportionate share of US casualties</h2>
-    <div class="row">
-        <div class="col-md-8" id="cartogram">
-            <svg id="map"></svg>
-        </div>
-        <div class="col-md-4" id="cartogram-ul">
-            <h3>The toll on the United States home front</h3>
-            <ul>
-                <li>We will insert storytelling here about the effects at home</li>
-                <li>We will discuss the small percentage of the American populace (<1%) that has served</li>
-                <li>We will highlight often repeated deployments, contrasting with other wars like Vietnam where most servicemembers served one year.</li>
-            </ul>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-8" id="cartogram-controls">
-            <label for="cartogram-data" class="col-xs-4 control-label">Map Data</label>
-            <div class="col-xs-8">
-                <select id="cartogram-data" class="form-control">
-                    <option value="normedCasualties">Casualties Per 100,000 Residents</option>
-                    <option value="rawCasualties">Total Number of Casualties</option>
-                </select>
+        <!-- Cartogram -->
+        <div class="section">
+            <div class="text-center row">
+                <h2>The War's Effects on the US Homefront</h2>
+                <h3>Adjusted for population, the midwest and Vermont bore a disproportionate share of the casualties</h3>
+            </div>
+            <div class="row">
+                <div class="col-md-8" id="cartogram">
+                    <svg id="map"></svg>
+                </div>
+                <div class="col-md-4" id="cartogram-ul">
+                    <h3>The toll on the United States home front</h3>
+                    <ul>
+                        <li>We will insert storytelling here about the effects at home</li>
+                        <li>We will discuss the small percentage of the American populace (<1%) that has served</li>
+                        <li>We will highlight often repeated deployments, contrasting with other wars like Vietnam where most servicemembers served one year.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8" id="cartogram-controls">
+                    <label for="cartogram-data" class="col-xs-4 control-label">Map Data</label>
+                    <div class="col-xs-8">
+                        <select id="cartogram-data" class="form-control">
+                            <option value="normedCasualties">Casualties Per 100,000 Residents</option>
+                            <option value="rawCasualties">Total Number of Casualties</option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
