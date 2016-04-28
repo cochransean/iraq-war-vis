@@ -174,8 +174,8 @@ svg .event {
 }
 
 svg .event-highlighted {
-    stroke: #d73027;
-    stroke-width: 5px;
+    stroke: red;
+    stroke-width: 8px;
     opacity: 1;
     cursor: default;
 }

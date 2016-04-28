@@ -202,6 +202,8 @@ StoryController.prototype.changeDates = function(dateString1, dateString2) {
 
     // update extent rectangle to match display
     controller.extentRectangle
+        .transition()
+        .duration(1500)
         .attr("x", function() { return timeSelect.x(dateRange[0])})
         .attr("y", -6)
         .attr("height", function() { return timeSelect.height + 7 })
