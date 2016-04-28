@@ -5,6 +5,7 @@
     -webkit-font-smoothing: antialiased;
     text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
     font-weight: bolder;
+    background-color: #060000;
 }
 
 #header-image {
@@ -29,13 +30,11 @@
 }
 
 .overlay-text {
-    bottom:0;
-    left:0;
-    margin-bottom: 20px;
-    margin-left: 25px;
+    margin: auto;
     position: absolute;
-    background-color: hsla(14, 73%, 35%, 0.9);
-    padding: 5px;
+    left: 50px;
+    right: 50px;
+    bottom: 50px;
     color: #f7f7f7;
 }
 
