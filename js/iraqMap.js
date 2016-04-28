@@ -333,13 +333,14 @@ IraqMap.prototype.updateChoropleth = function() {
             return vis.colorScale(value);
         });
 
-    const COLOR_SWATCH_WIDTH = 25;
-    const COLOR_SWATCH_HORIZONTAL_PADDING = 5;
+    const COLOR_SWATCH_WIDTH = vis.width * 0.0374251497;
+    const COLOR_SWATCH_HORIZONTAL_PADDING = vis.width * 0.00748502994;
 
     // dynamically position based on size of div and number of colors
     vis.colorLegend
-        .attr("transform", "translate(" + (0.0524737631 * vis.width) + "," + ( vis.height -
-            vis.colorScale.range().length * COLOR_SWATCH_WIDTH ) + ")");
+        .attr("transform", "translate(" + (0.0424737631 * vis.width) + "," + ( vis.height * 0.82 ) + ")");
+
+    console.log(vis.colorScale.range().length);
 
     // update color scale by binding data from new color scale
     var colorSwatches = vis.colorLegend.selectAll(".color-swatch")
@@ -364,14 +365,17 @@ IraqMap.prototype.updateChoropleth = function() {
     swatchText.enter()
         .append("text")
         .attr("x", COLOR_SWATCH_WIDTH + COLOR_SWATCH_HORIZONTAL_PADDING)
-        .attr("y", function(d, i) {
-            const SWATCH_VERT_PADDING = 5;
-            return (COLOR_SWATCH_WIDTH * i + SWATCH_VERT_PADDING) + 16
-        })
-        .attr("class", "swatch-text");
+        .attr("class", "swatch-text")
+        .attr("font-size", function() { return Math.round(0.0209580838 * vis.width) } );
 
+    // adjust y-attribute here since text element needs actual text for BBox to work
     swatchText
-        .text(function(d, i) { return updateSwatchText(d, i) });
+        .text(function(d, i) { return updateSwatchText(d, i) })
+        .attr("y", function(d, i) {
+            const TEXT_HEIGHT = this.getBBox().height;
+            console.log(TEXT_HEIGHT);
+            return COLOR_SWATCH_WIDTH * i + COLOR_SWATCH_WIDTH / 2 + TEXT_HEIGHT / 2
+        });
 
     function updateSwatchText(d, i) {
 
