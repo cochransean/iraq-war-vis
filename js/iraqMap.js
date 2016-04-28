@@ -28,7 +28,7 @@ IraqMap.prototype.initVis = function() {
     var vis = this;
 
     // size map based on width of its div (to take up all available space and allow for easier styling)
-    vis.margin = {top: 20, right: 20, bottom: 40, left: 20};
+    vis.margin = {top: 20, right: 20, bottom: 45, left: 20};
     vis.width = $("#" + vis.parentElement).width() - vis.margin.left - vis.margin.right;
 
     // make map entire height of stacked area chart + controls to use up all space
@@ -339,7 +339,7 @@ IraqMap.prototype.updateChoropleth = function() {
 
     // dynamically position based on size of div and number of colors
     vis.colorLegend
-        .attr("transform", "translate(" + (0.0424737631 * vis.width) + "," + ( vis.height * 0.82 ) + ")");
+        .attr("transform", "translate(" + (0.0424737631 * vis.width) + "," + ( vis.height * 0.84 ) + ")");
 
     console.log(vis.colorScale.range().length);
 

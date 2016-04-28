@@ -6,9 +6,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Visualizing the Iraq War</title>
 
-	<!-- Load Google Font -->
-	<link href='https://fonts.googleapis.com/css?family=Roboto:100,400,300,400italic,700' rel='stylesheet' type='text/css'>
-
 	<!-- CSS libraries -->
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/font-awesome.min.css">
@@ -18,7 +15,8 @@
 </head>
 <body>
 
-    <div class="container-fluid" id="pageTitle">
+    <div class="container-fluid">
+        <div id="pageTitle">
         <img src="img/blackhawks-sunset.jpg" id="header-image" class="center-block img-responsive">
         <div class="overlay-text">
             <h1>The Long War</h1>
@@ -63,10 +61,10 @@
 
     <div class="container-fluid">
 
-        <!-- Visualizations -->
+        <!-- Stacked area chart -->
         <div class="section">
             <div class="text-center row">
-                <h2 class="sub-heading">The War's Effects in Iraq</h2>
+                <h2 class="sub-heading">The War in Iraq</h2>
             </div>
             <div class="row">
                 <div class="col-md-6">
@@ -146,35 +144,72 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Additional Info / Pictures -->
+    <div class="container">
+        <div class="section">
+            <div class="text-center row">
+                <h2 class="sub-heading">Maybe Discuss ISIS or Recent Developments Here</h2>
+                <h3 class="sub-title">
+                    “Eradication is the only sustainable solution to malaria.” Bill Gates
+                </h3>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <!-- Center text next to adjacent picture on larger screens; hide space on smart phones. -->
+                    <div class="hidden-xs" id="spacing-div"></div>
+                    <h4>Towards Elimination</h4>
+                    <p>
+                        An increasing number of countries are moving towards elimination of malaria. Whereas only 13
+                        countries were estimated to have fewer than 1000 malaria cases in 2000, 33 countries are
+                        estimated to have achieved this milestone in 2015.
+                    </p>
+                    <br>
+                    <h4>Financing of Malaria Control Programs</h4>
+                    <p>
+                        Global financing for malaria control increased from an estimated US$ 960 million in 2005 to US
+                        $2.5 billion in 2014.
+                    </p>
+                </div>
+                <div class="col-sm-8">
+                    <img src="img/RAKKASAN_unit_watches_as_a_medievac_Helo_lands_2007-2008.jpg" class="center-block img-responsive section-pic">
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
 
         <!-- Cartogram -->
         <div class="section">
             <div class="text-center row">
-                <h2>The War's Effects on the US Homefront</h2>
+                <h2>The War on the US Homefront</h2>
                 <h3>Adjusted for population, the midwest and Vermont bore a disproportionate share of the casualties</h3>
             </div>
             <div class="row">
-                <div class="col-md-8" id="cartogram">
-                    <svg id="map"></svg>
+                <div class="col-md-7" id="cartogram">
+                    <svg id="us-map"></svg>
+                    <div class="form-group">
+                        <label for="cartogram-data" class="text-right col-xs-2 control-label">Map Data</label>
+                        <div class="col-xs-10">
+                            <select id="cartogram-data" class="form-control">
+                                <option value="normedCasualties">Casualties Per 100,000 Residents</option>
+                                <option value="rawCasualties">Total Number of Casualties</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-4" id="cartogram-ul">
+                <div class="col-md-5" id="cartogram-ul">
+                    <img src="img/arlington-cemetery.jpg" id="net-pic" class="center-block img-responsive section-pic">
                     <h3>The toll on the United States home front</h3>
                     <ul>
-                        <li>We will insert storytelling here about the effects at home</li>
+                        <li>Discuss total casualties</li>
                         <li>We will discuss the small percentage of the American populace (<1%) that has served</li>
                         <li>We will highlight often repeated deployments, contrasting with other wars like Vietnam where most servicemembers served one year.</li>
+                        <li>Discuss the recent deaths of several US servicemembers, something that had not occurred since ~2011</li>
                     </ul>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-8" id="cartogram-controls">
-                    <label for="cartogram-data" class="col-xs-4 control-label">Map Data</label>
-                    <div class="col-xs-8">
-                        <select id="cartogram-data" class="form-control">
-                            <option value="normedCasualties">Casualties Per 100,000 Residents</option>
-                            <option value="rawCasualties">Total Number of Casualties</option>
-                        </select>
-                    </div>
                 </div>
             </div>
         </div>

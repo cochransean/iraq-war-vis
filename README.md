@@ -29,3 +29,9 @@ Aggregated US Troop Casualties and Coalition Troop Numbers
     The aggregated fatality data linked above was updated based on current reports (though 22 April 2016).
     More recent troop numbers
     http://www.military.com/daily-news/2016/02/03/number-us-troops-iraq-more-than-4000-exceeds-previous-claims.html
+    
+# Photo Credits
+Arlington Cemetery Picture - National Geographic
+    http://news.nationalgeographic.com/news/2014/10/141021-arlington-national-cemetery-iraq-afghanistan-war-ngbooktalk/
+    
+All other photos from https://commons.wikimedia.org/wiki/Main_Page or labeled for reuse

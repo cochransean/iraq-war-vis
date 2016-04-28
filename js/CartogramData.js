@@ -15,17 +15,21 @@
 // This code is based on the script in index.html from this repository: https://github.com/shawnbot/topogram
 
 // create group for US states paths
-var states = d3.select("#map")
+var states = d3.select("#us-map")
     .append("g")
     .attr("id", "states")
     .selectAll("path");
 
+var statesJquery = $("#us-map");
+
 // set up projection and cartogram
-var projection = d3.geo.albersUsa();
+var mapDivWidth = statesJquery.width();
+var projection = d3.geo.albersUsa()
+    .scale(1.22887865 * mapDivWidth)
+    .translate([mapDivWidth / 2.2, statesJquery.height() / 2]);
 var cartogram = d3.cartogram()
     .projection(projection)
     .properties(function(d) {
-        // TODO I don't understand why id is added to d.id, but it works :-)
         return stateCasualtiesObject[d.id];
     });
 
