@@ -55,7 +55,7 @@ IraqMap.prototype.initVis = function() {
     vis.MAX_CIRCLE_RADIUS = vis.width * 0.0449101796;
     vis.MIN_CIRCLE_RADIUS = vis.width * 0.00299401198;
     vis.circleScale = d3.scale.linear()
-        .range([0, vis.MAX_CIRCLE_RADIUS]);
+        .range([vis.MIN_CIRCLE_RADIUS, vis.MAX_CIRCLE_RADIUS]);
 
     // set tooltips
     vis.tipDistrict = d3.tip()

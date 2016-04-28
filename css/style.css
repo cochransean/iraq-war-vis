@@ -103,35 +103,39 @@ h2 {
     position: relative;
 }
 
+#area-chart-tooltip {
+    position: absolute;
+    pointer-events: none;
+    margin-bottom: 10px;
+    padding: 6px;
+}
+
+#area-chart-tooltip p {
+    margin: 2px;
+}
+
 .tooltipCircle {
     fill: none;
     stroke: black;
     stroke-width: 2px;
 }
 
-.tooltipDate {
+#area-chart-tooltip-date {
     font-size: 16px;
     fill: black;
 }
 
-.tooltipValue {
+#area-chart-tooltip-p {
     font-size: 16px;
     font-weight: bold;
     fill: black;
 }
 
-.tooltipTitle {
+#area-chart-tooltip-title {
     font-size: 16px;
     font-weight: bold;
     text-decoration: underline;
     fill: black;
-}
-
-.tooltipBackground {
-    fill: white;
-    stroke-width: 2px;
-    stroke: black;
-    opacity: 0.6;
 }
 
 .tooltipLine {
@@ -173,6 +177,7 @@ svg .event-highlighted {
     -moz-box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.5);
     box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.5);
     pointer-events: none;
+    max-width: 300px;
 }
 
 /* MAP STYLES */

@@ -156,6 +156,13 @@ StackedAreaChart.prototype.initVis = function () {
         .offset([vis.height / 3, 0]);
     vis.svg.call(vis.timelineTooltip);
 
+    // tooltip for data on stacked area chart
+    vis.tooltip = d3.select("#area-chart-tooltip");
+    vis.jQueryTooltip = $("#area-chart-tooltip");
+    vis.tooltipTitle = d3.select("#area-chart-tooltip-title");
+    vis.tooltipText = d3.select("#area-chart-tooltip-p");
+    vis.tooltipDate = d3.select("#area-chart-tooltip-date");
+
     // filter and format data for stacked area chart
     vis.wrangleData();
 
@@ -358,34 +365,6 @@ StackedAreaChart.prototype.addTooltipElements = function() {
         .attr("class", "tooltipCircle")
         .attr("r", 4);
 
-    // build out group to contain tooltip elements
-    const BOX_HEIGHT = 65;
-    vis.focusBox = vis.focus.append("g");
-
-    // background box
-    vis.tooltipBackground = vis.focusBox.append("rect")
-        .attr("class", "tooltipBackground")
-        .attr("width", BOX_HEIGHT)
-        .attr("height", 65);
-
-    // place the text elements
-    const TEXT_PADDING = 3;
-    vis.tooltipTitle = vis.focusBox.append("text")
-        .attr("class", "tooltipTitle")
-        .attr("dx", TEXT_PADDING)
-        .attr("dy", "1.2em");
-
-    vis.tooltipText = vis.focusBox.append("text")
-        .attr("class", "tooltipValue")
-        .attr("dx", TEXT_PADDING)
-        .attr("dy", "2.5em");
-
-    vis.tooltipDate = vis.focusBox.append("text")
-        .attr("class", "tooltipDate")
-        .attr("dx", TEXT_PADDING)
-        .attr("dy", "3.8em");
-
-
 };
 
 // updates the axes labels and provides tooltip functionality
@@ -444,6 +423,7 @@ StackedAreaChart.prototype.updateUI = function() {
 
     vis.newPaths
         .on("mouseover", function (d) {
+            vis.jQueryTooltip.removeClass('hidden');
             vis.tooltipTitle.text(convertAbbreviation(d.name));
             vis.focus.style("display", null);
         })
@@ -469,10 +449,13 @@ StackedAreaChart.prototype.updateUI = function() {
                 closestIndex = indexNextHigherDate - 1;
             }
 
+            var xPos = vis.x(closestDate);
+            var yPos = vis.y(d.values[closestIndex].y + d.values[closestIndex].y0);
+
             vis.focus
                 .attr("transform",
-                    "translate(" + vis.x(closestDate) + "," +
-                    vis.y(d.values[closestIndex].y + d.values[closestIndex].y0) + ")");
+                    "translate(" + xPos + "," +
+                    yPos + ")");
 
             vis.focus.select(".tooltip-x")
                 .attr("y2", vis.height - vis.y(d.values[closestIndex].y + d.values[closestIndex].y0));
@@ -480,40 +463,21 @@ StackedAreaChart.prototype.updateUI = function() {
             vis.focus.select(".tooltip-y")
                 .attr("x1", 0 - vis.x(closestDate));
 
+            vis.tooltip
+                .style("top", function() {
+                    return yPos + vis.margin.top -  vis.jQueryTooltip.outerHeight(true) + "px"
+                })
+                .style("left", function() {
+                    return xPos + vis.margin.left - vis.jQueryTooltip.outerWidth() / 2 + "px"
+                });
+
             // update text and get new width
             vis.tooltipText.text(d.values[closestIndex].y);
             vis.tooltipDate.text(monthYear(closestDate));
-            var textWidth = getTextWidth([vis.tooltipTitle, vis.tooltipText, vis.tooltipDate]);
-
-            vis.tooltipBackground
-                .attr("width", textWidth);
-
-            // shift focus box to accommodate new width
-            const BOX_HEIGHT = 65;
-            const BOX_VERTICAL_PADDING = 10;
-            vis.focusBox
-                .attr("transform",
-                    "translate(" + (-textWidth / 2) + "," + (-(BOX_HEIGHT + BOX_VERTICAL_PADDING)) + ")");
-
-            // returns greatest width from an array of nodes to check
-            function getTextWidth(nodes) {
-
-                const PADDING = 6;
-
-                // get bounding box
-                var highestWidth = nodes[0].node().getBBox().width;
-
-                for (var i = 1; i < nodes.length; i++) {
-                    var currentWidth = nodes[i].node().getBBox().width;
-                    highestWidth = currentWidth > highestWidth ? currentWidth: highestWidth;
-                }
-
-                // return width plus padding
-                return highestWidth + PADDING;
-            }
 
         })
         .on("mouseout", function() {
+            vis.jQueryTooltip.addClass('hidden');
             vis.focus.style("display", "none");
         });
 
