@@ -20,7 +20,7 @@ var storyMode;
 var iraqMap, areaChart, timeSelect;
 
 // controller for the storytelling interaction
-var storyController, selectedEvent;
+var storyController, highlightedEvent;
 
 // Start application by loading the data
 loadData();

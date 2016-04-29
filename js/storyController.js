@@ -76,6 +76,9 @@ StoryController.prototype.views = function() {
             controller.backButton.prop('disabled', true);
             controller.nextButton.prop('disabled', false);
 
+            // update highlighted event
+            highlightedEvent = "event12";
+
             // set data
             controller.backgroundSelect.val("ethnicHomogeneity");
             controller.dataSelect.val("totalViolenceData");
@@ -87,25 +90,19 @@ StoryController.prototype.views = function() {
             $("#information-headline").text("In early 2006, violence rose dramatically");
             $("#information-subtitle").text("Al Qaeda's bombing of the the Shia al-Askari mosque in Samarra, a Shia holy site, set off violent sectarian conflict.");
 
-            // show timeline tooltip and change line color using ID to select
-            d3.select("#event12")
-                .attr("class", "event event-highlighted")
-                .each(function(d) { areaChart.timelineTooltip.show(d, this) });
-
-            // update so that when lines is appended after transition, it will be colored (line above is removed after
-            // transitioning)
-            selectedEvent = "event12";
 
         },
 
         '1': function() {
 
-            // cleanup previous slide
-            d3.select("#event12")
-                .attr("class", "event");
+            // hide any showing tooltips
+            areaChart.timelineTooltip.hide();
 
             // set selects (whatever second slide is, needs this line)
             controller.backButton.prop('disabled', false);
+
+            // update highlighted event
+            highlightedEvent = "event17";
 
             // set data
             controller.backgroundSelect.val("ethnicHomogeneity");
@@ -118,22 +115,15 @@ StoryController.prototype.views = function() {
             $("#information-headline").text("In summer of 2007, violence began to fall");
             $("#information-subtitle").text("The US's \"surge\" strategy, along with the Sunni Awakening was credited with the striking reduction.");
 
-            // show timeline tooltip and change line color using ID to select
-            d3.select("#event17")
-                .attr("class", "event event-highlighted")
-                .each(function(d) { areaChart.timelineTooltip.show(d, this) });
-
-            // update so that when lines is appended after transition, it will be colored (line above is removed after
-            // transitioning)
-            selectedEvent = "event17";
-
         },
 
         '2': function() {
 
-            // cleanup previous slide
-            d3.select("#event17")
-                .attr("class", "event");
+            // hide any showing tooltips
+            areaChart.timelineTooltip.hide();
+
+            // update highlighted event
+            highlightedEvent = false;
 
             controller.exitStory();
         }

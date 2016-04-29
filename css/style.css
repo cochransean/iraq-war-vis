@@ -174,14 +174,6 @@ svg .event {
     clip-path: url(#clip);
 }
 
-svg .event-highlighted {
-    stroke: red;
-    stroke-width: 8px;
-    opacity: 1;
-    cursor: default;
-    clip-path: url(#clip);
-}
-
 /* Get rid of extenders on timeline event tooltips (lead to confusion) */
 .d3-tip-timeline {
     line-height: 1;

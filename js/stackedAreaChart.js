@@ -401,6 +401,9 @@ StackedAreaChart.prototype.updateUI = function() {
         .attr("x2", function(d) {return vis.x(d.date)})
         .attr("y1", 0)
         .attr("y2", vis.height)
+        .style("stroke", function(d) { console.log(d); return d.id == highlightedEvent ? "red" : "black" })
+        .style("stroke-width", function(d) { return d.id == highlightedEvent ? 8 : 5 })
+        .style("opacity", function(d) { return d.id == highlightedEvent ? 1 : 0.5 })
         .remove()
         .call(endall, function() { addEvents() });
 
@@ -516,15 +519,25 @@ StackedAreaChart.prototype.updateUI = function() {
         vis.events.enter()
             .append("line");
 
+        console.log(vis.events);
+
         vis.events
             .attr("x1", function(d) {return vis.x(d.date)})
             .attr("x2", function(d) {return vis.x(d.date)})
             .attr("y1", 0)
             .attr("y2", vis.height)
+            .style("stroke", function(d) { console.log(d); return d.id == highlightedEvent ? "red" : "black" })
+            .style("stroke-width", function(d) { return d.id == highlightedEvent ? 8 : 5 })
+            .style("opacity", function(d) { return d.id == highlightedEvent ? 1 : 0.5 })
             .attr("id", function(d) { return d.id })
             .attr("class", "event")
             .on("mouseover", function(d) { vis.timelineTooltip.show(d, this) })
-            .on("mouseout", function(d) { vis.timelineTooltip.hide(d, this) });
+            .on("mouseout", function(d) { vis.timelineTooltip.hide(d, this) })
+            .each(function(d) {
+                if (d.id == highlightedEvent) {
+                    areaChart.timelineTooltip.show(d, this); // show tooltip if highlighted
+                }
+            });
     }
 
 };
