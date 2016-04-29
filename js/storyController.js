@@ -92,6 +92,10 @@ StoryController.prototype.views = function() {
                 .attr("class", "event event-highlighted")
                 .each(function(d) { areaChart.timelineTooltip.show(d, this) });
 
+            // update so that when lines is appended after transition, it will be colored (line above is removed after
+            // transitioning)
+            selectedEvent = "event12";
+
         },
 
         '1': function() {
@@ -118,6 +122,10 @@ StoryController.prototype.views = function() {
             d3.select("#event17")
                 .attr("class", "event event-highlighted")
                 .each(function(d) { areaChart.timelineTooltip.show(d, this) });
+
+            // update so that when lines is appended after transition, it will be colored (line above is removed after
+            // transitioning)
+            selectedEvent = "event17";
 
         },
 

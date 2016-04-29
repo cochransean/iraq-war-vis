@@ -375,32 +375,34 @@ StackedAreaChart.prototype.addTooltipElements = function() {
         .attr("class", "tooltipCircle")
         .attr("r", 4);
 
+    // overlay with path clipping
+    vis.svg.append("defs").append("clipPath")
+        .attr("id", "clip")
+        .append("rect")
+        .attr("width", vis.width)
+        .attr("height", vis.height);
+
 };
 
 // updates the axes labels and provides tooltip functionality
 StackedAreaChart.prototype.updateUI = function() {
     var vis = this;
 
-    // add timeline lines
-    // filter events by date
-    vis.displayEvents = vis.eventsData.filter(filterByDate);
-    vis.displayEvents = vis.displayEvents.filter(filterByImportance);
+    // first, update any existing events to make the transition clearer to the user (movement of time)
+    vis.events = vis.svg.selectAll(".event")
+        .data(vis.displayEvents);
 
-    // remove any current lines (otherwise they will be behind paths)
-    vis.svg.selectAll(".event")
-        .remove();
-
-    vis.svg.selectAll(".event")
-        .data(vis.displayEvents).enter()
-        .append("line")
+    // old events (currently displayed)
+    // after transition, remove and add timeline lines (to ensure they are always on top of paths
+    vis.events
+        .transition()
+        .duration(1500)
         .attr("x1", function(d) {return vis.x(d.date)})
         .attr("x2", function(d) {return vis.x(d.date)})
         .attr("y1", 0)
         .attr("y2", vis.height)
-        .attr("id", function(d) { return d.id })
-        .attr("class", "event")
-        .on("mouseover", function(d) { vis.timelineTooltip.show(d, this) })
-        .on("mouseout", function(d) { vis.timelineTooltip.hide(d, this) });
+        .remove()
+        .call(endall, function() { addEvents() });
 
     // formatter for time
     var monthYear = d3.time.format("%B %Y");
@@ -490,5 +492,39 @@ StackedAreaChart.prototype.updateUI = function() {
             vis.jQueryTooltip.addClass('hidden');
             vis.focus.style("display", "none");
         });
+
+    // http://stackoverflow.com/questions/10692100/invoke-a-callback-at-the-end-of-a-transition
+    function endall(transition, callback) {
+        if (transition.size() === 0) { callback() }
+        var n = 0;
+        transition
+            .each(function() { ++n; })
+            .each("end", function() { if (!--n) callback.apply(this, arguments); });
+    }
+
+    function addEvents() {
+
+        console.log('addevents');
+
+        // filter events by date
+        vis.displayEvents = vis.eventsData.filter(filterByDate);
+        vis.displayEvents = vis.displayEvents.filter(filterByImportance);
+
+        vis.events = vis.svg.selectAll(".event")
+            .data(vis.displayEvents);
+
+        vis.events.enter()
+            .append("line");
+
+        vis.events
+            .attr("x1", function(d) {return vis.x(d.date)})
+            .attr("x2", function(d) {return vis.x(d.date)})
+            .attr("y1", 0)
+            .attr("y2", vis.height)
+            .attr("id", function(d) { return d.id })
+            .attr("class", "event")
+            .on("mouseover", function(d) { vis.timelineTooltip.show(d, this) })
+            .on("mouseout", function(d) { vis.timelineTooltip.hide(d, this) });
+    }
 
 };
