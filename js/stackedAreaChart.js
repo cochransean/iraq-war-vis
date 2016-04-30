@@ -153,7 +153,7 @@ StackedAreaChart.prototype.initVis = function () {
     vis.timelineTooltip = d3.tip()
         .attr('class', 'd3-tip-timeline')
         .html(function(d) { return '<div class="text-center">' + d.event + '</div>'; })
-        .offset([vis.height / 3, 0]);
+        .offset([vis.height / 2, 0]);
     vis.svg.call(vis.timelineTooltip);
 
     // tooltip for data on stacked area chart
@@ -554,7 +554,7 @@ StackedAreaChart.prototype.updateUI = function() {
             .on("mouseout", function(d) { vis.timelineTooltip.hide(d, this) })
             .each(function(d) {
                 if (d.id == highlightedEvent) {
-                    areaChart.timelineTooltip.show(d, this); // show tooltip if highlighted
+                    vis.timelineTooltip.show(d, this); // show tooltip if highlighted
                 }
             });
     }

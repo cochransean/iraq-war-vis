@@ -101,6 +101,9 @@ StoryController.prototype.views = function() {
             // set selects (whatever second slide is, needs this line)
             controller.backButton.prop('disabled', false);
 
+            // offset tip since it's near the edge
+            areaChart.timelineTooltip.offset([areaChart.height / 2, 0.28 * areaChart.width]);
+
             // update highlighted event
             highlightedEvent = "event17";
 
@@ -121,6 +124,9 @@ StoryController.prototype.views = function() {
 
             // hide any showing tooltips
             areaChart.timelineTooltip.hide();
+
+            // clean up previous slide
+            areaChart.timelineTooltip.offset([areaChart.height / 2, 0]);
 
             // update highlighted event
             highlightedEvent = false;
@@ -171,6 +177,9 @@ StoryController.prototype.views = function() {
             controller.backgroundSelect.val("ethnicHomogeneity");
             controller.dataSelect.val("fatalities");
 
+            // offset tip since it's near the edge
+            areaChart.timelineTooltip.offset([areaChart.height / 2, 0.28 * areaChart.width]);
+
             // set dates
             controller.changeDates();
 
@@ -181,6 +190,10 @@ StoryController.prototype.views = function() {
         },
 
         '5': function() {
+
+            // clean up previous slide
+            areaChart.timelineTooltip.offset([areaChart.height / 2, 0]);
+
             controller.exitStory();
         }
 
