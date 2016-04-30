@@ -13,6 +13,16 @@ StoryController = function(nextButtonID, backButtonID, exitID) {
     controller.backButton = $("#" + backButtonID);
     controller.exitButton = $("#" + exitID);
 
+    // boxes to highlight info on map
+    controller.southHighlight = iraqMap.svg.append("rect")
+        .attr("class", "highlightRect")
+        .call(controller.hideRect);
+
+
+    controller.northHighlight = iraqMap.svg.append("rect")
+        .attr("class", "highlightRect")
+        .call(controller.hideRect);
+
     // call views function (closure is needed to ensure sub-functions know what "this" is
     controller.views = controller.views();
 
@@ -98,6 +108,12 @@ StoryController.prototype.views = function() {
             // hide any showing tooltips
             areaChart.timelineTooltip.hide();
 
+            // hide any rectangles
+            controller.southHighlight
+                .call(controller.hideRect);
+            controller.northHighlight
+                .call(controller.hideRect);
+
             // set selects (whatever second slide is, needs this line)
             controller.backButton.prop('disabled', false);
 
@@ -135,6 +151,23 @@ StoryController.prototype.views = function() {
             controller.backgroundSelect.val("ethnicHomogeneity");
             controller.dataSelect.val("totalViolenceData");
 
+            // append rectangles to highlight the data
+            var southLocation = iraqMap.projection([42.19101954728873, 33.32226927028446]);
+            controller.southHighlight
+                .transition()
+                .duration(1500)
+                .attr("transform","translate(" + southLocation[0] + "," + southLocation[1] + ") rotate(-45)")
+                .attr("width", 180)
+                .attr("height", 170);
+
+            var northLocation = iraqMap.projection([41.284069, 37.1]);
+            controller.northHighlight
+                .transition()
+                .duration(1500)
+                .attr("transform","translate(" + northLocation[0] + "," + northLocation[1] + ")")
+                .attr("width", 300)
+                .attr("height", 150);
+
             // set dates
             controller.changeDates();
 
@@ -148,6 +181,12 @@ StoryController.prototype.views = function() {
 
             // hide any showing tooltips
             areaChart.timelineTooltip.hide();
+
+            // hide rectangles
+            controller.southHighlight
+                .call(controller.hideRect);
+            controller.northHighlight
+                .call(controller.hideRect);
 
             // update highlighted event
             highlightedEvent = false;
@@ -294,4 +333,17 @@ StoryController.prototype.changeDates = function(dateString1, dateString2) {
             .attr("width", function() { return timeSelect.x(dateRange[1]) - timeSelect.x(dateRange[0])});
     }
 
+};
+
+// used via .call to hide rectangles when done with them
+StoryController.prototype.hideRect = function(selection) {
+    selection
+        .transition()
+        .duration(1500)
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("transform","rotate(0)")
+        .attr("transform", "translate(0,0)")
+        .attr("width", 0)
+        .attr("height", 0);
 };

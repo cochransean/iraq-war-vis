@@ -43,13 +43,13 @@ IraqMap.prototype.initVis = function() {
 
     // setup project and path generator; make map resize based on window size
     const widthToProjectRatio = 5.9;
-    var projection = d3.geo.mercator()
+    vis.projection = d3.geo.mercator()
         .translate([vis.width / 2, vis.height / 2])
         .center([43.75, 33.6])
         .scale(vis.width * widthToProjectRatio);
 
     var path = d3.geo.path()
-        .projection(projection);
+        .projection(vis.projection);
 
     // setup linear scale for proportionate symbol circle radii; update domain later because it will change on selection
     vis.MAX_CIRCLE_RADIUS = vis.width * 0.0449101796;
@@ -76,7 +76,7 @@ IraqMap.prototype.initVis = function() {
         .attr("d", path)
         .attr("class", "map district-borders")
         .on('mouseover', vis.tipDistrict.show)
-        .on('click', function() { console.log(projection.invert(d3.mouse(this))) } )
+        .on('click', function() { console.log(vis.projection.invert(d3.mouse(this))) } ) // for determining where to play overlays
         .on('mouseout', vis.tipDistrict.hide);
 
     // get district centroids and place into object for constant time access
@@ -95,8 +95,8 @@ IraqMap.prototype.initVis = function() {
         .data(vis.placeData)
         .enter()
         .append("circle")
-        .attr("cx", function (d) { return projection(d.geometry.coordinates)[0]; })
-        .attr("cy", function (d) { return projection(d.geometry.coordinates)[1]; })
+        .attr("cx", function (d) { return vis.projection(d.geometry.coordinates)[0]; })
+        .attr("cy", function (d) { return vis.projection(d.geometry.coordinates)[1]; })
         .attr("class", "map city point")
         .attr("r", "4px")
         .on('mouseover', vis.tipCity.show)
@@ -108,10 +108,10 @@ IraqMap.prototype.initVis = function() {
         .enter()
         .append("text")
         .text(function(d) { return d.properties.name; })
-        .attr("x", function (d) { return projection(d.geometry.coordinates)[0]; })
+        .attr("x", function (d) { return vis.projection(d.geometry.coordinates)[0]; })
         .attr("y", function (d) {
             const verticalOffset = 7;
-            return projection(d.geometry.coordinates)[1] - verticalOffset;
+            return vis.projection(d.geometry.coordinates)[1] - verticalOffset;
         })
         .attr("class", "city-label");
      */
@@ -311,7 +311,7 @@ IraqMap.prototype.updateChoropleth = function() {
     else if (vis.selectedBackgroundValue == "ethnicHomogeneity") {
         vis.colorScale = d3.scale.quantize()
             .domain(d3.extent(valuesForExtent))
-            .range(colorbrewer.RdYlGn[6]);
+            .range(colorbrewer.PRGn[6]);
     }
 
     // I used quintiles for above 0
@@ -340,8 +340,6 @@ IraqMap.prototype.updateChoropleth = function() {
     // dynamically position based on size of div and number of colors
     vis.colorLegend
         .attr("transform", "translate(" + (0.0424737631 * vis.width) + "," + ( vis.height * 0.84 ) + ")");
-
-    console.log(vis.colorScale.range().length);
 
     // update color scale by binding data from new color scale
     var colorSwatches = vis.colorLegend.selectAll(".color-swatch")
@@ -374,7 +372,6 @@ IraqMap.prototype.updateChoropleth = function() {
         .text(function(d, i) { return updateSwatchText(d, i) })
         .attr("y", function(d, i) {
             const TEXT_HEIGHT = this.getBBox().height;
-            console.log(TEXT_HEIGHT);
             return COLOR_SWATCH_WIDTH * i + COLOR_SWATCH_WIDTH / 2 + TEXT_HEIGHT / 2
         });
 

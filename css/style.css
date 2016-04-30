@@ -228,6 +228,13 @@ svg .circle-legend-text {
     text-anchor: start;
 }
 
+svg .highlightRect {
+    fill: none;
+    stroke: #E41A1C;
+    stroke-width: 8;
+
+}
+
 /* D3.JS Tooltips */
 .d3-tip {
     line-height: 1;
