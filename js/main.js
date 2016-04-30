@@ -110,7 +110,7 @@ function createVis() {
     timeSelect = new TimeSelect("area-chart", timeSelectDimensions, districtViolenceData, totalViolenceData,
         troopNumbersData, usCasualtiesMonthData, civilianCasualtiesMonthly, eventsData, "Greys");
     timeSelect.initVis();
-    $(document).on("datesChanged", function() { timeSelect.wrangleData(datesChanged) });
+    $(document).on("datesChanged", function() { timeSelect.wrangleData() });
     circleData.change(function() { timeSelect.wrangleData() });
 
     // Create map after timeline because timeline generates dates needed for map data selection

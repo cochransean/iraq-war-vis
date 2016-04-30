@@ -125,6 +125,62 @@ StoryController.prototype.views = function() {
             // update highlighted event
             highlightedEvent = false;
 
+            // set data
+            controller.backgroundSelect.val("ethnicHomogeneity");
+            controller.dataSelect.val("totalViolenceData");
+
+            // set dates
+            controller.changeDates();
+
+            // set text
+            $("#information-headline").text("Most violence occurred along ethnic fault lines");
+            $("#information-subtitle").text("Red areas on the map indicate Iraq's most ethnically mixed districts.");
+
+        },
+
+        '3': function() {
+
+            // hide any showing tooltips
+            areaChart.timelineTooltip.hide();
+
+            // update highlighted event
+            highlightedEvent = false;
+
+            // set data
+            controller.backgroundSelect.val("ethnicHomogeneity");
+            controller.dataSelect.val("ied_total");
+
+            // trigger update (since dates haven't been changed which would otherwise trigger)
+            controller.changeDates();
+
+            // set text
+            $("#information-headline").text("Most violence incidents involved Improvised Explosive Devices (IEDs)");
+            $("#information-subtitle").text("IED events peaked in June 2007, with 3106 IEDs reported.");
+
+        },
+
+        '4': function() {
+
+            // hide any showing tooltips
+            areaChart.timelineTooltip.hide();
+
+            // update highlighted event
+            highlightedEvent = "event3";
+
+            // set data
+            controller.backgroundSelect.val("ethnicHomogeneity");
+            controller.dataSelect.val("fatalities");
+
+            // set dates
+            controller.changeDates();
+
+            // set text
+            $("#information-headline").text("Few predicted the length and costs of the war");
+            $("#information-subtitle").text("In the 13 years since President Bush's \"Mission Accomplished\" speech, 4318 US Soldiers were killed");
+
+        },
+
+        '5': function() {
             controller.exitStory();
         }
 
@@ -157,6 +213,9 @@ StoryController.prototype.exitStory = function() {
     var controller = this;
     storyMode = false;
 
+    // update highlighted event
+    highlightedEvent = false;
+
     // hide any tooltips showing
     areaChart.timelineTooltip.hide();
 
@@ -166,8 +225,7 @@ StoryController.prototype.exitStory = function() {
     controller.exitButton.on("click", function() { controller.enterStory(0) });
 
     // set dates to entire extent of data
-    dateRange = timeSelect.x.domain();
-    $(document).trigger("datesChanged");
+    controller.changeDates();
 
     controller.backgroundSelect.removeAttr("disabled");
     controller.dataSelect.removeAttr("disabled");
@@ -193,20 +251,38 @@ StoryController.prototype.exitStory = function() {
 };
 
 
-// updates brush extent and date object itself (so visuals and dates selected match)
+// updates brush extent and date object itself (so visuals and dates selected match); if no args resets dates
 StoryController.prototype.changeDates = function(dateString1, dateString2) {
     var controller = this;
-    dateRange = [new Date(dateString1), new Date(dateString2)];
 
-    // update extent rectangle to match display
-    controller.extentRectangle
-        .transition()
-        .duration(1500)
-        .attr("x", function() { return timeSelect.x(dateRange[0])})
-        .attr("y", -6)
-        .attr("height", function() { return timeSelect.height + 7 })
-        .attr("width", function() { return timeSelect.x(dateRange[1]) - timeSelect.x(dateRange[0])});
+    console.log(d3.extent(timeSelect[timeSelect.subcategoryToCategory[controller.dataSelect.val()]]));
 
-    $(document).trigger("datesChanged");
+    var newDateRange = dateString1 && dateString2 ? [new Date(dateString1), new Date(dateString2)] :
+        d3.extent(timeSelect[timeSelect.subcategoryToCategory[controller.dataSelect.val()]], function(d) {
+            return d.date;
+        });
+
+    // if dates haven't actually changed, trigger regular update (affects transitions)
+    if (newDateRange[0].getTime() == dateRange[0].getTime() && newDateRange[1].getTime() == dateRange[1].getTime()) {
+        console.log('same dates');
+        $("#circle-data").trigger("change");
+    }
+
+    // if dates have changed trigger date change so transitions work as should
+    else {
+        dateRange = newDateRange;
+        console.log('controller says dates changed');
+
+        $(document).trigger("datesChanged");
+
+        // update extent rectangle to match display
+        controller.extentRectangle
+            .transition()
+            .duration(1500)
+            .attr("x", function() { return timeSelect.x(dateRange[0])})
+            .attr("y", -6)
+            .attr("height", function() { return timeSelect.height + 7 })
+            .attr("width", function() { return timeSelect.x(dateRange[1]) - timeSelect.x(dateRange[0])});
+    }
 
 };

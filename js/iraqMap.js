@@ -180,11 +180,14 @@ IraqMap.prototype.wrangleData = function() {
         // hide circles in legend
         vis.circleLegend.style("display", "none");
 
-        $("#alert-div").html('<div class="alert alert-warning alert-dismissible fade in" role="alert">' +
-            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
-            '<span aria-hidden="true">&times;</span></button>' +
-            '<strong>Sorry!</strong> Map data is unavailable for the selected data. </div>'
-        );
+        // only alert if not in story mode
+        if (!storyMode) {
+            $("#alert-div").html('<div class="alert alert-warning alert-dismissible fade in" role="alert">' +
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                '<span aria-hidden="true">&times;</span></button>' +
+                '<strong>Sorry!</strong> Map data is unavailable for the selected data. </div>'
+            );
+        }
 
         // remove current circles and stop without updating data and circles
         vis.circles.remove();
@@ -237,11 +240,7 @@ IraqMap.prototype.updateCircles = function() {
 
     vis.circles
         .attr("r", function(d) {
-            var scaledValue = vis.circleScale(d.value);
-
-            // don't circles so small they aren't legible and look like noise
-            scaledValue = scaledValue < vis.MIN_CIRCLE_RADIUS ? 0: scaledValue;
-            return scaledValue;
+            return vis.circleScale(d.value);
         });
 
     vis.circles.exit()

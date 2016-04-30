@@ -184,12 +184,25 @@ StackedAreaChart.prototype.wrangleData = function (datesChanged) {
 
     // if new data selection, update date range
     if (oldOption !== vis.selectedOption) {
-        dateRange = d3.extent(vis.displayData, function (d) {
+        var newDateRange = d3.extent(vis.displayData, function (d) {
             return d.date
         });
 
-        // announce change with event handler
-        $(document).trigger("dateRangeChanged");
+        // check to see if dates actually are different
+        if (newDateRange[0].getTime() != dateRange[0].getTime() || newDateRange[1].getTime() != dateRange[1].getTime()) {
+
+            datesChanged = true;
+            dateRange = newDateRange;
+
+            console.log('dates changed');
+
+            // announce change with event handler
+            $(document).trigger("dateRangeChanged");
+        }
+
+        else {
+            datesChanged = false;
+        }
     }
 
     // if not a timeline, update based on date range
@@ -317,6 +330,7 @@ StackedAreaChart.prototype.updateVis = function (datesChanged) {
 
     // only transition the areas if the dates have not changed (otherwise it gets confusing and muddled)
     if (!datesChanged) {
+        console.log('dates not changed');
         vis.categories
             .style("opacity", 0.5)
             .transition()
@@ -327,6 +341,7 @@ StackedAreaChart.prototype.updateVis = function (datesChanged) {
             .style("opacity", 1);
     }
     else {
+        console.log('dates changed');
         vis.categories
             .style("opacity", 0.5)
             .attr("d", function (d) {
@@ -401,7 +416,7 @@ StackedAreaChart.prototype.updateUI = function() {
         .attr("x2", function(d) {return vis.x(d.date)})
         .attr("y1", 0)
         .attr("y2", vis.height)
-        .style("stroke", function(d) { console.log(d); return d.id == highlightedEvent ? "red" : "black" })
+        .style("stroke", function(d) { return d.id == highlightedEvent ? "#E41A1C" : "black" })
         .style("stroke-width", function(d) { return d.id == highlightedEvent ? 8 : 5 })
         .style("opacity", function(d) { return d.id == highlightedEvent ? 1 : 0.5 })
         .remove()
@@ -507,8 +522,6 @@ StackedAreaChart.prototype.updateUI = function() {
 
     function addEvents() {
 
-        console.log('addevents');
-
         // filter events by date
         vis.displayEvents = vis.eventsData.filter(filterByDate);
         vis.displayEvents = vis.displayEvents.filter(filterByImportance);
@@ -519,14 +532,12 @@ StackedAreaChart.prototype.updateUI = function() {
         vis.events.enter()
             .append("line");
 
-        console.log(vis.events);
-
         vis.events
             .attr("x1", function(d) {return vis.x(d.date)})
             .attr("x2", function(d) {return vis.x(d.date)})
             .attr("y1", 0)
             .attr("y2", vis.height)
-            .style("stroke", function(d) { console.log(d); return d.id == highlightedEvent ? "red" : "black" })
+            .style("stroke", function(d) { return d.id == highlightedEvent ? "#E41A1C" : "black" })
             .style("stroke-width", function(d) { return d.id == highlightedEvent ? 8 : 5 })
             .style("opacity", function(d) { return d.id == highlightedEvent ? 1 : 0.5 })
             .attr("id", function(d) { return d.id })
