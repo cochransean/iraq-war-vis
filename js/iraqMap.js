@@ -255,7 +255,7 @@ IraqMap.prototype.updateCircles = function() {
     // show circles for legend
     vis.circleLegend.style("display", "initial");
 
-    // update text on circle legend
+    // update text on circle legend TODO fix title vertical alignment
     var circleLegendText = vis.circleLegend.selectAll(".circle-legend-text")
         .data(vis.legendRadii);
     vis.circleLegendTitle.text($('.chart-option[value=' + vis.selectedCircleValue +']').text())
