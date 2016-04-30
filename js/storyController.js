@@ -55,7 +55,7 @@ StoryController.prototype.enterStory = function(slideNumber) {
     controller.exitButton.text("Exit Story Mode");
 
     // select d3's brush extent and make disappear by altering width
-    d3.selectAll(".extent").attr("width", 0);
+    timeSelect.svg.selectAll(".extent").attr("width", 0);
 
     // reset current view
     controller.currentView = slideNumber;
@@ -141,53 +141,6 @@ StoryController.prototype.views = function() {
             // hide any showing tooltips
             areaChart.timelineTooltip.hide();
 
-            // clean up previous slide
-            areaChart.timelineTooltip.offset([areaChart.height / 2, 0]);
-
-            // update highlighted event
-            highlightedEvent = false;
-
-            // set data
-            controller.backgroundSelect.val("ethnicHomogeneity");
-            controller.dataSelect.val("totalViolenceData");
-
-            // append rectangles to highlight the data
-            var southLocation = iraqMap.projection([42.19101954728873, 33.32226927028446]);
-            controller.southHighlight
-                .transition()
-                .duration(1500)
-                .attr("transform","translate(" + southLocation[0] + "," + southLocation[1] + ") rotate(-45)")
-                .attr("width", 180)
-                .attr("height", 170);
-
-            var northLocation = iraqMap.projection([41.284069, 37.1]);
-            controller.northHighlight
-                .transition()
-                .duration(1500)
-                .attr("transform","translate(" + northLocation[0] + "," + northLocation[1] + ")")
-                .attr("width", 300)
-                .attr("height", 150);
-
-            // set dates
-            controller.changeDates();
-
-            // set text
-            $("#information-headline").text("Most violence occurred along ethnic fault lines");
-            $("#information-subtitle").text("Red areas on the map indicate Iraq's most ethnically mixed districts.");
-
-        },
-
-        '3': function() {
-
-            // hide any showing tooltips
-            areaChart.timelineTooltip.hide();
-
-            // hide rectangles
-            controller.southHighlight
-                .call(controller.hideRect);
-            controller.northHighlight
-                .call(controller.hideRect);
-
             // update highlighted event
             highlightedEvent = false;
 
@@ -195,7 +148,7 @@ StoryController.prototype.views = function() {
             controller.backgroundSelect.val("ethnicHomogeneity");
             controller.dataSelect.val("ied_total");
 
-            // trigger update (since dates haven't been changed which would otherwise trigger)
+            // trigger update
             controller.changeDates();
 
             // set text
@@ -204,10 +157,109 @@ StoryController.prototype.views = function() {
 
         },
 
+        '3': function() {
+
+            // hide any showing tooltips
+            areaChart.timelineTooltip.hide();
+
+            // clean up previous slide
+            areaChart.timelineTooltip.offset([areaChart.height / 2, 0]);
+
+            // remove dispatch and stop any current transitions and reset color
+            if (controller.backgroundSelect.val() != "ethnicHomogeneity") {
+                iraqMap.districts
+                    .interrupt()
+                    .transition();
+                controller.backgroundSelect.val("ethnicHomogeneity");
+                iraqMap.updateChoropleth();
+            }
+            dispatch.on("mapBackgroundChanged", null);
+
+            // update highlighted event
+            highlightedEvent = false;
+
+            // set data
+            controller.dataSelect.val("totalViolenceData");
+
+            // append rectangles to highlight the data
+            var southLocation = iraqMap.projection([42.19101954728873, 33.32226927028446]);
+            controller.southHighlight
+                .transition()
+                .duration(1500)
+                .attr("transform","translate(" + southLocation[0] + "," + southLocation[1] + ") rotate(-45)")
+                .attr("width", 0.2821316614 * iraqMap.width)
+                .attr("height", 0.26645768 * iraqMap.width);
+
+            var northLocation = iraqMap.projection([41.18, 37.0]);
+            controller.northHighlight
+                .transition()
+                .duration(1500)
+                .attr("transform","translate(" + northLocation[0] + "," + northLocation[1] + ")")
+                .attr("width", 0.460219436 * iraqMap.width)
+                .attr("height", 0.235109718 * iraqMap.width);
+
+            // set dates
+            controller.changeDates();
+
+            // set text
+            $("#information-headline").text("Most violence occurred along ethnic fault lines");
+            $("#information-subtitle").text("Purple areas on the map indicate Iraq's most ethnically mixed districts.");
+
+        },
+
         '4': function() {
 
             // hide any showing tooltips
             areaChart.timelineTooltip.hide();
+
+            // update rectangles
+            controller.southHighlight
+                .call(controller.hideRect);
+            var northLocation = iraqMap.projection([42.7, 37.7]);
+            controller.northHighlight
+                .transition()
+                .duration(1500)
+                .attr("transform","translate(" + northLocation[0] + "," + northLocation[1] + ") rotate(40)")
+                .attr("width", 0.470219436 * iraqMap.width)
+                .attr("height", 0.219435737 * iraqMap.width);
+
+            // set data
+            controller.backgroundSelect.val("OilGas");
+            controller.dataSelect.val("totalViolenceData");
+
+
+            // update the map and when transitions are complete, initiate another toggle between background colors
+            dispatch.on("mapBackgroundChanged", function() { setTimeout(cycleBackground, 1500) });
+            iraqMap.updateChoropleth();
+            controller.changeDates();
+
+            // set text
+            $("#information-headline").text("Many oil reserves are located on an ethnic fault line");
+            $("#information-subtitle").text("Equitably splitting these valuable reserves has proved difficult for Iraq's leaders, challenging political reconciliation.");
+
+            function cycleBackground() {
+
+                // switch to opposite value but only if still on this slide
+                if (controller.currentView == 4) {
+                    var newValue = controller.backgroundSelect.val() == "OilGas" ? "ethnicHomogeneity": "OilGas";
+                    controller.backgroundSelect.val(newValue);
+                    iraqMap.updateChoropleth();
+                }
+            }
+
+        },
+
+        '5': function() {
+
+            // hide any showing tooltips
+            areaChart.timelineTooltip.hide();
+
+            // remove dispatch
+            dispatch.on("mapBackgroundChanged", null);
+
+            // update rectangles
+            controller.northHighlight
+                .call(controller.hideRect);
 
             // update highlighted event
             highlightedEvent = "event3";
@@ -217,10 +269,13 @@ StoryController.prototype.views = function() {
             controller.dataSelect.val("fatalities");
 
             // offset tip since it's near the edge
-            areaChart.timelineTooltip.offset([areaChart.height / 2, 0.28 * areaChart.width]);
+            areaChart.timelineTooltip.offset([areaChart.height / 1.3, 0.29 * areaChart.width]);
 
             // set dates
             controller.changeDates();
+
+            // change color so highlight line is apparent
+            areaChart.svg.selectAll(".stacked-category").style("fill", "#984EA3");
 
             // set text
             $("#information-headline").text("Few predicted the length and costs of the war");
@@ -228,10 +283,14 @@ StoryController.prototype.views = function() {
 
         },
 
-        '5': function() {
+        '6': function() {
 
             // clean up previous slide
             areaChart.timelineTooltip.offset([areaChart.height / 2, 0]);
+
+            // set data
+            controller.backgroundSelect.val("ethnicHomogeneity");
+            controller.dataSelect.val("totalViolenceData");
 
             controller.exitStory();
         }
@@ -286,7 +345,7 @@ StoryController.prototype.exitStory = function() {
 
     // add text
     $("#information-headline").text("Explore the data on your own");
-    $("#information-subtitle").text("Use the select boxes to filter by category and the gray timeline to filter by date");
+    $("#information-subtitle").text("Use the select boxes to filter by category and the grey timeline to filter by date");
 
     // change width of rectangle to make it go away
     controller.extentRectangle

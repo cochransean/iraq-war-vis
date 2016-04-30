@@ -16,6 +16,9 @@ var eventsData;
 var dateRange;
 var storyMode;
 
+// d3 dispatcher for map background changes in story mode
+var dispatch = d3.dispatch("mapBackgroundChanged");
+
 // Variables for the visualization instances
 var iraqMap, areaChart, timeSelect;
 

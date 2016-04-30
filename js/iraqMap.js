@@ -28,7 +28,7 @@ IraqMap.prototype.initVis = function() {
     var vis = this;
 
     // size map based on width of its div (to take up all available space and allow for easier styling)
-    vis.margin = {top: 20, right: 20, bottom: 45, left: 20};
+    vis.margin = {top: 40, right: 20, bottom: 45, left: 20};
     vis.width = $("#" + vis.parentElement).width() - vis.margin.left - vis.margin.right;
 
     // make map entire height of stacked area chart + controls to use up all space
@@ -79,8 +79,10 @@ IraqMap.prototype.initVis = function() {
         .on('click', function() { console.log(vis.projection.invert(d3.mouse(this))) } ) // for determining where to play overlays
         .on('mouseout', vis.tipDistrict.hide);
 
+    vis.districts = vis.svg.selectAll(".district-borders");
+
     // get district centroids and place into object for constant time access
-    vis.svg.selectAll(".district-borders")
+    vis.districts
         .each(function (d) {
             vis.districtCentroids[d.properties.ADM3NAME] = path.centroid(d);
         });
@@ -328,11 +330,14 @@ IraqMap.prototype.updateChoropleth = function() {
             .range(colorbrewer.Oranges[6]);
     }
 
-    vis.svg.selectAll(".district-borders")
+    vis.districts
+        .transition() // adding transition to aid in story mode
+        .duration(1500)
         .style("fill", function (d) {
             var value = vis.districtData[d.properties.ADM3NAME][vis.selectedBackgroundValue];
             return vis.colorScale(value);
-        });
+        })
+        .call(endall, function() { dispatch.mapBackgroundChanged() });
 
     const COLOR_SWATCH_WIDTH = vis.width * 0.0374251497;
     const COLOR_SWATCH_HORIZONTAL_PADDING = vis.width * 0.00748502994;
@@ -355,6 +360,7 @@ IraqMap.prototype.updateChoropleth = function() {
         });
 
     colorSwatches
+        .transition()
         .attr("fill", function(d) { return d } )
         .attr("class", "color-swatch");
 
@@ -439,15 +445,15 @@ IraqMap.prototype.updateBackgroundTooltip = function(d) {
         return message
     }
 
-    // TODO need to clean up the code here so that rounding doesn't lead to percentages that don't added up to 100%
-    // Code now overestimates Shia, but that was the fastest solution I could think of.
+    // estimates add up to 100 with rounding
     else if (vis.selectedBackgroundValue == "ethnicHomogeneity") {
 
-        var SunniTooltip = Math.floor(vis.districtData[d.properties.ADM3NAME]["Sunni"] * 100);
-        var KurdishTooltip = Math.floor(vis.districtData[d.properties.ADM3NAME]["Kurdish"] * 100);
+        var SunniTooltip = Math.round(vis.districtData[d.properties.ADM3NAME]["Sunni"] * 100);
+        var KurdishTooltip = Math.round(vis.districtData[d.properties.ADM3NAME]["Kurdish"] * 100);
+        var ShiaTooltip = Math.round(vis.districtData[d.properties.ADM3NAME]["Shia"] * 100);
 
         message = "Ethnic Composition of District " + d.properties.ADM3NAME + ": <br>" +
-            "Shia: " + (100 - SunniTooltip - KurdishTooltip) + "%</br>" +
+            "Shia: " + ShiaTooltip + "%</br>" +
             "Sunni: " + SunniTooltip + "%</br>" +
             "Kurdish: " + KurdishTooltip + "%</br>";
 

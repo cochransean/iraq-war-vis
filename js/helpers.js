@@ -374,3 +374,14 @@ function niceDate(date) {
 
     return closestDate
 }
+
+
+// used to tell when all transitions have finished
+// http://stackoverflow.com/questions/10692100/invoke-a-callback-at-the-end-of-a-transition
+function endall(transition, callback) {
+    if (transition.size() === 0) { callback() }
+    var n = 0;
+    transition
+        .each(function() { ++n; })
+        .each("end", function() { if (!--n) callback.apply(this, arguments); });
+}

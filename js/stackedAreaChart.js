@@ -198,9 +198,6 @@ StackedAreaChart.prototype.wrangleData = function (datesChanged) {
             $(document).trigger("dateRangeChanged");
         }
 
-        else {
-            datesChanged = false;
-        }
     }
 
     // if not a timeline, update based on date range
@@ -419,6 +416,7 @@ StackedAreaChart.prototype.updateUI = function() {
         .attr("height", vis.height)
         .style("fill", function(d) { return d.id == highlightedEvent ? "#E41A1C" : "black" })
         .style("stroke", function(d) { return d.id == highlightedEvent ? "white" : "black" })
+        .style("stroke-width", function(d) { return d.id == highlightedEvent ? "2" : "1" })
         .style("width", function(d) { return d.id == highlightedEvent ? 7 : 4 })
         .attr("x", function(d) { return vis.x(d.date) - this.getBBox().width / 2 })
         .style("opacity", function(d) { return d.id == highlightedEvent ? 1 : 0.5 })
@@ -514,15 +512,6 @@ StackedAreaChart.prototype.updateUI = function() {
             vis.focus.style("display", "none");
         });
 
-    // http://stackoverflow.com/questions/10692100/invoke-a-callback-at-the-end-of-a-transition
-    function endall(transition, callback) {
-        if (transition.size() === 0) { callback() }
-        var n = 0;
-        transition
-            .each(function() { ++n; })
-            .each("end", function() { if (!--n) callback.apply(this, arguments); });
-    }
-
     function addEvents() {
 
         // filter events by date
@@ -539,6 +528,7 @@ StackedAreaChart.prototype.updateUI = function() {
             .attr("height", vis.height)
             .style("fill", function(d) { return d.id == highlightedEvent ? "#E41A1C" : "black" })
             .style("stroke", function(d) { return d.id == highlightedEvent ? "#f7f7f7" : "black" })
+            .style("stroke-width", function(d) { return d.id == highlightedEvent ? "2" : "1" })
             .style("width", function(d) { return d.id == highlightedEvent ? 7 : 4 })
             .attr("x", function(d) { return vis.x(d.date) - this.getBBox().width / 2 })
             .style("opacity", function(d) { return d.id == highlightedEvent ? 1 : 0.5 })

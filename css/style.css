@@ -194,7 +194,7 @@ svg .district-borders {
     stroke-width: 1.5px;
     stroke-linejoin: round;
     stroke-opacity: 0.5;
-    fill: none;
+    fill: #f7f7f7;
 }
 
 /* Need a darker background, but white district borders are much more supportive (to my eyes :)) */
