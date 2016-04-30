@@ -288,7 +288,7 @@ StoryController.prototype.views = function() {
             // clean up previous slide
             areaChart.timelineTooltip.offset([areaChart.height / 2, 0]);
 
-            // set data
+            // set data TODO fix transition as on previous slide (sometimes map background doesn't update)
             controller.backgroundSelect.val("ethnicHomogeneity");
             controller.dataSelect.val("totalViolenceData");
 
