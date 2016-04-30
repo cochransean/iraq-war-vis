@@ -151,6 +151,9 @@ IraqMap.prototype.initVis = function() {
         })
     }
 
+    // title for legend
+    vis.circleLegendTitle = vis.circleLegend.append("text");
+
     // add groups for color legend
     vis.colorLegend = vis.svg.append("g");
 
@@ -255,6 +258,10 @@ IraqMap.prototype.updateCircles = function() {
     // update text on circle legend
     var circleLegendText = vis.circleLegend.selectAll(".circle-legend-text")
         .data(vis.legendRadii);
+    vis.circleLegendTitle.text($('.chart-option[value=' + vis.selectedCircleValue +']').text())
+        .attr("text-anchor", "start")
+        .attr("x", -vis.MAX_CIRCLE_RADIUS) // align with start of largest circle
+        .attr("font-size", function() { return Math.round(0.0209580838 * vis.width) } )
 
     circleLegendText.enter()
         .append("text")
