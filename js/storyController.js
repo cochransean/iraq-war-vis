@@ -154,7 +154,7 @@ StoryController.prototype.views = function() {
             controller.changeDates();
 
             // set text
-            $("#information-headline").text("Most violence incidents involved Improvised Explosive Devices (IEDs)");
+            $("#information-headline").text("Most violent incidents involved Improvised Explosive Devices (IEDs)");
             $("#information-subtitle").text("IED events peaked in June 2007, with 3106 IEDs reported.");
 
         },

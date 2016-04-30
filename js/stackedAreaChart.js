@@ -152,7 +152,7 @@ StackedAreaChart.prototype.initVis = function () {
     // tooltips for timeline events
     vis.timelineTooltip = d3.tip()
         .attr('class', 'd3-tip-timeline')
-        .html(function(d) { return d.event; })
+        .html(function(d) { return '<div class="text-center">' + d.event + '</div>'; })
         .offset([vis.height / 3, 0]);
     vis.svg.call(vis.timelineTooltip);
 
@@ -338,7 +338,11 @@ StackedAreaChart.prototype.updateVis = function (datesChanged) {
             .attr("d", function (d) {
                 return vis.area(d.values);
             })
-            .style("opacity", 1);
+            .each("end", function() {
+                var category = d3.select(this);
+                category.style("opacity", 1);
+            })
+
     }
     else {
         console.log('dates changed');
@@ -349,7 +353,11 @@ StackedAreaChart.prototype.updateVis = function (datesChanged) {
             })
             .transition()
             .duration(1500)
-            .style("opacity", 1);
+            .style("opacity", 0.5)
+            .each("end", function() {
+                var category = d3.select(this);
+                category.style("opacity", 1);
+            });
     }
 
 
