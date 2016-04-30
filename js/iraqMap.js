@@ -76,6 +76,7 @@ IraqMap.prototype.initVis = function() {
         .attr("d", path)
         .attr("class", "map district-borders")
         .on('mouseover', vis.tipDistrict.show)
+        .on('click', function() { console.log(projection.invert(d3.mouse(this))) } )
         .on('mouseout', vis.tipDistrict.hide);
 
     // get district centroids and place into object for constant time access

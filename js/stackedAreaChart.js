@@ -194,8 +194,6 @@ StackedAreaChart.prototype.wrangleData = function (datesChanged) {
             datesChanged = true;
             dateRange = newDateRange;
 
-            console.log('dates changed');
-
             // announce change with event handler
             $(document).trigger("dateRangeChanged");
         }
@@ -330,7 +328,6 @@ StackedAreaChart.prototype.updateVis = function (datesChanged) {
 
     // only transition the areas if the dates have not changed (otherwise it gets confusing and muddled)
     if (!datesChanged) {
-        console.log('dates not changed');
         vis.categories
             .style("opacity", 0.5)
             .transition()
@@ -345,7 +342,6 @@ StackedAreaChart.prototype.updateVis = function (datesChanged) {
 
     }
     else {
-        console.log('dates changed');
         vis.categories
             .style("opacity", 0.5)
             .attr("d", function (d) {
@@ -420,12 +416,11 @@ StackedAreaChart.prototype.updateUI = function() {
     vis.events
         .transition()
         .duration(1500)
-        .attr("x1", function(d) {return vis.x(d.date)})
-        .attr("x2", function(d) {return vis.x(d.date)})
-        .attr("y1", 0)
-        .attr("y2", vis.height)
-        .style("stroke", function(d) { return d.id == highlightedEvent ? "#E41A1C" : "black" })
-        .style("stroke-width", function(d) { return d.id == highlightedEvent ? 8 : 5 })
+        .attr("height", vis.height)
+        .style("fill", function(d) { return d.id == highlightedEvent ? "#E41A1C" : "black" })
+        .style("stroke", function(d) { return d.id == highlightedEvent ? "white" : "black" })
+        .style("width", function(d) { return d.id == highlightedEvent ? 7 : 4 })
+        .attr("x", function(d) { return vis.x(d.date) - this.getBBox().width / 2 })
         .style("opacity", function(d) { return d.id == highlightedEvent ? 1 : 0.5 })
         .remove()
         .call(endall, function() { addEvents() });
@@ -538,15 +533,14 @@ StackedAreaChart.prototype.updateUI = function() {
             .data(vis.displayEvents);
 
         vis.events.enter()
-            .append("line");
+            .append("rect");
 
         vis.events
-            .attr("x1", function(d) {return vis.x(d.date)})
-            .attr("x2", function(d) {return vis.x(d.date)})
-            .attr("y1", 0)
-            .attr("y2", vis.height)
-            .style("stroke", function(d) { return d.id == highlightedEvent ? "#E41A1C" : "black" })
-            .style("stroke-width", function(d) { return d.id == highlightedEvent ? 8 : 5 })
+            .attr("height", vis.height)
+            .style("fill", function(d) { return d.id == highlightedEvent ? "#E41A1C" : "black" })
+            .style("stroke", function(d) { return d.id == highlightedEvent ? "#f7f7f7" : "black" })
+            .style("width", function(d) { return d.id == highlightedEvent ? 7 : 4 })
+            .attr("x", function(d) { return vis.x(d.date) - this.getBBox().width / 2 })
             .style("opacity", function(d) { return d.id == highlightedEvent ? 1 : 0.5 })
             .attr("id", function(d) { return d.id })
             .attr("class", "event")

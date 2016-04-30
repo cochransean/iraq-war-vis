@@ -268,8 +268,6 @@ StoryController.prototype.exitStory = function() {
 StoryController.prototype.changeDates = function(dateString1, dateString2) {
     var controller = this;
 
-    console.log(d3.extent(timeSelect[timeSelect.subcategoryToCategory[controller.dataSelect.val()]]));
-
     var newDateRange = dateString1 && dateString2 ? [new Date(dateString1), new Date(dateString2)] :
         d3.extent(timeSelect[timeSelect.subcategoryToCategory[controller.dataSelect.val()]], function(d) {
             return d.date;
@@ -277,14 +275,12 @@ StoryController.prototype.changeDates = function(dateString1, dateString2) {
 
     // if dates haven't actually changed, trigger regular update (affects transitions)
     if (newDateRange[0].getTime() == dateRange[0].getTime() && newDateRange[1].getTime() == dateRange[1].getTime()) {
-        console.log('same dates');
         $("#circle-data").trigger("change");
     }
 
     // if dates have changed trigger date change so transitions work as should
     else {
         dateRange = newDateRange;
-        console.log('controller says dates changed');
 
         $(document).trigger("datesChanged");
 

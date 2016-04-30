@@ -168,7 +168,7 @@ svg .area-background {
 
 svg .event {
     stroke: black;
-    stroke-width: 5px;
+    stroke-width: 1px;
     opacity: 0.5;
     cursor: default;
     clip-path: url(#clip);
