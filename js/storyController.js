@@ -138,6 +138,9 @@ StoryController.prototype.views = function() {
 
                 // hide any showing tooltips
                 areaChart.timelineTooltip.hide();
+
+                // reset offset
+                areaChart.timelineTooltip.offset([areaChart.height / 2, 0]);
             }
         },
 
@@ -333,7 +336,7 @@ StoryController.prototype.views = function() {
                     .interrupt()
                     .transition();
 
-                // clean up previous slide
+                // reset offset
                 areaChart.timelineTooltip.offset([areaChart.height / 2, 0]);
             }
         },
