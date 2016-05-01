@@ -60,8 +60,8 @@ StackedAreaChart.prototype.initVis = function () {
 
     var vis = this;
 
-    var otherDivsHeight = $("#controls").height() + $("#information").height();
-    vis.height = (vis.width - otherDivsHeight) * vis.heightRatio - vis.margin.top - vis.margin.bottom;
+    var otherDivsHeight = $("#controls").height() + $("#information").height() + $("#area-map-heading").height();
+    vis.height = ($(window).height() - otherDivsHeight) * vis.heightRatio - vis.margin.top - vis.margin.bottom;
     vis.width = vis.width - vis.margin.left - vis.margin.right;
 
     // SVG drawing area

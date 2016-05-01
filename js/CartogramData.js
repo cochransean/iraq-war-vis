@@ -1,17 +1,3 @@
-
-// TODO embed it nicely in DOM
-
-// TODO now it automatically updates and shows casualties, but it would be nicer if the user could choose a view
-/** What would be ideal is to have three views:
- *     1. original US map
- *     2. cartogram casualties
- *     3. cartogram population
- *  Why add a cartogram population?
- *  I don't think that the cartogram casualties is that shocking as the states (like Texas) are big anyway.
- *  What would be more interesting is to compare cartogram casualties to cartogram population.
- *  But well, we would need to put more work into it :-)
- */
-
 // This code is based on the script in index.html from this repository: https://github.com/shawnbot/topogram
 
 // create group for US states paths

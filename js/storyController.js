@@ -141,6 +141,12 @@ StoryController.prototype.views = function() {
             // hide any showing tooltips
             areaChart.timelineTooltip.hide();
 
+            // hide any showing rectangles
+            controller.southHighlight
+                .call(controller.hideRect);
+            controller.northHighlight
+                .call(controller.hideRect);
+
             // update highlighted event
             highlightedEvent = false;
 
@@ -323,6 +329,8 @@ StoryController.prototype.advanceView = function(incrementAmount) {
 StoryController.prototype.exitStory = function() {
     var controller = this;
     storyMode = false;
+
+    // TODO stop transitions if underway in case exit is pressed while on animating slide
 
     // update highlighted event
     highlightedEvent = false;
