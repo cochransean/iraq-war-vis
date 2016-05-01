@@ -3,7 +3,7 @@
  * @param _parentElement 	-- the HTML element in which to draw the visualization
  * @param _districtViolenceData    -- violence data by district
  * @param _totalViolenceData    -- violence for entire country not divided by district
- * @param _dimensions       -- dimensions object
+ * @param _dimensions       -- dimensions object, contains multiples to scale parent div dimensions by
  * @param _colorScale       -- color scale desired from colorbrewer.js
  */
 

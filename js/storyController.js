@@ -16,11 +16,13 @@ StoryController = function(nextButtonID, backButtonID, exitID) {
     // boxes to highlight info on map
     controller.southHighlight = iraqMap.svg.append("rect")
         .attr("class", "highlightRect")
+        .style("stroke-width", 0.002 * iraqMap.projectionScale) // make responsive
         .call(controller.hideRect);
 
 
     controller.northHighlight = iraqMap.svg.append("rect")
         .attr("class", "highlightRect")
+        .style("stroke-width", 0.002 * iraqMap.projectionScale) // make responsive
         .call(controller.hideRect);
 
     // call views function (closure is needed to ensure sub-functions know what "this" is
@@ -175,7 +177,7 @@ StoryController.prototype.views = function() {
         },
 
         {
-            'setup': function() {
+            'setup': function () {
 
                 // hide any showing tooltips
                 areaChart.timelineTooltip.hide();
@@ -183,15 +185,9 @@ StoryController.prototype.views = function() {
                 // clean up previous slide
                 areaChart.timelineTooltip.offset([areaChart.height / 2, 0]);
 
-                // remove dispatch and stop any current transitions and reset color
-                if (controller.backgroundSelect.val() != "ethnicHomogeneity") {
-                    iraqMap.districts
-                        .interrupt()
-                        .transition();
-                    controller.backgroundSelect.val("ethnicHomogeneity");
-                    iraqMap.updateChoropleth();
-                }
-                dispatch.on("mapBackgroundChanged", null);
+                // reset color (always in case transition was in progress)
+                controller.backgroundSelect.val("ethnicHomogeneity");
+                iraqMap.updateChoropleth();
 
                 // update highlighted event
                 highlightedEvent = false;
@@ -200,22 +196,22 @@ StoryController.prototype.views = function() {
                 controller.dataSelect.val("totalViolenceData");
 
                 // append rectangles to highlight the data
-                // TODO scale rectangles based on projection, not on width (sometimes width isn't used for scaling)
-                var southLocation = iraqMap.projection([42.19101954728873, 33.32226927028446]);
+                // scales rectangles based on projection, not on width (sometimes height is used for scaling)
+                var southLocation = iraqMap.projection([42.12506142018065, 33.21713792358125]);
                 controller.southHighlight
                     .transition()
                     .duration(1500)
-                    .attr("transform","translate(" + southLocation[0] + "," + southLocation[1] + ") rotate(-45)")
-                    .attr("width", 0.2821316614 * iraqMap.width)
-                    .attr("height", 0.26645768 * iraqMap.width);
+                    .attr("transform", "translate(" + southLocation[0] + "," + southLocation[1] + ") rotate(-45)")
+                    .attr("width", 0.06 * iraqMap.projectionScale)
+                    .attr("height", 0.05 * iraqMap.projectionScale);
 
-                var northLocation = iraqMap.projection([41.18, 37.0]);
+                var northLocation = iraqMap.projection([41.75, 37.15]);
                 controller.northHighlight
                     .transition()
                     .duration(1500)
-                    .attr("transform","translate(" + northLocation[0] + "," + northLocation[1] + ")")
-                    .attr("width", 0.460219436 * iraqMap.width)
-                    .attr("height", 0.235109718 * iraqMap.width);
+                    .attr("transform", "translate(" + northLocation[0] + "," + northLocation[1] + ")")
+                    .attr("width", 0.055 * iraqMap.projectionScale)
+                    .attr("height", 0.05 * iraqMap.projectionScale);
 
                 // set dates
                 controller.changeDates();
@@ -225,7 +221,7 @@ StoryController.prototype.views = function() {
                 $("#information-subtitle").text("Purple areas on the map indicate Iraq's most ethnically mixed districts.");
             },
 
-            'cleanup': function() {
+            'cleanup': function () {
 
                 // hide any showing tooltips
                 areaChart.timelineTooltip.hide();
@@ -235,8 +231,12 @@ StoryController.prototype.views = function() {
                     .call(controller.hideRect);
                 controller.northHighlight
                     .call(controller.hideRect);
-            }
 
+                // stop any current transitions
+                iraqMap.districts
+                    .interrupt()
+                    .transition();
+            }
         },
 
         {
@@ -247,18 +247,17 @@ StoryController.prototype.views = function() {
                 areaChart.timelineTooltip.hide();
 
                 // update rectangles
-                var northLocation = iraqMap.projection([42.7, 37.7]);
+                var northLocation = iraqMap.projection([42.9, 37.5]);
                 controller.northHighlight
                     .transition()
                     .duration(1500)
                     .attr("transform","translate(" + northLocation[0] + "," + northLocation[1] + ") rotate(40)")
-                    .attr("width", 0.470219436 * iraqMap.width)
-                    .attr("height", 0.219435737 * iraqMap.width);
+                    .attr("width", 0.08 * iraqMap.projectionScale)
+                    .attr("height", 0.05 * iraqMap.projectionScale);
 
                 // set data
                 controller.backgroundSelect.val("OilGas");
                 controller.dataSelect.val("totalViolenceData");
-
 
                 // update the map and when transitions are complete, initiate another toggle between background colors
                 dispatch.on("mapBackgroundChanged", function() { setTimeout(cycleBackground, 1500) });
@@ -291,6 +290,14 @@ StoryController.prototype.views = function() {
                 // update rectangles
                 controller.northHighlight
                     .call(controller.hideRect);
+
+                // stop any current transitions
+                iraqMap.districts
+                    .interrupt()
+                    .transition();
+
+                // remove listener
+                dispatch.on("mapBackgroundChanged", null);
             }
         },
 
@@ -302,6 +309,7 @@ StoryController.prototype.views = function() {
 
                 // set data
                 controller.backgroundSelect.val("ethnicHomogeneity");
+                iraqMap.updateChoropleth();
                 controller.dataSelect.val("fatalities");
 
                 // offset tip since it's near the edge
@@ -320,6 +328,11 @@ StoryController.prototype.views = function() {
 
             'cleanup': function() {
 
+                // stop any current transitions
+                iraqMap.districts
+                    .interrupt()
+                    .transition();
+
                 // clean up previous slide
                 areaChart.timelineTooltip.offset([areaChart.height / 2, 0]);
             }
@@ -328,10 +341,9 @@ StoryController.prototype.views = function() {
         {
             'setup': function() {
 
-                // set data TODO fix transition as on previous slide (sometimes map background doesn't update)
+                // set data
                 controller.backgroundSelect.val("ethnicHomogeneity");
                 controller.dataSelect.val("totalViolenceData");
-
                 controller.exitStory();
             },
 
@@ -370,7 +382,8 @@ StoryController.prototype.exitStory = function() {
     var controller = this;
     storyMode = false;
 
-    // TODO stop transitions if underway in case exit is pressed while on animating slide
+    // cleanup current slide
+    controller.views[controller.currentView].cleanup();
 
     // update highlighted event
     highlightedEvent = false;
