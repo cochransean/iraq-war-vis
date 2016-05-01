@@ -43,10 +43,11 @@ IraqMap.prototype.initVis = function() {
 
     // setup project and path generator; make map resize based on window size
     const heightToProjectRatio = 6.6;
+    var projection = vis.height < vis.width ? vis.height * heightToProjectRatio: vis.width * heightToProjectRatio;
     vis.projection = d3.geo.mercator()
         .translate([vis.width / 2, vis.height / 2.15])
         .center([43.75, 33.6])
-        .scale(vis.height * heightToProjectRatio);
+        .scale(projection);
 
     var path = d3.geo.path()
         .projection(vis.projection);
