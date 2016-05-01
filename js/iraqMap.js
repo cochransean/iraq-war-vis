@@ -41,7 +41,7 @@ IraqMap.prototype.initVis = function() {
         .append("g")
         .attr("transform", "translate(" + vis.margin.left + "," + vis.margin.top + ")");
 
-    // setup project and path generator; make map resize based on window size
+    // setup projection and path generator; make map resize based on window size
     const heightToProjectRatio = 6.6;
     const widthToProjectRatio = 5.9;
     vis.projectionScale = vis.height < vis.width ? vis.height * heightToProjectRatio: vis.width * widthToProjectRatio;
@@ -121,12 +121,10 @@ IraqMap.prototype.initVis = function() {
         .attr("class", "city-label");
      */
 
-    console.log(0.004 * vis.height);
-
     // add groups for legends; place based on size of div which is dynamically calculated on load
     vis.circleLegend = vis.svg.append("g");
     vis.circleLegend
-        .attr("transform", "translate(" + (0.0524737631 * vis.width) + ", " + (0.06 * vis.height) + ")");
+        .attr("transform", "translate(" + (0.03 * vis.width) + ", " + (0.06 * vis.height) + ")");
     const NUMBER_OF_CIRCLES = 5;
     const DIFFERENCE_BETWEEN_CIRCLE_RADIUS = (vis.MAX_CIRCLE_RADIUS - vis.MIN_CIRCLE_RADIUS) / NUMBER_OF_CIRCLES;
     var spaceFromTop = 0;
@@ -156,11 +154,19 @@ IraqMap.prototype.initVis = function() {
         })
     }
 
+    // calculate font size for legend
+    vis.legendFontSize = Math.round(0.024 * vis.width);
+
     // title for legend
-    vis.circleLegendTitle = vis.circleLegend.append("text");
+    vis.circleLegendTitle = vis.circleLegend.append("text")
+        .attr("class", "legend-title")
+        .attr("font-size", vis.legendFontSize );
 
     // add groups for color legend
     vis.colorLegend = vis.svg.append("g");
+    vis.colorLegendTitle = vis.colorLegend.append("text")
+        .attr("class", "legend-title")
+        .attr("font-size", vis.legendFontSize );
 
     // Update the visualization
     vis.updateChoropleth();
@@ -266,8 +272,7 @@ IraqMap.prototype.updateCircles = function() {
     vis.circleLegendTitle.text($('.chart-option[value=' + vis.selectedCircleValue +']').text())
         .attr("text-anchor", "start")
         .attr("x", -vis.MAX_CIRCLE_RADIUS) // align with start of largest circle
-        .attr("y", -vis.MAX_CIRCLE_RADIUS - vis.CIRCLE_PADDING)
-        .attr("font-size", function() { return Math.round(0.0209580838 * vis.width) } );
+        .attr("y", -vis.MAX_CIRCLE_RADIUS - vis.CIRCLE_PADDING);
 
     circleLegendText.enter()
         .append("text")
@@ -276,7 +281,7 @@ IraqMap.prototype.updateCircles = function() {
             return d.spaceFromTop + 5;
         })
         .attr("class", "circle-legend-text")
-        .attr("font-size", function() { return Math.round(0.0209580838 * vis.width) } );
+        .attr("font-size", vis.legendFontSize );
 
     // update text as required
     circleLegendText
@@ -357,7 +362,7 @@ IraqMap.prototype.updateChoropleth = function() {
 
     // dynamically position based on size of div and number of colors
     vis.colorLegend
-        .attr("transform", "translate(" + (0.0524737631 * vis.width - vis.MAX_CIRCLE_RADIUS) // align with leftmost circle
+        .attr("transform", "translate(" + (0.03 * vis.width - vis.MAX_CIRCLE_RADIUS) // align with leftmost circle
             + "," + ( vis.height * 0.84 ) + ")");
 
     // update color scale by binding data from new color scale
@@ -385,7 +390,7 @@ IraqMap.prototype.updateChoropleth = function() {
         .append("text")
         .attr("x", COLOR_SWATCH_WIDTH + COLOR_SWATCH_HORIZONTAL_PADDING)
         .attr("class", "swatch-text")
-        .attr("font-size", function() { return Math.round(0.0209580838 * vis.width) } );
+        .attr("font-size", vis.legendFontSize );
 
     // adjust y-attribute here since text element needs actual text for BBox to work
     swatchText
@@ -394,6 +399,12 @@ IraqMap.prototype.updateChoropleth = function() {
             const TEXT_HEIGHT = this.getBBox().height;
             return COLOR_SWATCH_WIDTH * i + COLOR_SWATCH_WIDTH / 2 + TEXT_HEIGHT / 2
         });
+
+    // update title for legend
+    vis.colorLegendTitle.text($('.map-option[value=' + vis.selectedBackgroundValue +']').text())
+        .attr("text-anchor", "start")
+        .attr("x", 0)
+        .attr("y", -vis.CIRCLE_PADDING); // keep padding consistent with circles
 
     function updateSwatchText(d, i) {
 

@@ -51,6 +51,11 @@
     left: 0;
 }
 
+.legend-title {
+    text-decoration: underline;
+    font-weight: bold;
+}
+
 .overlay-text {
     margin: auto;
     position: absolute;

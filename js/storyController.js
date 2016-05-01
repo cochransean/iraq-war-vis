@@ -205,7 +205,7 @@ StoryController.prototype.views = function() {
                     .attr("width", 0.06 * iraqMap.projectionScale)
                     .attr("height", 0.05 * iraqMap.projectionScale);
 
-                var northLocation = iraqMap.projection([41.75, 37.15]);
+                var northLocation = iraqMap.projection([41.85, 37.15]);
                 controller.northHighlight
                     .transition()
                     .duration(1500)
@@ -247,13 +247,13 @@ StoryController.prototype.views = function() {
                 areaChart.timelineTooltip.hide();
 
                 // update rectangles
-                var northLocation = iraqMap.projection([42.9, 37.5]);
+                var northLocation = iraqMap.projection([42.8, 37.4]);
                 controller.northHighlight
                     .transition()
                     .duration(1500)
                     .attr("transform","translate(" + northLocation[0] + "," + northLocation[1] + ") rotate(40)")
                     .attr("width", 0.08 * iraqMap.projectionScale)
-                    .attr("height", 0.05 * iraqMap.projectionScale);
+                    .attr("height", 0.045 * iraqMap.projectionScale);
 
                 // set data
                 controller.backgroundSelect.val("OilGas");
