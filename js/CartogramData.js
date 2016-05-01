@@ -10,8 +10,10 @@ var statesJquery = $("#us-map");
 
 // set up projection and cartogram
 var mapDivWidth = statesJquery.width();
+var cartogramStandardScale = 1.22887865 * mapDivWidth;
+var cartogramScale = cartogramStandardScale < 1100 ? cartogramStandardScale: 1100;
 var projection = d3.geo.albersUsa()
-    .scale(1.22887865 * mapDivWidth)
+    .scale(cartogramScale)
     .translate([mapDivWidth / 2.2, statesJquery.height() / 2]);
 var cartogram = d3.cartogram()
     .projection(projection)
