@@ -94,8 +94,8 @@ function createVis() {
     // Area chart with different dimensions from corresponding timeline select
     var areaChartDimensions = {
         "width": null,
-        "heightRatio": 4/5,
-        "margin": { top: 40, right: 40, bottom: 40, left: 80 }
+        "heightRatio": 5/6,
+        "margin": { top: 0.118, right: 0.064, bottom: 0.118, left: 0.12 }
     };
     areaChart = new StackedAreaChart("area-chart", areaChartDimensions, districtViolenceData, totalViolenceData,
         troopNumbersData, usCasualtiesMonthData, civilianCasualtiesMonthly, eventsData, "Set1");
@@ -107,8 +107,8 @@ function createVis() {
     // Timeline select: smaller version of area chart with brush functionality added
     var timeSelectDimensions = {
         "width": null,
-        "heightRatio": 1/5,
-        "margin": { top: 10, right: 40, bottom: 45, left: 80 }
+        "heightRatio": 1/6,
+        "margin": { top: 0.03, right: 0.064, bottom: 0.3, left: 0.12 }
     };
     timeSelect = new TimeSelect("area-chart", timeSelectDimensions, districtViolenceData, totalViolenceData,
         troopNumbersData, usCasualtiesMonthData, civilianCasualtiesMonthly, eventsData, "Greys");

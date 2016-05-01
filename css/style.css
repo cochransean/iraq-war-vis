@@ -13,6 +13,10 @@
     margin-bottom: 8px;
 }
 
+#mapAreaVis {
+    padding: 2px;
+}
+
 .top-sub-title {
     margin-top: 8px;
     font-weight: 500;
@@ -36,6 +40,10 @@
 
 #information {
     height: 75px;
+}
+
+#information-headline {
+    margin-top: 0;
 }
 
 #alert-div {

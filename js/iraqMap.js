@@ -42,18 +42,19 @@ IraqMap.prototype.initVis = function() {
         .attr("transform", "translate(" + vis.margin.left + "," + vis.margin.top + ")");
 
     // setup project and path generator; make map resize based on window size
-    const widthToProjectRatio = 5.9;
+    const heightToProjectRatio = 6.6;
     vis.projection = d3.geo.mercator()
-        .translate([vis.width / 2, vis.height / 2])
+        .translate([vis.width / 2, vis.height / 2.15])
         .center([43.75, 33.6])
-        .scale(vis.width * widthToProjectRatio);
+        .scale(vis.height * heightToProjectRatio);
 
     var path = d3.geo.path()
         .projection(vis.projection);
 
     // setup linear scale for proportionate symbol circle radii; update domain later because it will change on selection
-    vis.MAX_CIRCLE_RADIUS = vis.width * 0.0449101796;
-    vis.MIN_CIRCLE_RADIUS = vis.width * 0.00299401198;
+    // use smallest of width or height to determine circle sizes; helps with display responsive sizing
+    vis.MAX_CIRCLE_RADIUS = vis.width < vis.height ? vis.width * 0.0449101796 : vis.height * 0.0449101796;
+    vis.MIN_CIRCLE_RADIUS = vis.width < vis.height ? vis.width * 0.00299401198 : vis.height * 0.00299401198;
     vis.circleScale = d3.scale.linear()
         .range([vis.MIN_CIRCLE_RADIUS, vis.MAX_CIRCLE_RADIUS]);
 
@@ -118,10 +119,12 @@ IraqMap.prototype.initVis = function() {
         .attr("class", "city-label");
      */
 
+    console.log(0.004 * vis.height);
+
     // add groups for legends; place based on size of div which is dynamically calculated on load
     vis.circleLegend = vis.svg.append("g");
     vis.circleLegend
-        .attr("transform", "translate(" + (0.0524737631 * vis.width) + ", " + (0.00727802038 * vis.height) + ")");
+        .attr("transform", "translate(" + (0.0524737631 * vis.width) + ", " + (0.06 * vis.height) + ")");
     const NUMBER_OF_CIRCLES = 5;
     const DIFFERENCE_BETWEEN_CIRCLE_RADIUS = (vis.MAX_CIRCLE_RADIUS - vis.MIN_CIRCLE_RADIUS) / NUMBER_OF_CIRCLES;
     var spaceFromTop = 0;
@@ -134,8 +137,8 @@ IraqMap.prototype.initVis = function() {
 
         // track radius to get appropriate positioning
         var radius = vis.MAX_CIRCLE_RADIUS - i * DIFFERENCE_BETWEEN_CIRCLE_RADIUS;
-        const CIRCLE_PADDING = 0.01497005988 * vis.width;
-        spaceFromTop += radius * 2 + CIRCLE_PADDING;
+        vis.CIRCLE_PADDING = 0.01497005988 * vis.width;
+        spaceFromTop += i == 0 ? 0: radius * 2 + vis.CIRCLE_PADDING; // don't add spacing on circle one
 
         vis.circleLegend.append("circle")
             .attr("cx", 0)
@@ -255,13 +258,14 @@ IraqMap.prototype.updateCircles = function() {
     // show circles for legend
     vis.circleLegend.style("display", "initial");
 
-    // update text on circle legend TODO fix title vertical alignment
+    // update text on circle legend
     var circleLegendText = vis.circleLegend.selectAll(".circle-legend-text")
         .data(vis.legendRadii);
     vis.circleLegendTitle.text($('.chart-option[value=' + vis.selectedCircleValue +']').text())
         .attr("text-anchor", "start")
         .attr("x", -vis.MAX_CIRCLE_RADIUS) // align with start of largest circle
-        .attr("font-size", function() { return Math.round(0.0209580838 * vis.width) } )
+        .attr("y", -vis.MAX_CIRCLE_RADIUS - vis.CIRCLE_PADDING)
+        .attr("font-size", function() { return Math.round(0.0209580838 * vis.width) } );
 
     circleLegendText.enter()
         .append("text")
@@ -346,12 +350,13 @@ IraqMap.prototype.updateChoropleth = function() {
         })
         .call(endall, function() { dispatch.mapBackgroundChanged() });
 
-    const COLOR_SWATCH_WIDTH = vis.width * 0.0374251497;
-    const COLOR_SWATCH_HORIZONTAL_PADDING = vis.width * 0.00748502994;
+    const COLOR_SWATCH_WIDTH = vis.width < vis.height ? vis.width * 0.0374251497: vis.height * 0.0374251497;
+    const COLOR_SWATCH_HORIZONTAL_PADDING = vis.width < vis.height ? vis.width * 0.00748502994: vis.height * 0.00748502994;
 
     // dynamically position based on size of div and number of colors
     vis.colorLegend
-        .attr("transform", "translate(" + (0.0424737631 * vis.width) + "," + ( vis.height * 0.84 ) + ")");
+        .attr("transform", "translate(" + (0.0524737631 * vis.width - vis.MAX_CIRCLE_RADIUS) // align with leftmost circle
+            + "," + ( vis.height * 0.84 ) + ")");
 
     // update color scale by binding data from new color scale
     var colorSwatches = vis.colorLegend.selectAll(".color-swatch")

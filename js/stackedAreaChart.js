@@ -23,9 +23,18 @@ StackedAreaChart = function (_parentElement, _dimensions, _districtViolenceData,
 
     // set dimensions; size based on width of div to allow for easier styling with bootstrap
     this.width = $("#" + this.parentElement).width();
-    this.heightRatio = _dimensions.heightRatio;
+    var mapAreaDiv = $("#mapAreaVis");
+    var otherDivsHeight = $("#controls").height() + $("#information").height() + $("#area-map-heading").height()
+        + mapAreaDiv.outerHeight(true) - mapAreaDiv.height(); // include padding and margins
+    this.height = ($(window).height() - otherDivsHeight) * _dimensions.heightRatio;
     this.margin = _dimensions.margin;
     this.selectedColors = _colorScale;
+
+    // convert margins to pixels based on viewport dimensions
+    this.margin.left = this.margin.left * this.width;
+    this.margin.right = this.margin.right * this.width;
+    this.margin.top = this.margin.top * this.height;
+    this.margin.bottom = this.margin.bottom * this.height;
 
     // map subcategories to categories to allow for subselections
     this.subcategoryToCategory = {
@@ -60,8 +69,8 @@ StackedAreaChart.prototype.initVis = function () {
 
     var vis = this;
 
-    var otherDivsHeight = $("#controls").height() + $("#information").height() + $("#area-map-heading").height();
-    vis.height = ($(window).height() - otherDivsHeight) * vis.heightRatio - vis.margin.top - vis.margin.bottom;
+
+    vis.height = vis.height - vis.margin.top - vis.margin.bottom;
     vis.width = vis.width - vis.margin.left - vis.margin.right;
 
     // SVG drawing area
