@@ -81,7 +81,7 @@ svg text {
 }
 
 #spacing-div {
-    height: 60px;
+    height: 50px;
 }
 
 .container-fluid {
@@ -329,4 +329,8 @@ path.state {
 
 path.state:hover {
     stroke-width: 3;
+}
+
+#cartogram-ul ul {
+    margin-top: 8px;
 }
