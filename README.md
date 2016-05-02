@@ -4,12 +4,12 @@ A D3-based visualization of the Iraq War.  This project aims to use public data 
 ## Live Website URL
 http://cochransean.github.io/iraq-war-vis/
 
-# Libraries used:
+## Libraries used:
 * D3
 * Cartogram.js (used for cartogram)
 
 # Data Citations:
-##Timeline Data:
+## Timeline Data:
   * NYTimes: Timeline of Major Events in the Iraq War
     * http://www.nytimes.com/interactive/2010/08/31/world/middleeast/20100831-Iraq-Timeline.html?_r=0#/#time111_3263
   * Updated with more recent events from:
@@ -17,13 +17,13 @@ http://cochransean.github.io/iraq-war-vis/
     * http://www.foreignpolicyi.org/iraq-timeline
     * https://www.washingtonpost.com/world/al-qaeda-force-captures-fallujah-amid-rise-in-violence-in-iraq/2014/01/03/8abaeb2a-74aa-11e3-8def-a33011492df2_story.html
     * http://www.wsj.com/articles/iraqi-security-forces-recapture-tikrit-from-islamic-state-1427812777
-##Geographic, Violence, Ethnic, and Civilian Casualty Data:
+## Geographic, Violence, Ethnic, and Civilian Casualty Data:
   * Empirical Studies of Conflict (ESOC): Princeton University
     * https://esoc.princeton.edu/
-##US Troop Casualty By Incident Data:
+## US Troop Casualty By Incident Data:
   * Github User: amandabee
     * https://github.com/amandabee/CUNY-data-storytelling/blob/master/lecture%20notes/pivot%20and%20refine/OIF_US_Fatalities.csv
-##Aggregated US Troop Casualties and Coalition Troop Numbers
+## Aggregated US Troop Casualties and Coalition Troop Numbers
   * The Guardian: Iraq War - The Conflict in Statistics
     * http://www.theguardian.com/news/datablog/2010/sep/01/iraq-war-conflict-in-statistics
     * The aggregated fatality data linked above was updated based on current reports (though 22 April 2016).
