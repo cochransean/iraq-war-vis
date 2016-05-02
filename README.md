@@ -20,7 +20,7 @@ http://cochransean.github.io/iraq-war-vis/
 ## Geographic, Violence, Ethnic, and Civilian Casualty Data:
   * Empirical Studies of Conflict (ESOC): Princeton University
     * https://esoc.princeton.edu/
-## US Troop Casualty By Incident Data:
+# US Troop Casualty By Incident Data:
   * Github User: amandabee
     * https://github.com/amandabee/CUNY-data-storytelling/blob/master/lecture%20notes/pivot%20and%20refine/OIF_US_Fatalities.csv
 ## Aggregated US Troop Casualties and Coalition Troop Numbers
