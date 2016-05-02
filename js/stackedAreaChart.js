@@ -26,7 +26,8 @@ StackedAreaChart = function (_parentElement, _dimensions, _districtViolenceData,
     var mapAreaDiv = $("#mapAreaVis");
     var otherDivsHeight = $("#controls").height() + $("#information").height() + $("#area-map-heading").height()
         + mapAreaDiv.outerHeight(true) - mapAreaDiv.height(); // include padding and margins
-    this.height = ($(window).height() - otherDivsHeight) * _dimensions.heightRatio;
+    this.viewportHeight = $(window).height();
+    this.height = (this.viewportHeight - otherDivsHeight) * _dimensions.heightRatio;
     this.margin = _dimensions.margin;
     this.selectedColors = _colorScale;
 
@@ -111,31 +112,43 @@ StackedAreaChart.prototype.initVis = function () {
     // color brewer scale, update range and domain depending on data
     vis.colorScale = d3.scale.ordinal();
 
+    var xAxisTickLengthScaleFactor = vis instanceof TimeSelect ? 0.287769784: 0.146323619;
+    var xAxisTickLength = xAxisTickLengthScaleFactor * vis.margin.bottom;
     vis.xAxis = d3.svg.axis()
         .scale(vis.x)
         .orient("bottom")
-        .ticks(5);
+        .ticks(5)
+        .innerTickSize(xAxisTickLength)
+        .outerTickSize(xAxisTickLength);
 
     vis.yAxis = d3.svg.axis()
         .scale(vis.y)
         .orient("left");
 
+    var xAxisFontScaleFactor = vis instanceof TimeSelect ? 0.66985645933: 0.341463415; // scale varies since no title on timeselect
     vis.xAxisGroup = vis.svg.append("g")
         .attr("class", "x-axis axis")
-        .attr("transform", "translate(0," + vis.height + ")");
+        .attr("transform", "translate(0," + vis.height + ")")
+        .style("font-size", Math.round(vis.margin.bottom * xAxisFontScaleFactor));
 
+    // place labels responsively based on viewport height (used to scale margins also) to prevent overlap
     vis.xLabel = vis.xAxisGroup.append("text")
         .attr("x", vis.width / 2)
-        .attr("y", 40)
+        .attr("y", vis.margin.bottom * 0.9)
         .attr("text-anchor", "middle")
         .text("Time");
 
-    vis.yAxisGroup = vis.svg.append("g")
-        .attr("class", "y-axis axis");
 
+    vis.yAxisGroup = vis.svg.append("g")
+        .attr("class", "y-axis axis")
+        .style("font-size", Math.round(vis.margin.left * 0.186666667));
+
+    // place labels based on overall div width to prevent overlap
     vis.yLabel = vis.yAxisGroup.append("text")
-        .attr("transform", "translate(-70," + (vis.height / 2) + ") rotate(90)")
+        .attr("transform", "translate(" + (vis.width + vis.margin.left + vis.margin.right) * -0.113452188 + ","
+            + (vis.height / 2) + ") rotate(90)")
         .attr("text-anchor", "middle");
+
 
     // Area generator
     vis.area = d3.svg.area()
