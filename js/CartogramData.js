@@ -1,10 +1,17 @@
 // This code is based on the script in index.html from this repository: https://github.com/shawnbot/topogram
 
+var visCartogram = d3.select("#us-map");
+
 // create group for US states paths
-var states = d3.select("#us-map")
+var states = visCartogram
     .append("g")
     .attr("id", "states")
     .selectAll("path");
+
+// initialize tooltip
+tipState = d3.tip()
+    .attr('class', 'd3-tip');
+visCartogram.call(tipState);
 
 var statesJquery = $("#us-map");
 
@@ -69,9 +76,6 @@ function init() {
         .attr("fill", "red")
         .attr("d", path);
 
-    // add empty tooltips for casualty numbers
-    states.append("title");
-
     update();
 
     // update on DOM changes
@@ -95,8 +99,16 @@ function update() {
 
             var color = d3.scale.quantize()
                 .range(colorbrewer.Reds[6]);
-        }
 
+            // set tooltips
+            tipState
+                .html(function(d) {
+                    return d3.round(value(d), 2) + " US service members died per" + "</br>" + "100,000 residents in " + [d.properties.Name];
+                });
+            states
+                .on('mouseover', tipState.show)
+                .on('mouseout', tipState.hide);
+        }
 
         // TODO: update this with an else if, if we add more than 2 options
         else {
@@ -111,6 +123,15 @@ function update() {
                 .domain([25, 62, 88, 500])
                 .range(["#fee5d9","#fcae91","#fb6a4a","#cb181d"]);
 
+
+            // set tooltips
+            tipState
+                .html(function(d) {
+                    return value(d) + " US service members that died" + "</br>" + " came from " + [d.properties.Name];
+                });
+            states
+                .on('mouseover', tipState.show)
+                .on('mouseout', tipState.hide);
         }
 
 
@@ -133,19 +154,8 @@ function update() {
             }));
     }
 
-    // update the features and add text to the tooltips
-    states.data(features)
-        .select("title")
-        .text(function(d) {
-            if (selectedOption == 'normedCasualties') {
-                return value(d) + " US service members died per 100,000 residents in " + [d.properties.Name];
-            }
-
-            // TODO update this if we add more options (to else if)
-            else {
-                return value(d) + " US service members that died came from " + [d.properties.Name];
-            }
-        });
+    // update the features
+    states.data(features);
 
     // set transition
     // TODO makes little sense with one view
