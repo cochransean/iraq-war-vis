@@ -4,6 +4,9 @@ A D3-based visualization of the Iraq War.  This project aims to use public data 
 ## Live Website URL
 http://cochransean.github.io/iraq-war-vis/
 
+## Screencast URL
+https://github.com/cochransean/iraq-war-vis/tree/gh-pages/screencast
+
 ## Libraries used:
 * D3
 * Cartogram.js (used for cartogram)
