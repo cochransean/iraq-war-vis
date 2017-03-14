@@ -42,7 +42,7 @@ IraqMap.prototype.initVis = function() {
         .attr("transform", "translate(" + vis.margin.left + "," + vis.margin.top + ")");
 
     // setup projection and path generator; make map resize based on window size
-    const heightToProjectRatio = 6.6;
+    const heightToProjectRatio = 5.5;
     const widthToProjectRatio = 5.9;
     vis.projectionScale = vis.height < vis.width ? vis.height * heightToProjectRatio: vis.width * widthToProjectRatio;
     vis.projection = d3.geo.mercator()
@@ -106,20 +106,6 @@ IraqMap.prototype.initVis = function() {
         .attr("r", "4px")
         .on('mouseover', vis.tipCity.show)
         .on('mouseout', vis.tipCity.hide);
-
-    /** commented out (city name moved into tooltip):
-    vis.svg.selectAll(".city-label")
-        .data(vis.placeData)
-        .enter()
-        .append("text")
-        .text(function(d) { return d.properties.name; })
-        .attr("x", function (d) { return vis.projection(d.geometry.coordinates)[0]; })
-        .attr("y", function (d) {
-            const verticalOffset = 7;
-            return vis.projection(d.geometry.coordinates)[1] - verticalOffset;
-        })
-        .attr("class", "city-label");
-     */
 
     // add groups for legends; place based on size of div which is dynamically calculated on load
     vis.circleLegend = vis.svg.append("g");
@@ -357,7 +343,7 @@ IraqMap.prototype.updateChoropleth = function() {
         })
         .call(endall, function() { dispatch.mapBackgroundChanged() });
 
-    const COLOR_SWATCH_WIDTH = vis.width < vis.height ? vis.width * 0.0374251497: vis.height * 0.0374251497;
+    const COLOR_SWATCH_WIDTH = vis.width < vis.height ? vis.width * 0.0374251497: vis.height * 0.03;
     const COLOR_SWATCH_HORIZONTAL_PADDING = vis.width < vis.height ? vis.width * 0.00748502994: vis.height * 0.00748502994;
 
     // dynamically position based on size of div and number of colors
@@ -407,6 +393,7 @@ IraqMap.prototype.updateChoropleth = function() {
         .attr("y", -vis.CIRCLE_PADDING); // keep padding consistent with circles
 
     function updateSwatchText(d, i) {
+        var range;
 
         // update with text explaining scale (vs std dev values that won't make sense
         if (vis.selectedBackgroundValue == "ethnicHomogeneity") {
@@ -430,7 +417,7 @@ IraqMap.prototype.updateChoropleth = function() {
         }
 
         else if (vis.selectedBackgroundValue == "OilGas") {
-            var range = vis.colorScale.invertExtent(d);
+            range = vis.colorScale.invertExtent(d);
             if ( isNaN( vis.colorScale.invertExtent(d)[0] )) { return "No oil and gas reserves"; }
             else return ( range[0] + " to " + range[1] + " billions of barrels" );
         }
@@ -438,7 +425,7 @@ IraqMap.prototype.updateChoropleth = function() {
         // otherwise, scale must be in percentage. update with value represented by each color
         else {
             var formatter = d3.format(".3p");
-            var range = vis.colorScale.invertExtent(d);
+            range = vis.colorScale.invertExtent(d);
             if (isNaN(vis.colorScale.invertExtent(d)[0]))
                 { return "Below " + formatter(range[1]); }
             else
@@ -500,12 +487,5 @@ IraqMap.prototype.updateBackgroundTooltip = function(d) {
     else {
         return "No data for current selection"
     }
-
-    // TODO: add other cases for different background selections here
-    // else if...
-    // else...
-
-
-
 
 };
